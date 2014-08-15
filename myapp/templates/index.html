@@ -1,0 +1,143 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Bảng điều khiển <span>Theo dõi sự cố
+			hệ thống</span>
+	</h2>
+	<!-- <div class="breadcrumb-wrapper">
+			<span class="label">You are here:</span>
+			<ol class="breadcrumb">
+				<li><a href="index.html">Bracket</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+		</div> -->
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-hover" id="table2">
+					<thead>
+						<tr>
+							<th>Mã</th>
+							<th>Trạm</th>
+							<th>Tên</th>
+							<th>MAC</th>
+							<th>Server</th>
+							<th>Online</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for device in devices %}
+						<tr class="odd gradeX">
+							<td>{{ device.code }}</td>
+							<td><a href="#">{{ device.address }}</a></td>
+							<td>{{ device.name }}</td>
+							<td>{{ device.mac_add }}</td>
+							<td class="center">{{ device.connected_server }}</td>
+							{% if  device.status == '0' %}
+								<td class="center"><img width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
+							{% elif device.status == '1' %}
+								<td class="center"><img width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
+							{% elif device.status == '2' %}
+								<td class="center"><img width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- table-responsive -->
+
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="panel-btns">
+				<a href="#" class="panel-close">×</a> <a href="#" class="minimize">−</a>
+			</div>
+			<!-- panel-btns -->
+			<h4 class="title">Chi tiết phòng máy</h4>
+			<p>
+				<a href="#">RW0001 </a> 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
+				Nội,Việt Nam
+			</p>
+		</div>
+		<!-- panel-heading -->
+		<div class="panel-body">
+			<div class="row">
+				<div class="mb10"></div>
+				<div class="col-sm-6">
+					<p>Nhiệt độ</p>
+					<h4 style="color: red">90 °C</h4>
+				</div>
+				<div class="col-sm-6">
+					<p>Độ ẩm</p>
+					<h4>90 %</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="mb10"></div>
+				<div class="col-sm-6">
+					<p>Nhiệt độ</p>
+					<h4 style="color: red">90 °C</h4>
+				</div>
+				<div class="col-sm-6">
+					<p>Độ ẩm</p>
+					<h4>90 %</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="mb10"></div>
+				<div class="col-sm-6">
+					<p>Nhiệt độ</p>
+					<h4 style="color: red">90 °C</h4>
+				</div>
+				<div class="col-sm-6">
+					<p>Độ ẩm</p>
+					<h4>90 %</h4>
+				</div>
+			</div>
+		</div>
+		<!-- panel-body -->
+	</div>
+
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/modernizr.min.js"></script>
+<script src="js/jquery.sparkline.min.js"></script>
+<script src="js/toggles.min.js"></script>
+<script src="js/retina.min.js"></script>
+<script src="js/jquery.cookies.js"></script>
+
+<script src="js/jquery.datatables.min.js"></script>
+<script src="js/chosen.jquery.min.js"></script>
+
+<script src="js/custom.js"></script>
+<script>
+	jQuery(document).ready(function() {
+
+		jQuery('#table2').dataTable({
+			"sPaginationType" : "full_numbers"
+		});
+		// Chosen Select
+		jQuery("select").chosen({
+				'min-width' : '100px',
+				'white-space' : 'nowrap',
+				disable_search_threshold : 10
+			});
+
+	});
+</script>
+{% endblock scripts%}
