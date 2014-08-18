@@ -1,0 +1,91 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Bảng điều khiển <span>Theo dõi sự cố
+			hệ thống</span>
+	</h2>
+	<!-- <div class="breadcrumb-wrapper">
+			<span class="label">You are here:</span>
+			<ol class="breadcrumb">
+				<li><a href="index.html">Bracket</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+		</div> -->
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-hover" id="table2">
+					<thead>
+						<tr>
+							<th>Tên cảm biến </th>
+							<th>Mã</th>
+							<th>Mô tả</th>
+							<th>Loại</th>
+							<th>Nhỏ nhất</th>
+							<th>Lớn nhất</th>
+							<th>Ngưỡng dưới</th>
+							<th>Ngưỡng trên</th>
+							<th>Đơn vị</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for deviceProperty in lsDeviceProperty %}
+						<tr class="odd gradeX">
+							<td>{{ deviceProperty.name }}</td>
+							<td>{{ deviceProperty.code }}</td>
+							<td>{{ deviceProperty.description }}</td>
+							<td>{{ deviceProperty.type }}</td>
+							<td>{{ deviceProperty.min }}</td>
+							<td>{{ deviceProperty.max }}</td>
+							<td>{{ deviceProperty.min_alarm }}</td>
+							<td>{{ deviceProperty.max_alarm }}</td>
+							<td>{{ deviceProperty.symbol }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- table-responsive -->
+
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/modernizr.min.js"></script>
+<script src="js/jquery.sparkline.min.js"></script>
+<script src="js/toggles.min.js"></script>
+<script src="js/retina.min.js"></script>
+<script src="js/jquery.cookies.js"></script>
+
+<script src="js/jquery.datatables.min.js"></script>
+<script src="js/chosen.jquery.min.js"></script>
+
+<script src="js/custom.js"></script>
+<script>
+	jQuery(document).ready(function() {
+
+		jQuery('#table2').dataTable({
+			"sPaginationType" : "full_numbers"
+		});
+		// Chosen Select
+		jQuery("select").chosen({
+				'min-width' : '150px',
+				'white-space' : 'nowrap',
+				disable_search_threshold : 10
+			});
+
+	});
+</script>
+{% endblock scripts%}
