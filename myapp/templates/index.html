@@ -32,7 +32,7 @@
 					</thead>
 					<tbody>
 						{% for device in devices %}
-						<tr class="odd gradeX">
+						<tr class="odd gradeX" id="{{ device.id }}">
 							<td>{{ device.code }}</td>
 							<td><a href="#">{{ device.address }}</a></td>
 							<td>{{ device.name }}</td>
@@ -126,7 +126,28 @@
 				'white-space' : 'nowrap',
 				disable_search_threshold : 10
 			});
-
+		$('#table2 tbody tr').click(function()
+		{
+			var device_id = $(this).attr('id');
+			var csrftoken = $.cookie('csrftoken');
+			var posting = $.post( "/device-infor", {'csrfmiddlewaretoken':csrftoken,'device_id':device_id,});
+			posting.done(function( data )
+			{
+				alert(JSON.stringify(data));
+			});
+		});
 	});
+	function onLoadDeviceInfor()
+	{
+		
+	}
+	var tid = setTimeout(mycode, 2000);
+	function mycode() {
+		// do some stuff...
+		tid = setTimeout(mycode, 2000); // repeat myself
+	}
+	function abortTimer() { // to be called when you want to stop the timer
+		clearTimeout(tid);
+	}
 </script>
 {% endblock scripts%}
