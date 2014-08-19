@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from eAlarm import settings
-from myapp.views import Home,DeviceProperties,AddDeviceProperties,EditDeviceProperties,Area,AddArea,DeviceInfor
+from myapp.views import Home,DeviceProperties,AddDeviceProperties,EditDeviceProperties,Area,AddArea,DeviceInfor,EditArea
 
 admin.autodiscover()
 
@@ -19,5 +19,6 @@ urlpatterns = patterns('',
 	url(r'^area$', Area.index),
     url(r'^add-area$', AddArea.index),
     url(r'^add-area$', AddArea.index,name='add-area'),
+    url(r'^edit-area$', EditArea.index),
     url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : False, }),
 )

@@ -17,29 +17,35 @@ from myapp.models import Area
 def index(request):
 	if request.method == 'GET':
 		try:
-			lsArea = Area.objects.all()
-			context={'lsArea':lsArea}
+			_area_id = request.GET['area_id']
+			area = Area.objects.get(id = _area_id)
+			context={'area':area}
+			
 			context.update(csrf(request))
 		except Exception as ex:
 			context={}
 			print(ex)
 		finally:
-			return render_to_response("add-area.html", context)
+			return render_to_response("edit-area.html", context)
 	elif request.method == 'POST':
 		formType= request.POST['type']
-		if formType == "addArea":
+		if formType == "editArea":
 			context={}
 			try:
+				_area_id = request.POST['area_id'].strip()
 				_code = request.POST['txtCode'].strip()
 				_name = request.POST['txtName'].strip()
 				_lat = request.POST['txtLat'].strip()
 				_lng = request.POST['txtLng'].strip()
 				_status = request.POST['slStatus'].strip()
 				area = Area.objects.filter(code = _code.upper())
-				if len(area) >0 :
+				if len(area) >1 :
 					raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
+				elif len(area) == 1:
+					if str(_area_id) != str(area[0].id) :
+						raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
 				else :
-					area = Area()
+					area = Area.objects.get(id = _area_id)
 					
 					area.code = _code
 					area.name = _name
@@ -56,6 +62,6 @@ def index(request):
 				context.update(csrf(request))
 				return HttpResponseRedirect('/area')
 			except Exception as ex:
-				context.update({'has_error':ex,'code':_code,'name':_name,'status':_status,'lat':_lat,'lng':_lng})
+				context.update({'has_error':ex,'area_id':_area_id,'code':_code,'name':_name,'status':_status,'lat':_lat,'lng':_lng})
 				context.update(csrf(request))
-				return render_to_response("add-area.html", context)
+				return render_to_response("edit-area.html", context)

@@ -43,7 +43,7 @@
 							<td devicePropertyId ="full_name{{ area.id }}" type="{{ area.full_name }}"> {{ area.full_name}}</td>
 							<td devicePropertyId ="status{{ area.id }}" min="{{ area.id }}">{% if area.status = "1" %} Kích hoạt {% else %} Không kích hoạt {% endif %}</td>
 							<td class="table-action">
-								<a href="#" onclick="onEditArea('{{ area.id }}');" data-toggle="modal" data-target="#edit-area"><i class="fa fa-pencil"></i></a>
+								<a href="/edit-area?area_id={{ area.id }}"><i class="fa fa-pencil"></i></a>
 								<a href="#" onclick="onDeleteArea('{{ area.id }}');" class="delete-row"><i class="fa fa-trash-o"></i></a>
 							</td>
 						</tr>
