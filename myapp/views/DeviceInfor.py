@@ -20,7 +20,8 @@ def index(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor= list(DeviceInfor.objects.filter(device_id=device,status='1').select_related())
+		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').select_related().order_by('device_pro__code')
+		print(device_infor.query)
 		infors =[]
 		for infor in device_infor:
 			infors.append({'value':infor.value,'status':infor.status,'properties':model_to_dict(infor.device_pro)})

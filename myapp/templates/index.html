@@ -1,4 +1,7 @@
 {% extends "base.html" %} 
+{% block styles %}
+	<link href="css/chart.css" rel="stylesheet">
+{% endblock %}
 {% block content-header %}
 <div class="pageheader">
 	<h2>
@@ -61,46 +64,66 @@
 		<div class="panel-heading">
 			<h4 class="title">Chi tiết phòng máy</h4>
 			<p>
-				<a href="#">RW0001 </a> 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
+				<a href="#">RW0001 </a> - 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
 				Nội,Việt Nam
 			</p>
 			<p>
-				<a href="#">RW0001 </a> Connected server: 65:AD:GD:09:09:89
+				MAC: 65:AD:GD:09:09:89
 			</p>
 			<p>
-				<a href="#">RW0001 </a> Connected server: 65:AD:GD:09:09:89
+				Connected server: 127.0.0.1
+			</p>
+			<p>
+				Trạng thái: <img width="15px" height="15px" src="images/ic_blue.png" alt="" />
+			</p>
+			<p>
+				Sự cố:
 			</p>
 		</div>
 		<!-- panel-heading -->
-		<div class="panel-body" id="device-infor" style="min-height: 300px">
-			<div class="row">
-				<div class="mb10"></div>
-				<div class="col-sm-6">
-					<p>Nhiệt độ</p>
-					<h4 style="color: red">90 °C</h4>
+		<div class="panel-body" style="min-height: 300px">
+			<div class ="row">
+				<div class="col-sm-6" id="device-infor">
+					<div class="row">
+						<div class="mb10"></div>
+						<div class="col-sm-6">
+							<p>Nhiệt độ</p>
+							<h4 style="color: red">90 °C</h4>
+						</div>
+						<div class="col-sm-6">
+							<p>Tần số điện lưới</p>
+							<h4 style="color: green">50.0 Hz %</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="mb10"></div>
+						<div class="col-sm-6">
+							<p>Độ ẩm</p>
+							<h4 style="color: red">35%</h4>
+						</div>
+						<div class="col-sm-6">
+							<p>Điện áp cầu</p>
+							<h4 style="color: green">25.5VDC</h4>
+						</div>
+					</div>
 				</div>
 				<div class="col-sm-6">
-					<p>Tần số điện lưới</p>
-					<h4 style="color: green">50.0 Hz %</h4>
+					<p>Nhiệt độ.</p>
+					<div class="demo-container">
+						<div id="placeholder" class="demo-placeholder"></div>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="mb10"></div>
-				<div class="col-sm-6">
-					<p>Độ ẩm</p>
-					<h4 style="color: red">35%</h4>
-				</div>
-				<div class="col-sm-6">
-					<p>Điện áp cầu</p>
-					<h4 style="color: green">25.5VDC</h4>
-				</div>
-			</div>
+			
 		</div>
 		<!-- panel-body -->
 	</div>
 
 </div>
 <!-- contentpanel -->
+<div id="footer">
+		Copyright &copy; 2007 - 2014 IOLA and Ole Laursen
+	</div>
 {% endblock %} 
 {% block scripts %}
 <script src="js/jquery-1.10.2.min.js"></script>
@@ -115,9 +138,11 @@
 <script src="js/jquery.datatables.min.js"></script>
 <script src="js/chosen.jquery.min.js"></script>
 
+<script src="js/flot/jquery.flot.js"></script>
+
 <script src="js/custom.js"></script>
+<script src="js/device-infor.js"></script>
 <script>
-	var currentDeviceID;
 	jQuery(document).ready(function() {
 
 		jQuery('#table2').dataTable({
@@ -136,56 +161,5 @@
 		});
 		onGetDeviceInfor({{ devices.0.id }});
 	});
-	
-	function onGetDeviceInfor(device_id)
-	{
-		currentDeviceID = device_id;
-		var csrftoken = $.cookie('csrftoken');
-		var posting = $.post( "/device-infor", {'csrfmiddlewaretoken':csrftoken,'device_id':device_id,});
-		posting.done(function(data)
-		{
-			updateDeviceInfor(data.device,data.device_infor);
-		});
-	}
-	
-	function updateDeviceInfor(device,infors)
-	{
-		var deviceInfor = $('#device-infor');
-		deviceInfor.empty();
-		for(var i=0;i<infors.length;i++)
-		{
-			var infor = infors[i];
-			var row = $('<div>');
-			row.attr("class","row");
-			
-			var separator = $('<div>');
-			separator.attr("class","mb10");
-			separator.appendTo(row);
-			
-			var column = $('<div>');
-			column.attr("class","col-sm-6");
-			column.html("<p>"+infor.properties.name+"</p> <h4 style=\"color: red\">"+infor.value+" "+infor.properties.symbol+"</h4>");
-			column.appendTo(row);
-			if(i<infors.length-2)
-			{
-				i++;
-				infor = infors[i];
-				column = $('<div>');
-				column.attr("class","col-sm-6");
-				column.html("<p>"+infor.properties.name+"</p> <h4 style=\"color: green\">"+infor.value+" "+infor.properties.symbol+"</h4>");
-				column.appendTo(row);
-			}
-			row.appendTo(deviceInfor);
-		}
-	}
-	var tid = setTimeout(mycode, 15000);
-	function mycode() {
-		onGetDeviceInfor(currentDeviceID);
-		// do some stuff...
-		tid = setTimeout(mycode, 15000); // repeat myself
-	}
-	function abortTimer() { // to be called when you want to stop the timer
-		clearTimeout(tid);
-	}
 </script>
 {% endblock scripts%}
