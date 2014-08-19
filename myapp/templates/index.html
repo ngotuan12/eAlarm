@@ -59,18 +59,20 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<div class="panel-btns">
-				<a href="#" class="panel-close">×</a> <a href="#" class="minimize">−</a>
-			</div>
-			<!-- panel-btns -->
 			<h4 class="title">Chi tiết phòng máy</h4>
 			<p>
 				<a href="#">RW0001 </a> 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
 				Nội,Việt Nam
 			</p>
+			<p>
+				<a href="#">RW0001 </a> Connected server: 65:AD:GD:09:09:89
+			</p>
+			<p>
+				<a href="#">RW0001 </a> Connected server: 65:AD:GD:09:09:89
+			</p>
 		</div>
 		<!-- panel-heading -->
-		<div class="panel-body">
+		<div class="panel-body" id="device-infor" style="min-height: 300px">
 			<div class="row">
 				<div class="mb10"></div>
 				<div class="col-sm-6">
@@ -115,6 +117,7 @@
 
 <script src="js/custom.js"></script>
 <script>
+	var currentDeviceID;
 	jQuery(document).ready(function() {
 
 		jQuery('#table2').dataTable({
@@ -129,22 +132,57 @@
 		$('#table2 tbody tr').click(function()
 		{
 			var device_id = $(this).attr('id');
-			var csrftoken = $.cookie('csrftoken');
-			var posting = $.post( "/device-infor", {'csrfmiddlewaretoken':csrftoken,'device_id':device_id,});
-			posting.done(function( data )
-			{
-				alert(JSON.stringify(data));
-			});
+			onGetDeviceInfor(device_id);
 		});
+		onGetDeviceInfor({{ devices.0.id }});
 	});
-	function onLoadDeviceInfor()
+	
+	function onGetDeviceInfor(device_id)
 	{
-		
+		currentDeviceID = device_id;
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post( "/device-infor", {'csrfmiddlewaretoken':csrftoken,'device_id':device_id,});
+		posting.done(function(data)
+		{
+			updateDeviceInfor(data.device,data.device_infor);
+		});
 	}
-	var tid = setTimeout(mycode, 2000);
+	
+	function updateDeviceInfor(device,infors)
+	{
+		var deviceInfor = $('#device-infor');
+		deviceInfor.empty();
+		for(var i=0;i<infors.length;i++)
+		{
+			var infor = infors[i];
+			var row = $('<div>');
+			row.attr("class","row");
+			
+			var separator = $('<div>');
+			separator.attr("class","mb10");
+			separator.appendTo(row);
+			
+			var column = $('<div>');
+			column.attr("class","col-sm-6");
+			column.html("<p>"+infor.properties.name+"</p> <h4 style=\"color: red\">"+infor.value+" "+infor.properties.symbol+"</h4>");
+			column.appendTo(row);
+			if(i<infors.length-2)
+			{
+				i++;
+				infor = infors[i];
+				column = $('<div>');
+				column.attr("class","col-sm-6");
+				column.html("<p>"+infor.properties.name+"</p> <h4 style=\"color: green\">"+infor.value+" "+infor.properties.symbol+"</h4>");
+				column.appendTo(row);
+			}
+			row.appendTo(deviceInfor);
+		}
+	}
+	var tid = setTimeout(mycode, 15000);
 	function mycode() {
+		onGetDeviceInfor(currentDeviceID);
 		// do some stuff...
-		tid = setTimeout(mycode, 2000); // repeat myself
+		tid = setTimeout(mycode, 15000); // repeat myself
 	}
 	function abortTimer() { // to be called when you want to stop the timer
 		clearTimeout(tid);
