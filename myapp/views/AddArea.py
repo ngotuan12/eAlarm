@@ -39,10 +39,13 @@ def index(request):
 				if len(area) >0 :
 					raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
 				else :
+					
+					parent = Area.objects.get(code = 'VN')
 					area = Area()
 					
 					area.code = _code
 					area.name = _name
+# 					area.parent_id = parent.id
 					area.lat = float(_lat)
 					area.lng = float(_lng)
 					area.status = _status

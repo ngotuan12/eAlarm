@@ -4,10 +4,12 @@ Created on Aug 15, 2014
 @author: DienND
 '''
 from django.db import models
+
 # Create your models here.
 class Area(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
+#     parent_id = models.ForeignKey('Area',blank=True, null=True, related_name='considered_best_friend_for')
     level = models.CharField(max_length=5)
     status = models.CharField(max_length=1)
     woodenleg = models.CharField(max_length=50)
