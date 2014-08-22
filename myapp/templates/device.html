@@ -4,20 +4,19 @@
 {% include 'edit-device-property.html' %}
 <div class="pageheader" style="min-height: 60px;padding: 10px;">
 	<div class="col-sm-4">
-		<select name='slType' class="form-control chosen-select" data-placeholder="Chọn tỉnh thành phố ..." style="display: none;" required="">
-			<option value="-1"></option>
+		<select name="selArea" id="selArea" class="form-control chosen-select" data-placeholder="Chọn tỉnh thành phố ..." >
+			<option value="-1">Tất cả</option>
 			{% if lsArea %}
 				{% for area in lsArea %}
-					<option value="{{ area.code }}">{{ area.name }}</option>
+					<option area_id="{{ area.id }}" lat="{{ area.lat }}" lng="{{ area.lng }}" name="{{ area.name }}" value="{{ area.code }}">{{ area.name }}</option>
 				{% endfor %}
 			{% endif %}
 		</select>
 	</div>
 	<div class="col-sm-4">
-		<select name='slType' class="form-control chosen-select" data-placeholder="Chọn trạng thái ..." style="display: none;" required="">
-			<option value="-1"></option>
-			<option value="0">Mất kết nối</option>
+		<select name="slStatus" id="slStatus" class="form-control chosen-select" data-placeholder="Chọn trạng thái ..." style="display: none;" required="">
 			<option value="1">Tất cả</option>
+			<option value="0">Mất kết nối</option>
 			<option value="2">Cảnh báo</option>
 		</select>
 	</div>
@@ -38,19 +37,19 @@
 							<ul class="nav nav-pills nav-stacked">
 								{% if lsArea %}
 									{% for area in lsArea %}
-										<li area_id="{{ area.id }}" onclick="onActive('{{ area.id }}');">
+										<li area_id="{{ area.id }}" used="0" onclick="onActive('{{ area.id }}','{{ area.lat }}','{{ area.lng }}','{{ area.name }}');">
 										<a href="#"> <span class="badge pull-right" >2</span>{{ area.name }}</a>
 										<ul class="folder-list" area_id="{{ area.id }}">
 											{% if lsDevice %}
 												{% for device in lsDevice %}
 													{% if device.status == '2' %}
-														<li device_id ="{{ device.id }}"><a href="#"><i
+														<li device_id ="{{ device.id }}" onclick="onshowDevice('{{ area.id }}','{{ device.id }}','{{ device.lat }}','{{ device.lng }}','{{ device.name }}');"><a href="#"><i
 															class="fa fa-times-circle"></i>{{ device.code }}-{{ device.short_address }}</a></li>
 													{% elif device.status == '0' %}
-														<li><a href="#"><i
+														<li device_id ="{{ device.id }}" onclick="onshowDevice('{{ area.id }}','{{ device.id }}','{{ device.lat }}','{{ device.lng }}','{{ device.name }}');"><a href="#"><i
 															class="fa fa-ban"></i>{{ device.code }}-{{ device.short_address }}</a></li>
 													{% else %}
-														<li><a href="#"><i
+														<li device_id ="{{ device.id }}" onclick="onshowDevice('{{ area.id }}','{{ device.id }}','{{ device.lat }}','{{ device.lng }}','{{ device.name }}');"><a href="#"><i
 															class="fa fa-check-square"></i>{{ device.code }}-{{ device.short_address }}</a></li>
 													{% endif %}
 												{% endfor %}
@@ -118,10 +117,17 @@
 		};
 		var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
 		map.setOptions({styles: styles});
-		var marker = new google.maps.Marker({
-			position: myLatlng,
-			map: map,
-			title: 'Việt Nam'
+		$("#selArea option").each(function()
+		{
+			var lat = $(this).attr('lat');
+			var lng = $(this).attr('lng');
+			var name = $(this).attr('name');
+			myLatlng = new google.maps.LatLng(lat, lng)
+			var marker = new google.maps.Marker({
+					position: myLatlng,
+					map: map,
+					title: name
+				});
 		});
 	}
 	google.maps.event.addDomListener(window, 'load', initialize);
@@ -135,25 +141,77 @@
 			"sPaginationType" : "full_numbers"
 		});
 	});
-	jQuery(window).load(function(){ 
+	$("#selArea").change(function(){
+		if($(this).find('option:selected').val() != '-1')
+		{
+			var area_id = $(this).find('option:selected').attr('area_id');
+			var lat = $(this).find('option:selected').attr('lat');
+			var lng = $(this).find('option:selected').attr('lng');
+			var name = $(this).find('option:selected').attr('name');
+			
+			//turn on,off
+			$("ul li[area_id][area_id='"+ area_id +"']").show();
+			$("ul li[area_id][area_id!='"+ area_id +"']").hide();
+			//active
+			onActive(area_id,lat,lng,name);
+		}
+		else
+		{
+			initialize();
+			$("ul li[area_id]").show();
+			$("ul li[area_id]").removeClass("active");
+			$("ul[area_id]").hide();
+		}
+	});
+	function onshowDevice(area_id,device_id,lat,lng,name){
+		$("ul li[area_id][area_id='"+ area_id +"']").attr('used','1');
+		//show location divice order area
+		alert("Name : " + name + ",Lat : " + lat + ",:Lng: " + lng);
+	}
+	jQuery(window).load(function(area_id){ 
 		$(".numberic").numeric();
 		$("ul.folder-list").hide();
 		//alert($("ul li ul.folder-list li[device_id][device_id='4']").size());
 	});
-	function onActive(area_id)
+	function onActive(area_id,lat,lng,name)
 	{
-		if(!$("ul li[area_id][area_id='"+ area_id +"']").hasClass("active"))
+		var used = $("ul li[area_id][area_id='"+ area_id +"']").attr('used');
+		if(used == '0')
 		{
-			$("ul li[area_id][area_id='"+ area_id +"']").addClass("active");
-			$("ul[area_id][area_id='"+ area_id +"']").show();
+			if(!$("ul li[area_id][area_id='"+ area_id +"']").hasClass("active"))
+			{
+				$("ul li[area_id][area_id='"+ area_id +"']").addClass("active");
+				$("ul[area_id][area_id='"+ area_id +"']").show();
+			}
+			else
+			{
+				$("ul li[area_id][area_id='"+ area_id +"']").removeClass("active");
+				$("ul[area_id][area_id='"+ area_id +"']").hide();
+			}
+			$("ul li[area_id][area_id!='"+ area_id +"']").removeClass("active");
+			$("ul[area_id][area_id!='"+ area_id +"']").hide();
+			
+			showAddress(lat,lng,name);
 		}
 		else
 		{
-			$("ul li[area_id][area_id='"+ area_id +"']").removeClass("active");
-			$("ul[area_id][area_id='"+ area_id +"']").hide();
+			$("ul li[area_id][area_id='"+ area_id +"']").attr('used','0');
 		}
-		$("ul li[area_id][area_id!='"+ area_id +"']").removeClass("active");
-		$("ul[area_id][area_id!='"+ area_id +"']").hide();
+	}
+	function showAddress(lat,lng,address)
+	{
+		var myLatlng = new google.maps.LatLng(lat, lng)
+		var mapOptions = {
+				center: myLatlng,
+				zoom: 15
+		};
+		var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title: address
+		});
+		google.maps.event.addDomListener(window, 'load', initialize);
 	}
 </script>
 {% endblock scripts%}

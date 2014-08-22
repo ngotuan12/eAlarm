@@ -11,6 +11,8 @@ class Device(models.Model):
     code = models.CharField(max_length=10)
 #     area_id = models.ForeignKey(Area)
     name = models.CharField(max_length=100)
+    lat = models.FloatField()
+    lng = models.FloatField()
     address = models.CharField(max_length=200)
     mac_add = models.CharField(max_length=30)
     short_address = models.CharField(max_length=200)
