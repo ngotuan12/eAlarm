@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^add-area$', AddArea.index,name='add-area'),
     url(r'^edit-area$', EditArea.index),
     url(r'^device$', Device.index),
+    url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
     url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : False, }),
 )
