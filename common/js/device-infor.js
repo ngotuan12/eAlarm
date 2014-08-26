@@ -1,7 +1,8 @@
 var plot;
-var data = [], totalPoints = 300;
+var data = [], totalPoints = 100;
 var updateInterval = 30;
 var currentDeviceID;
+var currentDeviceInforID;
 var tid;
 function onGetDeviceInfor(device_id) {
 	currentDeviceID = device_id;
@@ -10,13 +11,13 @@ function onGetDeviceInfor(device_id) {
 		'csrfmiddlewaretoken' : csrftoken,
 		'device_id' : device_id,
 	});
-	posting.done(function(data) {
-		
+	posting.done(function(data) 
+	{
 		resetChart(data.device_infor[0].properties.min,data.device_infor[0].properties.max);
 		updateData(data.device_infor[0].value);
+		currentDeviceInforID = data.device_infor[0].id;
 		updateDeviceInfor(data.device, data.device_infor);
 		abortTimer();
-		
 		tid = setTimeout(mycode, 1000);
 	});
 }
@@ -34,7 +35,32 @@ function getCurrentDeviceInfor()
 	});
 }
 
-function updateDeviceInfor(device, infors) {
+function updateDeviceInfor(device, infors)
+{
+	//update device name
+	var deviceName = $('#device-name');
+	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
+	var deviceMac = $('#device-mac');
+	deviceMac.html("MAC: "+device.mac_add);
+	var deviceServer = $('#device-server');
+	deviceServer.html("Connected server: "+nvl(device.connected_server,"Chưa kết nối"));
+	var deviceStatus = $('#device-status');
+	if(device.status=="1")
+		deviceStatus.attr("src","images/ic_green.png");
+	else if(device.status=="2")
+		deviceStatus.attr("src","images/ic_red.png")
+	else if(device.status=="0")
+		deviceStatus.attr("src","images/ic_blue.png");
+//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
+	var deviceIssue = $('#device-issue');
+//	if(device.status=="2")
+//	{
+//		deviceIssue.css("display","");
+//	}
+//	else
+//		deviceIssue.css("display","none");
+//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
+	//update device information
 	var deviceInfor = $('#device-infor');
 	deviceInfor.empty();
 	for (var i = 0; i < infors.length; i++) {
@@ -56,7 +82,8 @@ function updateDeviceInfor(device, infors) {
 	}
 }
 
-function addProperty(device,row, infor, status) {
+function addProperty(device,row, infor, status)
+{
 	var column = $('<div>');
 	column.attr("class", "col-sm-6");
 	if(device.status ="0")
@@ -177,4 +204,12 @@ function updateChart() {
 	plot.setData([getData()]);
 	// Since the axes don't change, we don't need to call plot.setupGrid()
 	plot.draw();
+}
+
+function nvl(obj,strNull)
+{
+	if(obj)
+		return obj.toString();
+	else
+		return strNull;
 }
