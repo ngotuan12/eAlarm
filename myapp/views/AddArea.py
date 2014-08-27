@@ -4,16 +4,17 @@ Created on Apr 3, 2014
 
 @author: TuanNA
 '''
-# @login_required(login_url='/signin')
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.context_processors import csrf
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 
 from myapp.models import Area
 
 
 @login_required(login_url='/login')
+@permission_required('myapp.add_area',login_url='/permission-error')
 def index(request):
 	if request.method == 'GET':
 		try:
@@ -24,7 +25,7 @@ def index(request):
 			context={}
 			print(ex)
 		finally:
-			return render_to_response("add-area.html", context)
+			return render_to_response("add-area.html", context,RequestContext(request))
 	elif request.method == 'POST':
 		formType= request.POST['type']
 		if formType == "addArea":
@@ -61,4 +62,4 @@ def index(request):
 			except Exception as ex:
 				context.update({'has_error':ex,'code':_code,'name':_name,'status':_status,'lat':_lat,'lng':_lng})
 				context.update(csrf(request))
-				return render_to_response("add-area.html", context)
+				return render_to_response("add-area.html", context,RequestContext(request))
