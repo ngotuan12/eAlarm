@@ -1,26 +1,152 @@
 {% extends "base.html" %}
 {% block styles %}
 	<link href="../../css/style.default.css" rel="stylesheet">
+	<link href="../../css/custom.css" rel="stylesheet">
 {% endblock styles %}
 
 {% block content-header %} 
 	<div class="pageheader">
 	<h2>
-		<i class="fa fa-home"></i> Tài khoản <span>Thêm tài khoản</span>
+		<i class="fa fa-home"></i> Tài khoản <span>Sửa thông tin tài khoản</span>
 	</h2>
 	<div class="breadcrumb-wrapper">
 		<ol class="breadcrumb">
 			<li><a href="/user">User</a></li>
-			<li class="active">Add user</li>
+			<li class="active">{{ current_user.username }}</li>
 		</ol>
 	</div>
 </div>
 {% endblock %}
-			
 {% block content %}
-	<link href="../../css/style.default.css" rel="stylesheet">
-{% endblock content %}
-{% block scripts %}
+<div class="contentpanel">
+	<form action="" class="form-horizontal form-bordered" method="post">
+		<div class="panel">
+			<div class="panel-body">
+			
+				<div class="form-group ">
+					<label class="col-sm-2 control-label">Tài khoản</label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="Tài khoản" class="form-control">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Mật khẩu</label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="Mật khẩu" class="form-control">
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Thông tin tài khoản</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Họ</label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="Họ" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Tên</label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="Tên" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Email</label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="Email" class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Phân quyền</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<div class="col-sm-5 ckbox ckbox-default ckpermission">
+						<input type="checkbox" value="1" id="checkbox1"> <label for="checkbox1">Admin
+							</label>
+					</div>
+					
+				</div>
+				<div class="form-group">
+					<div class="col-sm-5 ckbox ckbox-default ckpermission">
+						<input type="checkbox" value="1" id="checkbox2"> <label for="checkbox2">Kích hoạt
+							</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1">
+						<p>Quyền hạn</p>
+					</div>
+					<div class="col-sm-9">
+						{% for per in permissions %}
+							<div class="form-group">
+								<div class="col-sm-5">
+									<div class="ckbox ckbox-default">
+										<input type="checkbox" value="{{ per.id }}" id="checkboxPer{{ per.id }}"checked="checked"> <label for="checkboxPer{{ per.id }}">{{ per.name }}</label>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1">
+						<p>Phòng ban</p>
+						
+					</div>
+					<div class="col-sm-8">
+						<div class="col-sm-5">
+							<div class="ckbox ckbox-default">
+								<input type="checkbox" value="1" id="checkboxDefault"
+									checked="checked"> <label for="checkboxDefault">Checkbox
+									Default</label>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="ckbox ckbox-default">
+								<input type="checkbox" value="1" id="checkboxDefault"
+									checked="checked"> <label for="checkboxDefault">Checkbox
+									Default</label>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="ckbox ckbox-default">
+								<input type="checkbox" value="1" id="checkboxDefault"
+									checked="checked"> <label for="checkboxDefault">Checkbox
+									Default</label>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="ckbox ckbox-default">
+								<input type="checkbox" value="1" id="checkboxDefault"
+									checked="checked"> <label for="checkboxDefault">Checkbox
+									Default</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<button class="btn btn-primary">Lưu</button>&nbsp;
+					<button class="btn btn-default">Thoát</button>
+				</div>
+			 </div>
+	</form>
+	
+</div>
+{% endblock content %} {% block scripts %}
 <script src="../../js/jquery-1.10.2.min.js"></script>
 <script src="../../js/jquery-migrate-1.2.1.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
