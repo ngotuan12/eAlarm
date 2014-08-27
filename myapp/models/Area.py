@@ -21,3 +21,7 @@ class Area(models.Model):
     area_code = models.CharField(max_length=25)
     class Meta:
         db_table = 'area'
+        app_label = 'myapp'
+        permissions = (
+            ("view_area", "Can see list area"),
+        )

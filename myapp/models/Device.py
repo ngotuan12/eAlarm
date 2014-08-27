@@ -20,3 +20,7 @@ class Device(models.Model):
     status = models.CharField(max_length=1)
     class Meta:
         db_table = 'device'
+        app_label = 'myapp'
+        permissions = (
+            ("view_device", "Can see list device"),
+        )
