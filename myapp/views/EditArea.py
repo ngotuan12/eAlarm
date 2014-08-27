@@ -56,7 +56,7 @@ def index(request):
 					area.level = '2'
 					area.type = '2'
 					
-# 					area.save()
+					area.save()
 				#get data show client
 				lsArea = Area.objects.all()
 				context={'lsArea':lsArea}
@@ -66,3 +66,9 @@ def index(request):
 				context.update({'has_error':ex,'area_id':_area_id,'code':_code,'name':_name,'status':_status,'lat':_lat,'lng':_lng})
 				context.update(csrf(request))
 				return render_to_response("edit-area.html", context)
+		elif formType == "deleteArea":
+			_id = request.POST['hd_area']
+			area = Area.objects.get(id = _id)
+			
+			area.delete()
+			return HttpResponseRedirect('/area')

@@ -47,3 +47,9 @@ def index(request):
 			dp.save()
 			
 			return HttpResponseRedirect('/device-property')
+		elif formType == 'deleteDeviceProperty':
+			_id = request.POST['hd_device_pro']
+			dp = DeviceProperties.objects.get(id = _id)
+			
+			dp.delete()
+			return HttpResponseRedirect('/device-property')

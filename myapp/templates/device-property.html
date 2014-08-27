@@ -52,7 +52,12 @@
 							<td devicePropertyId ="symbol{{ deviceProperty.id }}" symbol="{{ deviceProperty.symbol }}">{{ deviceProperty.symbol }}</td>
 							<td class="table-action">
 								<a href="#" onclick="onEditDeviceProperty('{{ deviceProperty.id }}');" data-toggle="modal" data-target="#edit-device-property"><i class="fa fa-pencil"></i></a>
-								<a href="#" onclick="onDeleteDeviceProperty('{{ deviceProperty.id }}');" class="delete-row"><i class="fa fa-trash-o"></i></a>
+								<a href="#" onclick="onDeleteDeviceProperty('{{ deviceProperty.id }}');" class="delete-row confirm"><i class="fa fa-trash-o"></i></a>
+								<form method="post" id="DeleteDeviceProperty{{ deviceProperty.id }}" action="/edit-device-property">
+									{% csrf_token %}
+									<input type="hidden" name="hd_device_pro" value="{{ deviceProperty.id }}">
+									<input type="hidden" name="type" value="deleteDeviceProperty">
+								</form>
 							</td>
 						</tr>
 						{% endfor %}
@@ -83,6 +88,7 @@
 <script src="js/jquery.numeric.js"></script>
 <script src="js/custom.js"></script>
 <script src="js/jquery.validate.min.js"></script>
+<script src="js/jquery.confirm.js"></script>
 <script>
 	jQuery(document).ready(function() {
 		// Chosen Select
@@ -120,7 +126,15 @@
 	}
 	function onDeleteDeviceProperty(device_property_id)
 	{
-		alert("delete: "+device_property_id);
+		$.confirm({
+			text: "Xóa bản ghi?",
+			confirm: function(button) {
+				jQuery('#DeleteDeviceProperty'+device_property_id).submit();
+			},
+			cancel: function(button) {
+				
+			}
+		});
 	}
 	jQuery(window).load(function(){ 
 		$(".numberic").numeric();
