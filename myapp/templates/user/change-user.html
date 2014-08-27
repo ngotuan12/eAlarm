@@ -19,7 +19,7 @@
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
-	<form action="" class="form-horizontal form-bordered" method="post">
+	<form action="" class="form-horizontal form-bordered" method="post" id="formUser" novalidate="novalidate">
 		{% csrf_token %}
 		<div class="panel">
 			<div class="panel-body">
@@ -27,14 +27,14 @@
 				<div class="form-group ">
 					<label class="col-sm-2 control-label">Tài khoản</label>
 					<div class="col-sm-8">
-						<input type="text" placeholder="Tài khoản" class="form-control" value="{{ current_user.username }}" disabled="disabled">
+						<input type="text" name="txtUserName" placeholder="Tài khoản" class="form-control" value="{{ current_user.username }}" disabled="disabled">
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Mật khẩu</label>
 					<div class="col-sm-8">
-						<input type="password" placeholder="Mật khẩu" class="form-control" value="{{ current_user.password }}">
+						<input type="password" name="txtPassWord" placeholder="Mật khẩu" class="form-control" value="{{ current_user.password }}" disabled="disabled">
 					</div>
 				</div>
 			</div>
@@ -49,19 +49,19 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Họ</label>
 					<div class="col-sm-8">
-						<input type="text" placeholder="Họ" class="form-control" value="{{ current_user.first_name }}">
+						<input name="txtFirstName" type="text" placeholder="Họ" class="form-control" value="{{ current_user.first_name }}" required>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Tên</label>
 					<div class="col-sm-8">
-						<input type="text" placeholder="Tên" class="form-control" value="{{ current_user.last_name }}">
+						<input name="txtLastName" type="text" placeholder="Tên" class="form-control" value="{{ current_user.last_name }}" required>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Email</label>
 					<div class="col-sm-8">
-						<input type="text" placeholder="Email" class="form-control" value="{{ current_user.email }}">
+						<input name="txtEmail" type="text" placeholder="Email" class="form-control" value="{{ current_user.email }}" required>
 					</div>
 				</div>
 			</div>
@@ -73,20 +73,20 @@
 			<div class="panel-body">
 				<div class="form-group">
 					<div class="col-sm-5 ckbox ckbox-default ckpermission">
-						<input type="checkbox" value="1" id="checkbox1"
+						<input type="checkbox" name="checkboxSupperUser" id="checkboxSupperUser"
 							{% if current_user.is_superuser %}
 											checked="checked"
-										{% endif %}> <label for="checkbox1">Admin
+										{% endif %}> <label for="checkboxSupperUser">Admin
 							</label>
 					</div>
 					
 				</div>
 				<div class="form-group">
 					<div class="col-sm-5 ckbox ckbox-default ckpermission">
-						<input type="checkbox" value="1" id="checkbox2"
+						<input type="checkbox" name="checkboxActive" id="checkboxActive"
 							{% if current_user.is_active %}
 											checked="checked"
-										{% endif %}> <label for="checkbox2">Kích hoạt
+										{% endif %} > <label for="checkboxActive">Kích hoạt
 							</label>
 					</div>
 				</div>
@@ -131,7 +131,7 @@
 		</div>
 		<div class="row">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button class="btn btn-primary">Lưu</button>&nbsp;
+					<button class="btn btn-primary" onclick="return onValidate();">Lưu</button>&nbsp;
 					<button class="btn btn-default">Thoát</button>
 				</div>
 			 </div>
@@ -149,5 +149,17 @@
 <script src="../../js/jquery.cookies.js"></script>
 
 <script src="../../js/custom.js"></script>
-
+<script src="../../js/jquery.validate.min.js"></script>
+<script>
+function onValidate()
+{
+	var $valid = jQuery('#formUser').validate();
+	if (!$valid)
+	{
+		$validator.focusInvalid();
+		return false;
+	}
+	jQuery('#formUser').submit();
+}
+</script>
 {% endblock scripts%}

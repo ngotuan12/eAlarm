@@ -36,7 +36,7 @@ def add_group(request):
             return HttpResponseRedirect("/group")
         except Exception as ex:
             context.update({'has_error':ex})
-    context ={'permissions':permissions}
+    context.update({'permissions':permissions})
     context.update(csrf(request))
     return render_to_response("group/add-group.html",context, RequestContext(request))
 @user_passes_test(lambda u: u.is_superuser,login_url='/permission-error',redirect_field_name=None)
@@ -60,7 +60,7 @@ def change_group(request,group_id):
                 return HttpResponseRedirect("/group")
             except Exception as ex:
                 context.update({'has_error':ex})
-        context ={'permissions':permissions,'current_group':current_group,'current_pers':current_pers}
+        context.update({'permissions':permissions,'current_group':current_group,'current_pers':current_pers})
         context.update(csrf(request))
         return render_to_response("group/change-group.html",context, RequestContext(request))
     except Group.DoesNotExist:

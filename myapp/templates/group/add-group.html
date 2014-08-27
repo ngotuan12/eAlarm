@@ -19,7 +19,7 @@
 			
 {% block content %}
 <div class="contentpanel">
-	<form action="" class="form-horizontal form-bordered" method="post">
+	<form action="" class="form-horizontal form-bordered" method="post" novalidate="novalidate" id="formGroup">
 		{% csrf_token %}
 		<div class="panel">
 			<div class="panel-body">
@@ -27,7 +27,7 @@
 				<div class="form-group ">
 					<label class="col-sm-2 control-label">Tên phòng ban</label>
 					<div class="col-sm-8">
-						<input name= "txtGroupName"type="text" placeholder="Tên phòng ban" class="form-control" value="">
+						<input name= "txtGroupName"type="text" placeholder="Tên phòng ban" class="form-control" value="" required>
 					</div>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 		</div>
 		<div class="row">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button class="btn btn-primary">Lưu</button>&nbsp;
+					<button class="btn btn-primary" onclick="return onValidate();">Lưu</button>&nbsp;
 					<a class="btn btn-default" href="/group">Thoát</a>
 				</div>
 			 </div>
@@ -76,5 +76,17 @@
 <script src="../../js/jquery.cookies.js"></script>
 
 <script src="../../js/custom.js"></script>
-
+<script src="../../js/jquery.validate.min.js"></script>
+<script>
+	function onValidate()
+	{
+		var $valid = jQuery('#formGroup').valid();
+		if (!$valid)
+		{
+			$validator.focusInvalid();
+			return false;
+		}
+		jQuery('#formGroup').submit();
+	}
+</script>
 {% endblock scripts%}

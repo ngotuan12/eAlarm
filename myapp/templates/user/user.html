@@ -26,6 +26,7 @@
 							<th>Tên</th>
 							<th>Email </th>
 							<th>Ngày tạo</th>
+							<th>Sửa/Xoá</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -37,6 +38,15 @@
 							<td>{{ user.last_name }}</td>
 							<td>{{ user.email }}</td>
 							<td>{{ user.date_joined }}</td>
+							<td class="table-action">
+								<a href="/user/{{ user.id }}/"><i class="fa fa-pencil"></i></a>
+								<a href="#" onclick="deleteUser('{{ user.id }}');" class="delete-row confirm"><i class="fa fa-trash-o"></i></a>
+								 <form method="post" id="deleteUser{{ user.id }}" action="/user/delete/{{ user.id }}/">
+								  {% csrf_token %}
+								  <input type="hidden" name="hd_device_pro" value="{{ user.id }}">
+								  <input type="hidden" name="type" value="deleteDeviceProperty">
+								 </form>
+							</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -65,6 +75,7 @@
 <script src="js/chosen.jquery.min.js"></script>
 
 <script src="js/custom.js"></script>
+<script src="js/jquery.confirm.js"></script>
 <script>
 	jQuery(document).ready(function() {
 
@@ -78,5 +89,20 @@
 				disable_search_threshold : 10
 		});
 	});
+	
+	function deleteUser(user_id)
+	{
+		$.confirm({
+			text : "Xóa bản ghi?",
+			confirm : function(button)
+			{
+				jQuery('#deleteUser' + user_id).submit();
+			},
+			cancel : function(button)
+			{
+
+			}
+		});
+	}
 </script>
 {% endblock scripts%}
