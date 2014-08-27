@@ -21,22 +21,14 @@
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th>Tài khoản </th>
-							<th>Họ </th>
-							<th>Tên</th>
-							<th>Email </th>
-							<th>Ngày tạo</th>
+							<th>Tên phòng ban</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for user in users %}
+						{% for group in groups %}
 						<tr class="odd gradeX">
 							<td>{{forloop.counter}}</td>
-							<td><a href="/user/{{ user.id }}/">{{ user.username }}</a></td>
-							<td>{{ user.first_name }}</td>
-							<td>{{ user.last_name }}</td>
-							<td>{{ user.email }}</td>
-							<td>{{ user.date_joined }}</td>
+							<td><a href="/group/{{ group.id }}/">{{ group.name }}</a></td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -67,16 +59,14 @@
 <script src="js/custom.js"></script>
 <script>
 	jQuery(document).ready(function() {
-
 		$('#usertable').dataTable({
 			"sPaginationType" : "full_numbers"
 		});
-		// Chosen Select
 		$("select").chosen({
-				'min-width' : '150px',
-				'white-space' : 'nowrap',
-				disable_search_threshold : 10
-		});
+			'min-width' : '150px',
+			'white-space' : 'nowrap',
+			disable_search_threshold : 10
+	});
 	});
 </script>
 {% endblock scripts%}

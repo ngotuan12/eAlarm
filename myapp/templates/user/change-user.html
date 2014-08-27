@@ -99,11 +99,9 @@
 							<div class="form-group">
 								<div class="col-sm-5">
 									<div class="ckbox ckbox-default">
-										<input type="checkbox" value="{{ per.id }}" id="checkboxPer{{ per.id }}"
-										{% if per.id in current_pers %}
+										<input type="checkbox" id="checkboxPer{{ per.id }}" name = "checkboxPer{{ per.id }}" {% if per.id in current_pers %}
 											checked="checked"
-										{% endif %}
-											> <label for="checkboxPer{{ per.id }}">{{ per.name }}</label>
+										{% endif %}> <label for="checkboxPer{{ per.id }}">{{ per.name }}</label>
 									</div>
 								</div>
 							</div>
@@ -120,11 +118,9 @@
 							<div class="form-group">
 								<div class="col-sm-5">
 									<div class="ckbox ckbox-default">
-										<input type="checkbox" value="{{ per.id }}" id="checkboxPer{{ per.id }}"
-											{% if group.id in current_groups %}
+										<input type="checkbox" id="checkboxGroup{{ group.id }}" name = "checkboxGroup{{ group.id }}" {% if group.id in current_groups %}
 											checked="checked"
-										{% endif %}
-											> <label for="checkboxPer{{ per.id }}">{{ group.name }}</label>
+										{% endif %} > <label for="checkboxGroup{{ group.id }}">{{ group.name }}</label>
 									</div>
 								</div>
 							</div>

@@ -27,7 +27,12 @@ def view_user(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser,login_url='/permission-error',redirect_field_name=None)
 def add_user(request):
+    content_types = ContentType.objects.filter(app_label = "myapp")
+    permissions = Permission.objects.filter(content_type__in=content_types).order_by('content_type__id','-codename')
+    groups = Group.objects.all()
     context ={}
+    context ={'permissions':permissions,'groups':groups}
+    context.update(csrf(request))
     return render_to_response("user/add-user.html",context, RequestContext(request))
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser,login_url='/permission-error',redirect_field_name=None)
