@@ -17,7 +17,7 @@ class Device(models.Model):
     mac_add = models.CharField(max_length=30)
     short_address = models.CharField(max_length=200)
     connected_server = models.CharField(max_length=30)
-    status = models.CharField(max_length=1)
+    status = models.CharField(max_length=1,default ='0')
     class Meta:
         db_table = 'device'
         app_label = 'myapp'
