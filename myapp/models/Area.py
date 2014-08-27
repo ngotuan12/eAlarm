@@ -10,6 +10,7 @@ class Area(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
 #     parent_id = models.ForeignKey('Area',blank=True, null=True, related_name='considered_best_friend_for')
+    parent = models.ForeignKey('self',db_column='parent_id')
     level = models.CharField(max_length=5)
     status = models.CharField(max_length=1)
     woodenleg = models.CharField(max_length=50)

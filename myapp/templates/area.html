@@ -39,7 +39,7 @@
 						<tr class="odd gradeX">
 							<td devicePropertyId ="name{{ area.id }}" name="{{ area.name }}">{{ area.name }}</td>
 							<td devicePropertyId ="code{{ area.id }}" code="{{ area.code }}">{{ area.code }}</td>
-							<td devicePropertyId ="code{{ area.id }}" description="{{ area.code }}">{{ area.code }}</td>
+							<td devicePropertyId ="code{{ area.id }}" description="{{ area.code }}">{{ area.parent.name }}</td>
 							<td devicePropertyId ="full_name{{ area.id }}" type="{{ area.full_name }}"> {{ area.full_name}}</td>
 							<td devicePropertyId ="status{{ area.id }}" min="{{ area.id }}">{% if area.status = "1" %} Kích hoạt {% else %} Không kích hoạt {% endif %}</td>
 							<td class="table-action">

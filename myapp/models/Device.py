@@ -3,13 +3,13 @@ Created on Aug 15, 2014
 
 @author: TuanNA
 '''
-# from myapp.models.Area import Area
+from myapp.models.Area import Area
 from django.db import models
 
 # Create your models here.
 class Device(models.Model):
     code = models.CharField(max_length=10)
-#     area_id = models.ForeignKey(Area)
+    area = models.ForeignKey(Area,db_column='area_id')
     name = models.CharField(max_length=100)
     lat = models.FloatField()
     lng = models.FloatField()
