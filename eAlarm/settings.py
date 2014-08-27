@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'myapp',
 )
 
 PASSWORD_HASHERS = (
@@ -98,4 +99,15 @@ REPORT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
                 os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)), 'myapp/templates'),
+)
+
+TEMPLATE_CONTEXT_PROCESSORS =(
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    'django.core.context_processors.csrf',
 )
