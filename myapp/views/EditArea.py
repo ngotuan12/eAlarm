@@ -38,16 +38,17 @@ def index(request):
 				_lat = request.POST['txtLat'].strip()
 				_lng = request.POST['txtLng'].strip()
 				_status = request.POST['slStatus'].strip()
-				area = Area.objects.filter(code = _code.upper())
-				if len(area) >1 :
+				area = Area.objects.exclude(id = _area_id).filter(code = _code.upper())
+				if len(area) >0 :
 					raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
-				elif len(area) == 1:
-					if str(_area_id) != str(area[0].id) :
-						raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
+# 				elif len(area) == 1:
+# 					if str(_area_id) != str(area[0].id) :
+# 						raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
 				else :
+					
 					area = Area.objects.get(id = _area_id)
 					
-					area.code = _code
+					area.code = _code.upper()
 					area.name = _name
 					area.lat = float(_lat)
 					area.lng = float(_lng)

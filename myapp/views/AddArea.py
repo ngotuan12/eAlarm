@@ -43,16 +43,16 @@ def index(request):
 					parent = Area.objects.get(code = 'VN')
 					area = Area()
 					
-					area.code = _code
+					area.code = _code.upper()
 					area.name = _name
-# 					area.parent_id = parent.id
+					area.parent = parent
 					area.lat = float(_lat)
 					area.lng = float(_lng)
 					area.status = _status
 					area.level = '2'
 					area.type = '2'
 					
-# 					area.save()
+					area.save()
 				#get data show client
 				lsArea = Area.objects.all()
 				context={'lsArea':lsArea}
