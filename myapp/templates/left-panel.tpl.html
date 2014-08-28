@@ -75,9 +75,14 @@
 					{% endif %}
 					
 					{% if perms.myapp.view_device_detail_report %}
-						<li><a href="icons.html"><i class="fa fa-caret-right"></i>
-								Báo cáo tổng hợp chi tiết phòng máy</a></li>
-						{% endif %}
+						<li><a href="/device-detail-report"><i class="fa fa-caret-right"></i>
+								Báo cáo tổng hợp chi tiết hoạt động phòng máy</a></li>
+					{% endif %}
+					
+					{% if perms.myapp.view_device_error_report %}
+						<li><a href="/device-error-report"><i class="fa fa-caret-right"></i>
+								Báo cáo thống kê lỗi phòng máy</a></li>
+					{% endif %}
 				</ul></li>
 		</ul>
 

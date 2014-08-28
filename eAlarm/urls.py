@@ -41,7 +41,9 @@ urlpatterns = patterns('',
     url(r'^group/delete/(?P<group_id>\w+)/$', Group.delete_group,name='delete-group'),
     url(r'^group/(?P<group_id>\w+)/$', Group.change_group,name='change-group'),
     # Device Report
-    url(r'^device-report$', Report.view_device_report,name='user'),
+    url(r'^device-report$', Report.view_device_report,name='device-report'),
+    url(r'^device-detail-report$', Report.view_device_detail_report,name='device-detail-report'),
+    url(r'^device-error-report$', Report.view_device_error_report,name='device-error-report'),
     # Device Detail Report
     url(r'^group$', Group.view_group,name='user'),
     url(r'^permission-error$', Error.permission_error,name='permission-error'),

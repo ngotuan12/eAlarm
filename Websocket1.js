@@ -383,7 +383,7 @@ function onClose(socket)
 		if(socket.gatewayinfo!=null)
 		{
 			log('gateway_id'+socket.gatewayinfo.id);
-			updateDevice(socket,socket.gatewayinfo.id,'0','',"Mất kết nối với server.",[]);
+			updateDevice(socket,socket.gatewayinfo.id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
 //			var strSQL = "update device_infor set value = 0 where device_id = ?";
 //			connDB.query(strSQL,[socket.gatewayinfo.id], function(err) 
 //			{
@@ -582,6 +582,18 @@ function insertDeviceTransaction(socket,current_transaction_id,device_id,device_
 		strSQL = "UPDATE device_transaction SET end_date = now() "
 			+"WHERE id = ? ";
 		connDB.query(strSQL,[current_transaction_id], function(err, rows, fields) {
+			if (err)
+			{
+				log(err);
+				return;
+			}
+		});
+	}
+	else
+	{
+		strSQL = "UPDATE device_transaction SET end_date = now() "
+			+"WHERE device_id = ? AND end_date IS NULL ";
+		connDB.query(strSQL,[device_id], function(err, rows, fields) {
 			if (err)
 			{
 				log(err);
