@@ -3,6 +3,8 @@ var data = [], totalPoints = 100;
 var updateInterval = 30;
 var currentDeviceID;
 var currentDeviceInforID;
+var InforIndex = 0;
+var device_infor;
 var tid;
 function onGetDeviceInfor(device_id) {
 	currentDeviceID = device_id;
@@ -13,9 +15,11 @@ function onGetDeviceInfor(device_id) {
 	});
 	posting.done(function(data) 
 	{
-		resetChart(data.device_infor[0].properties.min,data.device_infor[0].properties.max);
-		updateData(data.device_infor[0].value);
-		currentDeviceInforID = data.device_infor[0].id;
+		InforIndex = 0;
+		device_infor = data.device_infor;
+		resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
+		updateData(data.device_infor[InforIndex].value);
+		currentDeviceInforID = data.device_infor[InforIndex].id;
 		updateDeviceInfor(data.device, data.device_infor);
 		abortTimer();
 		tid = setTimeout(mycode, 1000);
@@ -31,7 +35,7 @@ function getCurrentDeviceInfor()
 	});
 	posting.done(function(data) {
 		updateDeviceInfor(data.device, data.device_infor);
-		updateData(data.device_infor[0].value);
+		updateData(data.device_infor[InforIndex].value);
 	});
 }
 
@@ -72,39 +76,67 @@ function updateDeviceInfor(device, infors)
 		separator.attr("class", "mb10");
 		separator.appendTo(row);
 
-		addProperty(device,row, infor, "0")
+		addProperty(device,row, infor)
 		if (i < infors.length - 2) {
 			i++;
 			infor = infors[i];
-			addProperty(device,row, infor, "1")
+			addProperty(device,row, infor)
 		}
 		row.appendTo(deviceInfor);
 	}
 }
 
-function addProperty(device,row, infor, status)
+function addProperty(device,row, infor)
 {
 	var column = $('<div>');
+	column.attr("id",infor.id);
 	column.attr("class", "col-sm-6");
-	if(device.status ="0")
+	if(device.status =="0")
 	{
 		column.html("<p>" + infor.properties.name
 				+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 	}
-	else if (infor.value == 0) {
-		column.html("<p>" + infor.properties.name
-				+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
-	} else if (status == "0") {
-		column.html("<p>" + infor.properties.name
-				+ "</p> <h4 style=\"color: red\">" + infor.value + " "
-				+ infor.properties.symbol + "</h4>");
-	} else if (status == "1") {
-		column.html("<p>" + infor.properties.name
-				+ "</p> <h4 style=\"color: green\">" + infor.value + " "
-				+ infor.properties.symbol + "</h4>");
+	else
+	{
+		if(infor.properties.require == '0')
+		{
+			column.html("<p>" + infor.properties.name
+			+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
+		}
+		else if(infor.properties.require == '1')
+		{
+			if (infor.value == 0)
+			{
+				column.html("<p>" + infor.properties.name
+						+ "</p> <h5 style=\"color: red\">" + "Mất " + infor.properties.name + "</h5>");
+			}
+			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
+			{
+				column.html("<p>" + infor.properties.name
+						+ "</p> <h4 style=\"color: red\">" + infor.value + infor.properties.symbol +"</h4>");
+			}
+			else
+			{
+				column.html("<p>" + infor.properties.name
+						+ "</p> <h4 style=\"color: green\">" + infor.value + infor.properties.symbol +"</h4>");
+			}
+		}
 	}
+	column.click(function(e){
+		currentDeviceInforID = $(this).attr('id');
+		for(var i=0;i<device_infor.length;i++)
+		{
+			if(device_infor[i].id.toString() == currentDeviceInforID.toString())
+			{
+				InforIndex = i;
+				break;
+			}	
+		}
+		resetChart(device_infor[InforIndex].properties.min,device_infor[InforIndex].properties.max)
+	});
 	column.appendTo(row);
 }
+
 function mycode() {
 	getCurrentDeviceInfor();
 	

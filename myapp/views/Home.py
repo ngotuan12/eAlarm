@@ -13,6 +13,14 @@ from myapp.models import Device
 
 @login_required(login_url='/login')
 def index(request):
-	devices = Device.objects.all()
-	context={'devices':devices}
-	return render_to_response("index.html", context, RequestContext(request))
+	if request.method == 'GET':
+		try:
+			_device_id = request.GET['device_id']
+			devices = Device.objects.all()
+			context={'devices':devices,'device_id':_device_id}
+			return render_to_response("index.html", context, RequestContext(request))
+		except Exception as ex:
+			print(ex)
+			devices = Device.objects.all()
+			context={'devices':devices}
+			return render_to_response("index.html", context, RequestContext(request))

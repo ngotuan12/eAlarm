@@ -13,15 +13,14 @@ from django.views.decorators.http import require_http_methods
 from myapp.models.Device import Device
 from myapp.models.DeviceInfor import DeviceInfor
 
-
 @login_required(login_url='/login')
 @require_http_methods(["POST",])
 def index(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').order_by('device_pro__code')
-		print(device_infor.query)
+		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').order_by('device_pro__id')
+# 		print(device_infor.query)
 		infors =[]
 		for infor in device_infor:
 			infors.append({'id':infor.id,'value':infor.value,'status':infor.status,'properties':model_to_dict(infor.device_pro)})
