@@ -47,5 +47,5 @@ urlpatterns = patterns('',
     url(r'^permission-error$', Error.permission_error,name='permission-error'),
     url(r'^notfound-error$', Error.notfound_error,name='notfound-error'),
     url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
-    url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : False, }),
+    url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : True, }),
 )

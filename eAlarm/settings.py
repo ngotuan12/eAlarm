@@ -111,3 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.csrf',
 )
+
+ALARM_SERVER = 'http://localhost:8080/AlarmServer/'
+REPORT_SERVICE = 'ReportService'
+PERMISSION_SERVICE = 'AuthorizationService'
