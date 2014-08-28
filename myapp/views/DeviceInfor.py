@@ -16,12 +16,11 @@ from myapp.models.DeviceInfor import DeviceInfor
 
 @login_required(login_url='/login')
 @require_http_methods(["POST",])
-@permission_required('myapp.view_deviceproperties',login_url='/permission-error')
 def index(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').select_related().order_by('device_pro__code')
+		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').order_by('device_pro__code')
 		print(device_infor.query)
 		infors =[]
 		for infor in device_infor:

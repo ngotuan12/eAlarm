@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from eAlarm import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
-, Device, User, Error, Group,ListDevice,AddDevice,EditDevice
+, Device, User, Error, Group,ListDevice,AddDevice,EditDevice,Report
 
 
 admin.autodiscover()
@@ -40,7 +40,10 @@ urlpatterns = patterns('',
     url(r'^group/add/$', Group.add_group,name='add-group'),
     url(r'^group/delete/(?P<group_id>\w+)/$', Group.delete_group,name='delete-group'),
     url(r'^group/(?P<group_id>\w+)/$', Group.change_group,name='change-group'),
-    
+    # Device Report
+    url(r'^device-report$', Report.view_device_report,name='user'),
+    # Device Detail Report
+    url(r'^group$', Group.view_group,name='user'),
     url(r'^permission-error$', Error.permission_error,name='permission-error'),
     url(r'^notfound-error$', Error.notfound_error,name='notfound-error'),
     url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
