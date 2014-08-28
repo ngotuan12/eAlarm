@@ -68,6 +68,7 @@
 						<input type="hidden" name="area_id" value="{% if area %}{{ area.id }}{% endif %}{% if area_id %}{{ area_id }}{% endif %}">
 						<input type="hidden" id="txtLat" name="txtLat" value="{% if area %}{{ area.lat }}{% endif %} {% if lat %}{{ lat }}{% endif %}">
 						<input type="hidden" id="txtLng" name="txtLng" value="{% if area %}{{ area.lng }}{% endif %} {% if lng %}{{ lng }}{% endif %}">
+						<input type="hidden" id="txtFullName" name="txtFullName" value="{% if area %} {{ area.full_name }} {% endif %}">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='/area'">Thoát</button>
@@ -164,10 +165,11 @@
 			$("#fulladdress").html(address+ ",VIỆT NAM")
 			var geo = new google.maps.Geocoder;
 			
-			geo.geocode({'address':address},function(results, status){
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
 				if (status == google.maps.GeocoderStatus.OK) {
 					$("#txtLat").val(results[0].geometry.location.lat());
 					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+ ",Việt Nam");
 					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
 				} else {
 					alert("Geocode was not successful for the following reason: " + status);

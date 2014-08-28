@@ -10,7 +10,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
-from myapp.models import DeviceProperties
+from myapp.models import DeviceProperties,Device,DeviceInfor
 
 
 @permission_required('myapp.add_deviceproperties',login_url='/permission-error')
@@ -45,7 +45,22 @@ def index(request):
 			dp.max_alarm = _maxAlarm
 			dp.symbol = _symbol
 			
+			if request.POST.get('cbRequire') :
+				dp.require = '1'
+			else :
+				dp.require = '0'
 			dp.save()
+			
+			lsDevice = Device.objects.all()
+			for device in lsDevice :
+				deviceInfo = DeviceInfor()
+				
+				deviceInfo.device = device
+				deviceInfo.device_pro = dp
+				deviceInfo.status = '0'
+				deviceInfo.value = float('0')
+				
+				deviceInfo.save()
 			
 			return HttpResponseRedirect('/device-property')
 		elif formType == 'editDeviceProperty':

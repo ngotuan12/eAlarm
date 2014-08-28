@@ -40,6 +40,7 @@ def index(request):
 				_lat = request.POST['txtLat'].strip()
 				_lng = request.POST['txtLng'].strip()
 				_status = request.POST['slStatus'].strip()
+				_fullName = request.POST['txtFullName'].strip()
 				area = Area.objects.exclude(id = _area_id).filter(code = _code.upper())
 				if len(area) >0 :
 					raise Exception(("Mã khu vực '").decode('utf-8')+ _code + ("' đã tồn tại").decode('utf-8'))
@@ -55,6 +56,7 @@ def index(request):
 					area.lat = float(_lat)
 					area.lng = float(_lng)
 					area.status = _status
+					area.full_name = _fullName
 					area.level = '2'
 					area.type = '2'
 					

@@ -9,7 +9,7 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 
-from myapp.models import DeviceProperties
+from myapp.models import DeviceProperties,DeviceInfor
 
 
 @permission_required('myapp.change_deviceproperties',login_url='/permission-error')
@@ -45,7 +45,11 @@ def index(request):
 			dp.min_alarm = _minAlarm
 			dp.max_alarm = _maxAlarm
 			dp.symbol = _symbol
-			
+			if request.POST.get('cbRequire1') :
+				dp.require = '1'
+			else :
+				dp.require = '0'
+				
 			dp.save()
 			
 			return HttpResponseRedirect('/device-property')
@@ -53,5 +57,9 @@ def index(request):
 			_id = request.POST['hd_device_pro']
 			dp = DeviceProperties.objects.get(id = _id)
 			
+			slDeviceInfo = DeviceInfor.objects.filter(device_pro = _id)
+			for deviceInfo in slDeviceInfo :
+				deviceInfo.delete()
+				
 			dp.delete()
 			return HttpResponseRedirect('/device-property')

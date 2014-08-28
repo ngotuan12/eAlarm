@@ -174,6 +174,44 @@
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 <script>
+	$("#slArea").change(function(){
+		if ($('#txtAddress').val()) {
+			
+			var province = $("#slArea").find('option:selected').attr('area_name');
+			var address = $('#txtAddress').val();
+			$("#fulladdress").html(address+","+province+ ",VIỆT NAM");
+			var geo = new google.maps.Geocoder;
+			
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+					$("#txtLat").val(results[0].geometry.location.lat());
+					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+","+province+ ",Việt Nam");
+					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			
+			});
+		}
+		else
+		{
+			var province = $("#slArea").find('option:selected').attr('area_name');
+			$("#fulladdress").html(province+ ",VIỆT NAM")
+			var geo = new google.maps.Geocoder;
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+					$("#txtLat").val(results[0].geometry.location.lat());
+					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+","+province+ ",Việt Nam")
+					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),province);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			
+			});
+		}
+	});
 	var styles =
 		[
 			{
@@ -241,7 +279,7 @@
 			$("#fulladdress").html(address+","+province+ ",VIỆT NAM")
 			var geo = new google.maps.Geocoder;
 			
-			geo.geocode({'address':address},function(results, status){
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
 				if (status == google.maps.GeocoderStatus.OK) {
 					$("#txtLat").val(results[0].geometry.location.lat());
 					$("#txtLng").val(results[0].geometry.location.lng());

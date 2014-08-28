@@ -16,6 +16,7 @@ class DeviceProperties(models.Model):
     min_alarm = models.FloatField()
     max_alarm = models.FloatField()
     symbol = models.CharField(max_length=15)
+    require = models.CharField(max_length=1)
     class Meta:
         db_table = 'device_properties'
         app_label = 'myapp'

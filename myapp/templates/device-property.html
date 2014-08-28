@@ -59,6 +59,7 @@
 									<input type="hidden" name="type" value="deleteDeviceProperty">
 								</form>
 							</td>
+							<input type="hidden" id ="hd_require{{deviceProperty.id}}" value="{{ deviceProperty.require }}">
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -110,6 +111,7 @@
 		var min_alarm = $("table tbody tr td[devicePropertyId][devicePropertyId='min_alarm"+ device_property_id +"']").attr('min_alarm');
 		var max_alarm = $("table tbody tr td[devicePropertyId][devicePropertyId='max_alarm"+ device_property_id +"']").attr('max_alarm');
 		var symbol = $("table tbody tr td[devicePropertyId][devicePropertyId='symbol"+ device_property_id +"']").attr('symbol');
+		var require =$("#hd_require"+device_property_id).val()
 		
 		$("#txtCode").val(code);
 		$("#txtName").val(name);
@@ -123,6 +125,10 @@
 		$("#txtMaxAlarm").val(max_alarm);
 		$("#txtSymbol").val(symbol);
 		$("#hd_device_property_id").val(device_property_id);
+		if(require == '1')
+			$('#cbRequire1').prop('checked', true);
+		else
+			$('#cbRequire1').prop('checked', false);
 	}
 	function onDeleteDeviceProperty(device_property_id)
 	{

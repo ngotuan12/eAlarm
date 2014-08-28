@@ -15,7 +15,7 @@ from myapp.models import Area
 @permission_required('myapp.view_area',login_url='/permission-error')
 def index(request):
 	try:
-		lsArea = Area.objects.all()
+		lsArea = Area.objects.filter(level = '2')
 		context={'lsArea':lsArea}
 		context.update(csrf(request))
 	except Exception as ex:
