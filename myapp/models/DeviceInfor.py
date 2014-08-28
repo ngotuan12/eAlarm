@@ -9,8 +9,8 @@ from myapp.models.Device import Device
 
 # Create your models here.
 class DeviceInfor(models.Model):
-    device = models.ForeignKey(Device)
-    device_pro = models.ForeignKey(DeviceProperties)
+    device = models.ForeignKey(Device,db_column='device_id')
+    device_pro = models.ForeignKey(DeviceProperties,db_column='device_pro_id')
     value = models.FloatField()
     status = models.CharField(max_length=1)
     class Meta:
