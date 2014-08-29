@@ -129,10 +129,12 @@ function addProperty(device,row, infor)
 			if(device_infor[i].id.toString() == currentDeviceInforID.toString())
 			{
 				InforIndex = i;
+				$("p#charTitle").html(device_infor[i].properties.name);
 				break;
 			}	
 		}
 		resetChart(device_infor[InforIndex].properties.min,device_infor[InforIndex].properties.max)
+		
 	});
 	column.appendTo(row);
 }
