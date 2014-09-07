@@ -25,9 +25,14 @@ def exportDeviceReport(authorization,device_id,area_id,device_status):
     response = r.json()
     fileout = response['FileOut']
     return fileout
-def exportDeviceDetailReport(authorization,device_id,area_id,device_status):
+def exportDeviceDetailReport(authorization,device_id,area_id,device_status,from_date,to_date):
     url = settings.ALARM_SERVER + settings.REPORT_SERVICE
-    payload = {"SessionUserName":"TuanNA","Method":"DeviceDetailReport","device_id":device_id,"area_id":area_id,"device_status":device_status}
+    payload = {"SessionUserName":"TuanNA","Method":"DeviceDetailReport",
+               "device_id":device_id,
+               "area_id":area_id,
+               "device_status":device_status,
+               "from_date":from_date,
+               "to_date":to_date,}
     headers = {'content-type': 'application/json;charset=utf-8',"Authorization":authorization}
     r = requests.request('POST',url, data=json.dumps(payload), headers=headers)
     response = r.json()

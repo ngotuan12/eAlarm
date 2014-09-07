@@ -37,8 +37,10 @@ def view_device_detail_report(request):
 		device_id = request.POST["slDevice"]
 		area_id = request.POST["slArea"]
 		device_status = request.POST["slStatus"]
+		from_date = request.POST["dtFromDate"]
+		to_date = request.POST["dtToDate"]
 		authorization = client.getAuthorization()
-		fileOut = client.exportDeviceDetailReport(authorization,device_id,area_id,device_status)
+		fileOut = client.exportDeviceDetailReport(authorization,device_id,area_id,device_status,from_date,to_date)
 		return HttpResponseRedirect('/report/'+fileOut)
 	context.update(csrf(request))
 	return render_to_response("report/device-detail-report.html", context,RequestContext(request))
