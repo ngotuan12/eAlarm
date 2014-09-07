@@ -12,20 +12,18 @@
 		<!-- This is only visible to small devices -->
 		<div class="visible-xs hidden-sm hidden-md hidden-lg">
 			<div class="media userlogged">
-				<img alt="" src="images/photos/loggeduser.png" class="media-object">
+				<img alt="" src="/images/photos/anonymous.jpg" class="media-object">
 				<div class="media-body">
-					<h4>John Doe</h4>
-					<span>"Life is so..."</span>
+					<h4>{{ user.username}}</h4>
+					<span>{{ user.first_name|add:" "|add:user.last_name}}</span>
 				</div>
 			</div>
 
 			<h5 class="sidebartitle actitle">Account</h5>
 			<ul class="nav nav-pills nav-stacked nav-bracket mb30">
-				<li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
-				<li><a href="#"><i class="fa fa-cog"></i> <span>Account
-							Settings</span></a></li>
+				<li><a href="/password/change/"><i class="fa fa-cog"></i> <span>Đổi mật khẩu</span></a></li>
 				<li><a href="#"><i class="fa fa-question-circle"></i> <span>Help</span></a></li>
-				<li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign
+				<li><a href="logout"><i class="fa fa-sign-out"></i> <span>Sign
 							Out</span></a></li>
 			</ul>
 		</div>
@@ -71,17 +69,17 @@
 				<ul class="children">
 					{% if perms.myapp.view_device_report %}
 						<li><a href="/device-report"><i class="fa fa-caret-right"></i>
-								Báo cáo tổng hợp trạng thái phòng máy</a></li>
+								Báo cáo hiện trạng phòng máy</a></li>
 					{% endif %}
 					
 					{% if perms.myapp.view_device_detail_report %}
 						<li><a href="/device-detail-report"><i class="fa fa-caret-right"></i>
-								Báo cáo tổng hợp chi tiết hoạt động phòng máy</a></li>
+								Báo cáo thống kê sự kiện phòng máy</a></li>
 					{% endif %}
 					
 					{% if perms.myapp.view_device_error_report %}
 						<li><a href="/device-error-report"><i class="fa fa-caret-right"></i>
-								Báo cáo thống kê lỗi phòng máy</a></li>
+								Báo cáo chi tiết sự cố phòng máy</a></li>
 					{% endif %}
 				</ul></li>
 		</ul>
