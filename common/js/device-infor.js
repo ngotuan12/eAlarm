@@ -43,20 +43,32 @@ function updateDeviceInfor(device, infors)
 {
 	//update device name
 	var deviceName = $('#device-name');
+	
 	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
 	var deviceMac = $('#device-mac');
 	deviceMac.html("MAC: "+device.mac_add);
 	var deviceServer = $('#device-server');
 	deviceServer.html("Connected server: "+nvl(device.connected_server,"Chưa kết nối"));
 	var deviceStatus = $('#device-status');
-	if(device.status=="1")
-		deviceStatus.attr("src","images/ic_green.png");
-	else if(device.status=="2")
-		deviceStatus.attr("src","images/ic_red.png")
-	else if(device.status=="0")
-		deviceStatus.attr("src","images/ic_blue.png");
-//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
 	var deviceIssue = $('#device-issue');
+	if(device.status=="1")
+	{
+		deviceIssue.html("");
+		deviceStatus.attr("src","images/ic_green.png");
+	}
+	else if(device.status=="2")
+	{
+		deviceIssue.html("Sự cố: <p style = \"padding-left: 5px;\">" + device.description+"</p>");
+		deviceStatus.attr("src","images/ic_red.png")
+	}
+	else if(device.status=="0")
+	{
+		deviceIssue.html("Sự cố: <p> Mất kết nối"+"</p>");
+		deviceStatus.attr("src","images/ic_blue.png");
+	}
+		
+//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
+	
 //	if(device.status=="2")
 //	{
 //		deviceIssue.css("display","");
