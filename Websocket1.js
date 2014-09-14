@@ -513,6 +513,14 @@ function init_properties()
 		if (err)
 			throw err;
 		properties = rows;
+		strSQL = "UPDATE device SET status = '0' WHERE connected_server = ? ";
+		connDB.query(strSQL,[server_ip], function(err, rows, fields) {
+			if (err)
+			{
+				log(err);
+				return;
+			}
+		});
 	});
 }
 /*
@@ -557,15 +565,19 @@ function insertDeviceTransaction(socket,current_transaction_id,device_id,device_
 			log(err);
 			return;
 		}
-		socket.current_transaction_id = rows.insertId;
-		socket.device_status = device_status;
+		var current_transaction_id = rows.insertId;
+		if(socket!=null)
+		{
+			socket.current_transaction_id = rows.insertId;
+			socket.device_status = device_status;
+		}
 		//Insert transaction
 		for(var i=0;i<transaction_detail.length;i++)
 		{
 			var detail = transaction_detail[i];
 			strSQL = "INSERT INTO device_transaction_detail(device_transaction_id,device_pro_id,value,description) "
 				+"VALUES(?,?,?,?) ";
-			connDB.query(strSQL,[socket.current_transaction_id,detail.device_pro_id,detail.value,detail.description], function(err, rows, fields) 
+			connDB.query(strSQL,[current_transaction_id,detail.device_pro_id,detail.value,detail.description], function(err, rows, fields) 
 			{
 				if (err)
 				{
@@ -588,8 +600,7 @@ function onClose(socket)
 		if(socket.gatewayinfo!=null)
 		{
 			log('gateway_id'+socket.gatewayinfo.id);
-			updateDevice(socket,socket.gatewayinfo.id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
-			var tid = setTimeout(mycode(socket.gatewayinfo.id), delay_time);
+			var tid = setTimeout(timeOutFromServer(socket.gatewayinfo.id), delay_time);
 			gateways[socket.gatewayinfo.id] = {last_connect:new Date(),tid:tid,current_transaction_id:socket.current_transaction_id,device_status:socket.device_status};
 		}
 	}
@@ -603,7 +614,7 @@ function timeOutFromServer(gateway_id)
 	if(gateways[gateway_id].tid!=null)
 	{
 		clearTimeout(gateways[gateway_id].tid);
-		updateDevice(socket,gateway_id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
+		updateDevice(null,gateway_id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
 	}
 	
 }

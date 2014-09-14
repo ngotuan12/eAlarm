@@ -9,7 +9,7 @@ from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceP
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^home$', Home.index),
+    url(r'^home$', Home.home),
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),
     url(r'^admin/', include(admin.site.urls)),

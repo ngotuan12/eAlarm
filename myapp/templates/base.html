@@ -67,5 +67,16 @@
 	<script src="/js/custom.js"></script>
 	<script src="/js/device-infor.js"></script>
 	{% endblock %}
+	<script type="text/javascript"> 
+	var tidAlertSuccess;
+	$(document).ready(function()
+	{
+		
+		$menuChildren = $('.leftpanel a[href="'+window.location.pathname+'"]');
+		$menuChildren.parent().addClass("active");
+		$menuChildren.closest(".children").css("display","block")
+		$menuChildren.closest(".nav-parent").addClass("nav-active active");
+	});
+	</script>
 </body>
 </html>

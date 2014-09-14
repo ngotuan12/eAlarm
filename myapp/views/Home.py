@@ -9,10 +9,14 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
 from myapp.models import Device
+from django.http.response import HttpResponseRedirect
 
 
 @login_required(login_url='/login')
 def index(request):
+	return HttpResponseRedirect("/home")
+@login_required(login_url='/login')
+def home(request):
 	if request.method == 'GET':
 		try:
 			_device_id = request.GET['device_id']
