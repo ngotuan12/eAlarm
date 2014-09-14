@@ -42,9 +42,9 @@
 							class="fa fa-caret-right"></i> Danh sách phòng ban</a></li>
 				</ul></li>
 			{% endif %}
-			<li class="nav-parent nav-active"><a href="#"><i class="fa fa-laptop"></i>
+			<li class="nav-parent"><a href="#"><i class="fa fa-laptop"></i>
 					<span>Phòng máy</span></a>
-				<ul class="children" style="display: block;">
+				<ul class="children">
 					{% if perms.myapp.view_device %}
 						<li><a href="/device-list"><i class="fa fa-caret-right"></i>
 							Danh sách phòng máy</a></li>
