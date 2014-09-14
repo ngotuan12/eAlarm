@@ -25,12 +25,12 @@
 				<table class="table table-hover" id="table2">
 					<thead>
 						<tr>
-							<th>Mã</th>
-							<th>Trạm</th>
 							<th>Tên</th>
+							<th>Địa chỉ</th>
+							<th>Đơn vị</th>
 							<th>MAC</th>
 							<th>Server</th>
-							<th>Online</th>
+							<th>Trạng thái</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -42,11 +42,11 @@
 							<td>{{ device.mac_add }}</td>
 							<td class="center">{{ device.connected_server }}</td>
 							{% if  device.status == '0' %}
-								<td class="center"><img width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
+								<td class="center"><p style="display: None">Mất kết nối</p><img width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
 							{% elif device.status == '1' %}
-								<td class="center"><img width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
+								<td class="center"><p style="display: None">Tốt</p><img width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
 							{% elif device.status == '2' %}
-								<td class="center"><img width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
+								<td class="center"><p style="display: None">Hỏng</p><img width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
 							{% endif %}
 						</tr>
 						{% endfor %}

@@ -4,10 +4,13 @@
  */
  
 // Use strict compilation rules - we're not animals
+//Delay time between 2 transaction milliseconds
+var delay_time = 30000;
+
 var net = require('net'),fs = require('fs');;
 var util = require("util") ;
 var gjson = require("./json_sans_eval.js");
-var gateways = new Array;
+var gateways = new Object();
 var dispatchers = new Array;
 var monitors = new Array;
 var server;
@@ -371,71 +374,7 @@ function findGatewayByGMac(gmac)
 	}
 	return null;
 }
-/**
- * 
- * @param socket
- */
-function onClose(socket)
-{
-	log('disconnected');
-	if(socket.isConnect)
-	{
-		if(socket.gatewayinfo!=null)
-		{
-			log('gateway_id'+socket.gatewayinfo.id);
-			updateDevice(socket,socket.gatewayinfo.id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
-//			var strSQL = "update device_infor set value = 0 where device_id = ?";
-//			connDB.query(strSQL,[socket.gatewayinfo.id], function(err) 
-//			{
-//				if (err) 
-//				{
-//					log(err);
-//					return;
-//				}
-//			});
-		}
-		if(socket.gatewayinfo.type == "1")
-		{
-			//remove gateway
-			for(var i=0;i<gateways.length;i++)
-			{
-				if(gateways[i].gatewayinfo.id==socket.gatewayinfo.id)
-				{
-					gateways.splice(i,1);
-					
-					break;
-				}
-				
-			}
-		}
-		else if(socket.gatewayinfo.type == "2")
-		{
-			//remove monitor
-			for(var i=0;i<monitors.length;i++)
-			{
-				if(monitors[i].gatewayinfo.id==socket.gatewayinfo.id)
-				{
-					monitors.splice(i,1);
-					break;
-				}
-			}
-		}
-		else if(socket.gatewayinfo.type == "3")
-		{
-			//remove monitor
-			for(var i=0;i<dispatchers.length;i++)
-			{
-				if(dispatchers[i].gatewayinfo.id==socket.gatewayinfo.id)
-				{
-					dispatchers.splice(i,1);
-					break;
-				}
-			}
-		}
-	}
-	socket.isConnect = false;
-	socket.end();
-}
+
 function updateDevice(socket,device_id,status,strServerIP,strDescription,transaction_detail)
 {
 	var param = [];
@@ -488,24 +427,31 @@ function checkMac(request,socket)
 			socket.isok = true;
 			var gatewaydata = rows[0];
 			
-			updateDeviceCommandLog(gatewaydata.id,JSON.stringify(request),"1");
+			//updateDeviceCommandLog(gatewaydata.id,JSON.stringify(request),"1");
 			
 			socket.gatewayinfo = rows[0];
-			if(socket.gatewayinfo.type == "1")
-			{
-				gateways.push(socket);
-			}
-			else if(socket.gatewayinfo.type == "2")
-			{
-				monitors.push(socket);
-			}
-			else if(socket.gatewayinfo.type == "3")
-			{
-				dispatchers.push(socket);
-			}
+			
+			
 			log("---------connect-success-------------");
-			//update connected server
-			updateDevice(socket,gatewaydata.id,'0',server_ip,"Bắt đầu kết nối!",[]);
+			//check last transaction
+			if(gateways[gatewaydata.id]!=null&&gateways[gatewaydata.id].last_connect!=null)
+			{
+				log("last connect :"+gateways[gatewaydata.id].last_connect);
+				if(gateways[gateway_id].tid!=null)
+				{
+					log("clear timeout")
+					clearTimeout(gateways[gateway_id].tid);
+				}
+				socket.device_status = gateways[gatewaydata.id].device_status
+				socket.current_transaction_id = gateways[gatewaydata.id].current_transaction_id;
+			}
+			else
+			{
+				//update connected server
+				updateDevice(socket,gatewaydata.id,'0',server_ip,"Bắt đầu kết nối!",[]);
+				
+			}
+			gateways[gatewaydata.id] = socket;
 			//response
 			var response = { "type":"response","cmd": "announce","body" : {"result": "ok"}};
 			sendGatewayCommand(response,socket);
@@ -545,7 +491,7 @@ function sendGatewayCommand(response,socket)
 	{
 		socket.write(strResponse);
 	}
-	updateDeviceCommandLog(socket.gatewayinfo.id,strResponse,"2");
+	//updateDeviceCommandLog(socket.gatewayinfo.id,strResponse,"2");
 	log("response:"+strResponse);
 }
 
@@ -630,7 +576,37 @@ function insertDeviceTransaction(socket,current_transaction_id,device_id,device_
 		}
 	});
 }
+/**
+ * @update 09/09/2014
+ * @param socket
+ */
+function onClose(socket)
+{
+	log('disconnected');
+	if(socket.isConnect)
+	{
+		if(socket.gatewayinfo!=null)
+		{
+			log('gateway_id'+socket.gatewayinfo.id);
+			updateDevice(socket,socket.gatewayinfo.id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
+			var tid = setTimeout(mycode(socket.gatewayinfo.id), delay_time);
+			gateways[socket.gatewayinfo.id] = {last_connect:new Date(),tid:tid,current_transaction_id:socket.current_transaction_id,device_status:socket.device_status};
+		}
+	}
+	socket.isConnect = false;
+	socket.end();
+}
 
+function timeOutFromServer(gateway_id)
+{
+	gateways[socket.gatewayinfo.id]  = null;
+	if(gateways[gateway_id].tid!=null)
+	{
+		clearTimeout(gateways[gateway_id].tid);
+		updateDevice(socket,gateway_id,'0','',"Mất kết nối với server.",[{"description":"Mất kết nỗi với server","value":null,"device_pro_id":null}]);
+	}
+	
+}
 //listen socket
 socketServer.listen(8888, "10.10.0.17");
 //listen websocket

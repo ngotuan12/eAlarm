@@ -23,7 +23,7 @@
 			<ul class="nav nav-pills nav-stacked nav-bracket mb30">
 				<li><a href="/password/change/"><i class="fa fa-cog"></i> <span>Đổi mật khẩu</span></a></li>
 				<li><a href="#"><i class="fa fa-question-circle"></i> <span>Help</span></a></li>
-				<li><a href="logout"><i class="fa fa-sign-out"></i> <span>Sign
+				<li><a href="/logout"><i class="fa fa-sign-out"></i> <span>Sign
 							Out</span></a></li>
 			</ul>
 		</div>
@@ -69,17 +69,17 @@
 				<ul class="children">
 					{% if perms.myapp.view_device_report %}
 						<li><a href="/device-report"><i class="fa fa-caret-right"></i>
-								Báo cáo hiện trạng phòng máy</a></li>
+								Hiện trạng phòng máy</a></li>
 					{% endif %}
 					
 					{% if perms.myapp.view_device_detail_report %}
 						<li><a href="/device-detail-report"><i class="fa fa-caret-right"></i>
-								Báo cáo thống kê sự kiện phòng máy</a></li>
+								Thống kê sự kiện phòng máy</a></li>
 					{% endif %}
 					
 					{% if perms.myapp.view_device_error_report %}
 						<li><a href="/device-error-report"><i class="fa fa-caret-right"></i>
-								Báo cáo chi tiết sự cố phòng máy</a></li>
+								Chi tiết sự cố phòng máy</a></li>
 					{% endif %}
 				</ul></li>
 		</ul>
