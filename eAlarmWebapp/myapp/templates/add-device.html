@@ -1,0 +1,306 @@
+{% extends "base.html" %} 
+{% block content-header %}
+{% include 'add-device-property.html' %}
+{% include 'edit-device-property.html' %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Thêm phòng máy <span> </span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="table-responsive">
+				<form class="form" id="addDevice" novalidate="novalidate" method="post" action="/add-device">
+					{% csrf_token %}
+					<div class="panel-body" >
+						<div class="row">
+							<div class="col-md-5">
+								<div class="panel-body" style="padding: 0px;">
+								
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Mã phòng máy:</label>
+										<div class="col-sm-12">
+											<input type="text" id="txtcode" name="txtCode" value="{% if code %}{{ code }}{% endif %}" class="form-control"
+												placeholder="<Mã phòng máy>" required="">
+										</div>
+										{% if has_error %}
+											<label id="codeError" class="error" style="margin-top: 2%;margin-left: 3%;">{{ has_error }} </label>
+										{% endif %}
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Tên phòng máy:</label>
+										<div class="col-sm-12">
+											<input type="text" id="txtNameArea" name="txtName" value="" class="form-control"
+												placeholder="<Tên phòng máy>" required="">
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Mac:</label>
+										<div class="col-sm-12">
+											<input type="text" id="txtMAC" name="txtMAC" value="" class="form-control"
+												placeholder="<Địa chỉ MAC>" required="">
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Địa bàn:</label>
+										<div class="col-sm-12">
+											<select name='slArea' id="slArea" class="form-control" required="">
+												{% if lsArea %}
+													{% for area in lsArea %}
+														<option value="{{ area.id }}" area_name="{{ area.name }}">{{ area.name }}</option>
+													{% endfor %}
+												{% endif %}
+											</select>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Địa chỉ:</label>
+										<div class="col-sm-12">
+											<input type="text" id="txtAddress" name="txtAddress" value="" class="form-control"
+												placeholder="<Địa chỉ>" required="" onchange="getLatLong();">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-7" >
+								<div class="panel-body" style="padding: 0px;">
+									<div class="col-md-12">
+									<h5 class="subtitle" id="fulladdress" style="font-family: sans-serif;">Việt Nam</h5>
+									<p style="font-family: initial;">Hiển thị địa bàn trên google map với địa chỉ tương ứng</p>
+										<div id="map-canvas" style="min-height: 330px;">
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="type" value="addDevice">
+						<input type="hidden" id="txtLat" name="txtLat" value="{% if lat %} {{ lat }} {% endif %}">
+						<input type="hidden" id="txtLng" name="txtLng" value="{% if lng %} {{ lng }} {% endif %}">
+						<input type="hidden" id="txtFullName" name="txtFullName" value="">
+					</div>
+					<div class="panel-body" style="padding-top: 0px;">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel-body" style="padding: 0px;">
+								
+									<div class="form-group">
+										<label class="col-sm-12 control-label" style="line-height: 20px;">Cảm biến:</label>
+										{% for property in lsProperty%}
+											<div class="col-sm-6">
+												<div class="ckbox ckbox-primary" style="height: 28px;">
+													<input type="checkbox" id="lb{{ property.id }}" name="{{ property.code }}" style="margin-top: 0px !important;">
+													<label for="lb{{property.id}}"> {{ property.name }}</label>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='/device-list'">Thoát</button>
+						<button type="button" class="btn btn-primary" onclick="return onAddDeviceFromSubmit();">Lưu</button>
+					</div>
+				</form>
+			</div>
+			<!-- table-responsive -->
+
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/modernizr.min.js"></script>
+<script src="js/jquery.sparkline.min.js"></script>
+<script src="js/toggles.min.js"></script>
+<script src="js/retina.min.js"></script>
+<script src="js/jquery.cookies.js"></script>
+
+<script src="js/jquery.datatables.min.js"></script>
+<script src="js/chosen.jquery.min.js"></script>
+<script src="js/jquery.numeric.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+	function initialize() {
+		var styles =
+			[
+				{
+					"featureType": "poi",
+					//"elementType": "bus",
+					"stylers": 
+					[
+						{ "visibility": "off" }
+					]
+				},
+				{
+					"featureType": "transit",
+					//"elementType": "bus",
+					"stylers": 
+					[
+						{ "visibility": "off" }
+					]
+				}
+			];
+		var myLatlng = new google.maps.LatLng(16.3333, 108.1200)
+		var mapOptions = {
+			center: myLatlng,
+			zoom: 5,
+		};
+		var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
+		map.setOptions({styles: styles});
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title: 'Việt Nam'
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<script>
+	$("#slArea").change(function(){
+		if ($('#txtAddress').val()) {
+			
+			var province = $("#slArea").find('option:selected').attr('area_name');
+			var address = $('#txtAddress').val();
+			$("#fulladdress").html(address+","+province+ ",VIỆT NAM");
+			var geo = new google.maps.Geocoder;
+			
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+					$("#txtLat").val(results[0].geometry.location.lat());
+					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+","+province+ ",Việt Nam");
+					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			
+			});
+		}
+		else
+		{
+			var province = $("#slArea").find('option:selected').attr('area_name');
+			$("#fulladdress").html(province+ ",VIỆT NAM")
+			var geo = new google.maps.Geocoder;
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+					$("#txtLat").val(results[0].geometry.location.lat());
+					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+","+province+ ",Việt Nam")
+					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),province);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			
+			});
+		}
+	});
+	var styles =
+		[
+			{
+				"featureType": "poi",
+				//"elementType": "bus",
+				"stylers": 
+				[
+					{ "visibility": "off" }
+				]
+			},
+			{
+				"featureType": "transit",
+				//"elementType": "bus",
+				"stylers": 
+				[
+					{ "visibility": "off" }
+				]
+			}
+		];
+	
+	jQuery(document).ready(function() {
+		// Chosen Select
+		jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
+		
+		jQuery('#table2').dataTable({
+			"sPaginationType" : "full_numbers"
+		});
+	});
+	$('#txtcode').focus(function() 
+	{
+		$("#codeError").css('display','none')
+		$("input#txtcode").on({
+			keydown: function(e) {
+				if (e.which === 32)
+				return false;
+			},
+			change: function() {
+				this.value = this.value.replace(/\s/g, "");
+			}
+		});
+	});
+	function showAddress(lat,lng,address)
+	{
+		var myLatlng = new google.maps.LatLng(lat, lng)
+		var mapOptions = {
+				center: myLatlng,
+				zoom: 15
+		};
+		var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title: address
+		});
+		google.maps.event.addDomListener(window, 'load', initialize);
+	}
+	function getLatLong(){
+		
+		if ( !$('#txtAddress').val() ) {
+		}
+		else
+		{
+			var province = $("#slArea").find('option:selected').attr('area_name');
+			var address = $('#txtAddress').val();
+			$("#fulladdress").html(address+","+province+ ",VIỆT NAM")
+			var geo = new google.maps.Geocoder;
+			
+			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+					$("#txtLat").val(results[0].geometry.location.lat());
+					$("#txtLng").val(results[0].geometry.location.lng());
+					$("#txtFullName").val(address+","+province+ ",Việt Nam")
+					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			
+			});
+		}
+	}
+	function onAddDeviceFromSubmit()
+	{
+		var $valid = jQuery('#addDevice').valid();
+		if(!$valid) 
+		{
+			$validator.focusInvalid();
+			return false;
+		}
+		jQuery('#addDevice').submit();
+	}
+</script>
+{% endblock scripts%}

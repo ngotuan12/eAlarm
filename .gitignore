@@ -1,5 +1,12 @@
-/eAlarm/__pycache__
+/.metadata
 
 *.pyc
-/report
-/.settings
+*.class
+sqlnet.log
+/eAlarmWebapp/log
+/eAlarmWebapp/sqlnet.log
+/eAlarmServer/build
+/eAlarmServer/jar
+/RemoteSystemsTempFiles
+/Servers
+/eAlarmWebapp/report

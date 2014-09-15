@@ -1,0 +1,118 @@
+<div class="leftpanel">
+
+	<div class="logopanel">
+		<h1>
+			<span> Hasitec co.,ltd</span> <span></span>
+		</h1>
+	</div>
+	<!-- logopanel -->
+
+	<div class="leftpanelinner">
+
+		<!-- This is only visible to small devices -->
+		<div class="visible-xs hidden-sm hidden-md hidden-lg">
+			<div class="media userlogged">
+				<img alt="" src="/images/photos/anonymous.jpg" class="media-object">
+				<div class="media-body">
+					<h4>{{ user.username}}</h4>
+					<span>{{ user.first_name|add:" "|add:user.last_name}}</span>
+				</div>
+			</div>
+
+			<h5 class="sidebartitle actitle">Account</h5>
+			<ul class="nav nav-pills nav-stacked nav-bracket mb30">
+				<li><a href="/password/change/"><i class="fa fa-cog"></i> <span>Đổi mật khẩu</span></a></li>
+				<li><a href="#"><i class="fa fa-question-circle"></i> <span>Help</span></a></li>
+				<li><a href="/logout"><i class="fa fa-sign-out"></i> <span>Sign
+							Out</span></a></li>
+			</ul>
+		</div>
+
+		<h5 class="sidebartitle">Chức năng</h5>
+		<ul class="nav nav-pills nav-stacked nav-bracket">
+			<li><a href="/home"><i
+					class="fa fa-home"></i> <span>Giám sát phòng máy</span></a></li>
+			{% if user.is_superuser %}
+			<li class="nav-parent"><a href="#"><i class="fa fa-edit"></i>
+					<span>Quản trị</span></a>
+				<ul class="children">
+					<li><a href="/user"><i
+							class="fa fa-caret-right"></i> Quản lý tài khoản </a></li>
+					<li><a href="/group"><i
+							class="fa fa-caret-right"></i> Danh sách phòng ban</a></li>
+				</ul></li>
+			{% endif %}
+			<li class="nav-parent"><a href="#"><i class="fa fa-laptop"></i>
+					<span>Phòng máy</span></a>
+				<ul class="children">
+					{% if perms.myapp.view_device %}
+						<li><a href="/device-list"><i class="fa fa-caret-right"></i>
+							Danh sách phòng máy</a></li>
+					{% endif %}
+					{% if perms.myapp.view_area %}
+						<li><a href="/area"><i class="fa fa-caret-right"></i>
+								Danh sách khu vực</a></li>
+					{% endif %}
+					{% if perms.myapp.view_deviceproperties %}
+						<li><a href="/device-property"><i class="fa fa-caret-right"></i>
+								Danh sách cảm biến</a></li>
+						{% endif %}
+				</ul></li>
+			<!-- <li class="nav-parent"><a href="#"><i class="fa fa-suitcase"></i>
+					<span>Tiện ích</span></a>
+				<ul class="children">
+					<li><a href="buttons.html"><i class="fa fa-caret-right"></i>
+							Tập lệnh</a></li>
+				</ul></li> -->
+			<li class="nav-parent"><a href="#"><i class="fa fa-file-text"></i>
+					<span>Báo cáo</span></a>
+				<ul class="children">
+					{% if perms.myapp.view_device_report %}
+						<li><a href="/device-report"><i class="fa fa-caret-right"></i>
+								Hiện trạng phòng máy</a></li>
+					{% endif %}
+					
+					{% if perms.myapp.view_device_detail_report %}
+						<li><a href="/device-detail-report"><i class="fa fa-caret-right"></i>
+								Thống kê sự kiện phòng máy</a></li>
+					{% endif %}
+					
+					{% if perms.myapp.view_device_error_report %}
+						<li><a href="/device-error-report"><i class="fa fa-caret-right"></i>
+								Chi tiết sự cố phòng máy</a></li>
+					{% endif %}
+				</ul></li>
+		</ul>
+
+		<div class="infosummary">
+			<h5 class="sidebartitle">Thống kê</h5>
+			<ul>
+				<li>
+					<div class="datainfo">
+						<span class="text-muted">Trạm tốt</span>
+						<h4>{{ summary.1 }}</h4>
+					</div>
+					<div id="sidebar-chart" class="chart"></div>
+				</li>
+				<li>
+					<div class="datainfo">
+						<span class="text-muted">Sự cố</span>
+						<h4>{{ summary.2 }}</h4>
+					</div>
+					<div id="sidebar-chart2" class="chart"></div>
+				</li>
+				<li>
+					<div class="datainfo">
+						<span class="text-muted">Trạm mất kết nối</span>
+						<h4>{{ summary.0 }}</h4>
+					</div>
+					<div id="sidebar-chart3" class="chart"></div>
+				</li>
+			</ul>
+		</div>
+		<!-- infosummary -->
+
+	</div>
+	<!-- leftpanelinner -->
+</div>
+<!-- leftpanel -->
