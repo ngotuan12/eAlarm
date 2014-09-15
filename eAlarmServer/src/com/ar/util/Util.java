@@ -74,6 +74,7 @@ public class Util
 				"POST, GET, OPTIONS");
 		JSONObject jsonResponse = new JSONObject();
 		JSONObject jsonRequest;
+		Scanner scanner = null;
 		try
 		{
 			String autKey = servletRequest.getHeader("Authorization");
@@ -92,7 +93,7 @@ public class Util
 			}
 			// request
 			StringBuilder stringBuilder = new StringBuilder(1000);
-			Scanner scanner = new Scanner(servletRequest.getInputStream(),"utf-8");
+			scanner = new Scanner(servletRequest.getInputStream(),"utf-8");
 			while (scanner.hasNextLine())
 			{
 				stringBuilder.append(scanner.nextLine());
@@ -200,6 +201,8 @@ public class Util
 			PrintWriter out = servletResponse.getWriter();
 			out.println(jsonResponse.toString());
 			out.flush();
+			if(scanner!=null)
+				scanner.close();
 		}
 	}
 

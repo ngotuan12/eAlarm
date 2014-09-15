@@ -13,6 +13,7 @@ import com.mysql.jdbc.Statement;
 
 public class LoginBean extends AppProcessor
 {
+	@SuppressWarnings("resource")
 	public void onLogin() throws Exception
 	{
 		String strSQL = "";
@@ -71,6 +72,8 @@ public class LoginBean extends AppProcessor
 		}
 		finally
 		{
+			Database.closeObject(rs);
+			Database.closeObject(pstm);
 			close();
 		}
 	}

@@ -38,6 +38,7 @@ public class ReportService extends HttpServlet {
 			throws ServletException, IOException {
 	}
 	
+	@SuppressWarnings("unused")
 	private void getReportPath(){
 		String reportPath = getServletConfig().getServletContext().getRealPath("report");
 		DataHolder.setReportPath(reportPath);

@@ -117,6 +117,7 @@ public class AuthorizationBean extends AppProcessor
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private JSONObject verifyPassword(Connection cn, String strUserName,
 			String strPassword) throws Exception
 	{

@@ -1155,6 +1155,7 @@ public class DeviceBean extends AppProcessor
 	 * @version 1.0
 	 * @throws Exception
 	 */
+	@SuppressWarnings("resource")
 	public void onFormMainLoad() throws Exception
 	{
 		PreparedStatement pstm = null;

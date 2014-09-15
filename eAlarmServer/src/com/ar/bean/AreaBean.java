@@ -9,36 +9,46 @@ import com.ar.util.AppProcessor;
 import com.ar.util.Util;
 import com.fss.sql.Database;
 
-public class AreaBean extends AppProcessor {
-	public JSONArray ExcuteQuery(String Query, int TypeExcute) throws Exception {
+public class AreaBean extends AppProcessor
+{
+	public JSONArray ExcuteQuery(String Query, int TypeExcute) throws Exception
+	{
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		try {
+		try
+		{
 			// open connection
 			open();
 			// prepare
 			pstm = mcnMain.prepareStatement(Query);
-			if (TypeExcute == 0) {
+			if (TypeExcute == 0)
+			{
 				rs = pstm.executeQuery();
-			} else {
+			}
+			else
+			{
 				pstm.executeUpdate();
 				rs = null;
 			}
 			JSONArray arr = new JSONArray();
-			if (rs != null)
-				arr = Util.convertToJSONArray(rs);
+			if (rs != null) arr = Util.convertToJSONArray(rs);
 			return arr;
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw ex;
-		} finally {
+		}
+		finally
+		{
 			Database.closeObject(pstm);
 			Database.closeObject(rs);
 			close();
 		}
 	}
 
-	public JSONArray GetActiveByParent(int ID) throws Exception {
+	public JSONArray GetActiveByParent(int ID) throws Exception
+	{
 		String strSQL = "SELECT id,full_name,area_code,code,name,parent_id,level,status,woodenleg,lat,lng,type "
 				+ "FROM area "
 				+ "WHERE status=1 AND parent_id = "
@@ -46,63 +56,79 @@ public class AreaBean extends AppProcessor {
 		return ExcuteQuery(strSQL, 0);
 	}
 
-	private JSONArray GetByID(int ID) throws Exception {
+	private JSONArray GetByID(int ID) throws Exception
+	{
 		String strSQL = "SELECT id,full_name,code,name,parent_id,level,status,woodenleg,lat,lng,type "
 				+ "FROM area WHERE id = " + String.valueOf(ID);
 		return ExcuteQuery(strSQL, 0);
 	}
 
-	private void AddArea(AreaModel _Model) throws Exception {
+	private void AddArea(AreaModel _Model) throws Exception
+	{
 		String strSQL = "INSERT INTO area(code,name,full_name,parent_id,status,lat,lng,type) "
 				+ "VALUES('"
 				+ _Model.Code
 				+ "','"
 				+ _Model.Name
 				+ "','"
-				+_Model.FullName
+				+ _Model.FullName
 				+ "',"
 				+ _Model.ParentID
 				+ ","
 				+ _Model.Status
 				+ ","
 				+ _Model.Lat
-				+ "," + _Model.Lang + "," + _Model.Type + ")";
+				+ ","
+				+ _Model.Lang
+				+ ","
+				+ _Model.Type + ")";
 		ExcuteQuery(strSQL, 1);
 	}
 
-	private void UpdateArea(AreaModel _Model) throws Exception {
+	private void UpdateArea(AreaModel _Model) throws Exception
+	{
 		String strSQL = "UPDATE area SET code='" + _Model.Code + "',name=N'"
-				+ _Model.Name + "'"+",full_name=N'"+_Model.FullName+"'"+ ",parent_id=" + _Model.ParentID
-				+ ",status=" + _Model.Status + ",lat=" + _Model.Lat + ",lng="
-				+ _Model.Lang + ",type=" + _Model.Type + "" + " WHERE id="
-				+ _Model.ID + "";
+				+ _Model.Name + "'" + ",full_name=N'" + _Model.FullName + "'"
+				+ ",parent_id=" + _Model.ParentID + ",status=" + _Model.Status
+				+ ",lat=" + _Model.Lat + ",lng=" + _Model.Lang + ",type="
+				+ _Model.Type + "" + " WHERE id=" + _Model.ID + "";
 		ExcuteQuery(strSQL, 1);
 	}
 
-	private void DisbleArea(int ID) throws Exception {
+	private void DisbleArea(int ID) throws Exception
+	{
 		String strSQL = "UPDATE area SET status=0 WHERE id=" + ID + "";
 		ExcuteQuery(strSQL, 1);
 	}
 
-	private JSONArray GetAllAreaActive() throws Exception {
+	private JSONArray GetAllAreaActive() throws Exception
+	{
 		String strSQL = "SELECT id,full_name,area_code,code,name,parent_id,level,status,woodenleg,lat,lng,type "
 				+ "FROM area " + "WHERE status=1 " + " ORDER BY woodenleg";
 		return ExcuteQuery(strSQL, 0);
 	}
 
-	private JSONArray GetAllArea() throws Exception {
+	private JSONArray GetAllArea() throws Exception
+	{
 		String strSQL = "SELECT a1.id,a1.area_code,a2.name as parent_name,a1.full_name,a1.code,a1.name,a1.parent_id,a1.level,a1.status,a1.woodenleg,a1.lat,a1.lng,a1.type "
-				+ "FROM area as a1,area as a2 "+"WHERE a1.parent_id=a2.id " + "ORDER BY a1.woodenleg";
+				+ "FROM area as a1,area as a2 "
+				+ "WHERE a1.parent_id=a2.id "
+				+ "ORDER BY a1.woodenleg";
 		return ExcuteQuery(strSQL, 0);
 	}
-	private void DeleteArea(int ID) throws Exception {
-		String strSQL = "DELETE FROM  area WHERE id ="+ ID + "";
+
+	private void DeleteArea(int ID) throws Exception
+	{
+		String strSQL = "DELETE FROM  area WHERE id =" + ID + "";
 		ExcuteQuery(strSQL, 1);
 	}
+
 	@Override
-	public void doPost() throws Exception {
+	public void doPost() throws Exception
+	{
 		String Method = (String) request.getString("Method");
-		switch (Method) {
+		switch (Method)
+		{
 		case "GetByID":
 			int ID = Integer.parseInt((String) request.getString("ID"));
 			JSONArray GetByID = GetByID(ID);
@@ -127,7 +153,7 @@ public class AreaBean extends AppProcessor {
 			_AreaModel.Lat = Double.parseDouble((String) request
 					.getString("Lat"));
 			_AreaModel.Type = (String) request.getString("Type");
-			_AreaModel.FullName=(String) request.getString("FullName");
+			_AreaModel.FullName = (String) request.getString("FullName");
 			AddArea(_AreaModel);
 			response.put("Mess", "Success");
 			break;
@@ -145,7 +171,7 @@ public class AreaBean extends AppProcessor {
 			_AreaModelUpdate.Lat = Double.parseDouble((String) request
 					.getString("Lat"));
 			_AreaModelUpdate.Type = (String) request.getString("Type");
-			_AreaModelUpdate.FullName=(String) request.getString("FullName");
+			_AreaModelUpdate.FullName = (String) request.getString("FullName");
 			UpdateArea(_AreaModelUpdate);
 			response.put("Mess", "Success");
 			break;
@@ -176,14 +202,16 @@ public class AreaBean extends AppProcessor {
 	}
 
 	@Override
-	public void doGet() throws Exception {
+	public void doGet() throws Exception
+	{
 
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void doDelete() throws Exception {
+	public void doDelete() throws Exception
+	{
 		// TODO Auto-generated method stub
 	}
 }
