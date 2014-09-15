@@ -306,7 +306,7 @@ function checkMac(request, socket)
 
 							log("---------connect-success-------------");
 							// check last transaction
-							if (gateways[gatewaydata.id] !== null && gateways[gatewaydata.id].last_connect !== null)
+							if (typeof gateways[gatewaydata.id] !== 'undefined' && typeof gateways[gatewaydata.id].last_connect !== 'undefined')
 							{
 								log("last connect :" + gateways[gatewaydata.id].last_connect);
 								if (gateways[gatewaydata.id].tid !== null)

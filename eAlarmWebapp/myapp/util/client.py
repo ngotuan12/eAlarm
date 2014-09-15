@@ -6,7 +6,7 @@ Created on Aug 28, 2014
 import json
 
 import requests
-from eAlarm import settings
+from eAlarmWebapp import settings
 
 def getAuthorization():
     url = settings.ALARM_SERVER + settings.PERMISSION_SERVICE

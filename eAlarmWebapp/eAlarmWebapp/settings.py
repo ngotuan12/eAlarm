@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'eAlarm.urls'
+ROOT_URLCONF = 'eAlarmWebapp.urls'
 
-WSGI_APPLICATION = 'eAlarm.wsgi.application'
+WSGI_APPLICATION = 'eAlarmWebapp.wsgi.application'
 
 
 # Database
@@ -76,11 +76,11 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'vi'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = False
+USE_I18N = True
 
 USE_L10N = False
 
@@ -113,6 +113,6 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     'myapp.util.context_processors.deviceSummary',
 )
 
-ALARM_SERVER = 'http://localhost:8080/AlarmServer/'
+ALARM_SERVER = 'http://localhost/AlarmServer/'
 REPORT_SERVICE = 'ReportService'
 PERMISSION_SERVICE = 'AuthorizationService'

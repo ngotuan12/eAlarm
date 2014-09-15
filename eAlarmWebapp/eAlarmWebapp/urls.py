@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from eAlarm import settings
+from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group,ListDevice,AddDevice,EditDevice,Report
 
