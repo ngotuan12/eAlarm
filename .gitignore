@@ -10,3 +10,5 @@ sqlnet.log
 /RemoteSystemsTempFiles
 /Servers
 /eAlarmWebapp/report
+/eAlarmAndroid/E_Alarm/bin
+/eAlarmAndroid/E_Alarm/autobahn
