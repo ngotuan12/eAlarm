@@ -316,13 +316,14 @@ function checkMac(request, socket)
 								}
 								socket.device_status = gateways[gatewaydata.id].device_status;
 								socket.current_transaction_id = gateways[gatewaydata.id].current_transaction_id;
-							} else
-							{
-								// update connected server
-								updateDevice(socket, gatewaydata.id, '0',
-										server_ip, "Bắt đầu kết nối!", []);
-
 							}
+//							else
+//							{
+//								// update connected server
+//								updateDevice(socket, gatewaydata.id, '0',
+//										server_ip, "Bắt đầu kết nối!", []);
+//
+//							}
 							gateways[gatewaydata.id] = socket;
 							// response
 							var response = {
@@ -387,7 +388,9 @@ function init_properties()
 			throw err;
 		}
 		properties = rows;
-		strSQL = "UPDATE device SET status = '0' WHERE connected_server = ? ";
+		//update device transaction
+		strSQL = "UPDATE device_transaction SET end_date = now() WHERE end_date IS NULL AND device_id IN ( ";
+		strSQL += "SELECT id FROM device WHERE connected_server = ? )";
 		connDB.query(strSQL, [ server_ip ], function(err, rows, fields)
 		{
 			if (err)
@@ -395,6 +398,16 @@ function init_properties()
 				log(err);
 				return;
 			}
+			//update device
+			strSQL = "UPDATE device SET status = '0' WHERE connected_server = ? ";
+			connDB.query(strSQL, [ server_ip ], function(err, rows, fields)
+			{
+				if (err)
+				{
+					log(err);
+					return;
+				}
+			});
 		});
 	});
 }
