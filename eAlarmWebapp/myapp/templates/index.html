@@ -42,11 +42,11 @@
 							<td>{{ device.mac_add }}</td>
 							<td class="center">{{ device.connected_server }}</td>
 							{% if  device.status == '0' %}
-								<td class="center"><p style="display: None">Mất kết nối</p><img width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
+								<td class="center"><p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
 							{% elif device.status == '1' %}
-								<td class="center"><p style="display: None">Tốt</p><img width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
+								<td class="center"><p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
 							{% elif device.status == '2' %}
-								<td class="center"><p style="display: None">Hỏng</p><img width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
+								<td class="center"><p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
 							{% endif %}
 						</tr>
 						{% endfor %}
@@ -61,29 +61,35 @@
 	<!-- panel -->
 
 	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="title">Chi tiết phòng máy </h4>
-			<p id="device-name">
-				<a href="#">RW0001 </a> - 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
-				Nội,Việt Nam
-			</p>
-			<p id="device-mac">
-				MAC: 65:AD:GD:09:09:89
-			</p>
-			<p id="device-server">
-				Connected server: 127.0.0.1
-			</p>
-			<p >
-				Trạng thái: <img id="device-status" width="15px" height="15px" src="images/ic_blue.png" alt="" />
-			</p>
-			<p id="device-issue">
-				Sự cố:
-			</p>
-		</div>
+		<!-- <div class="panel-heading">
+			
+		</div> -->
 		<!-- panel-heading -->
-		<div class="panel-body" style="min-height: 300px">
-			<div class ="row">
-				<div class="col-sm-6" id="device-infor">
+		<div class="panel-body" style="min-height: 300px;padding-top: 0;">
+			<div class ="row" style="border-bottom: 1px solid; border-color: yellow;">
+				<div class="col-sm">
+					<h3 id="device-name">
+						<a href="#">RW0001 </a> - 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
+						Nội,Việt Nam
+					</h3>
+					<p id="device-mac" style="display: none">
+						MAC: 65:AD:GD:09:09:89
+					</p>
+					<p id="device-server" style="display: none">
+						Connected server: 127.0.0.1
+					</p>
+					<p >
+						Trạng thái: <img id="device-status" width="15px" height="15px" src="images/ic_blue.png" alt="" />
+					</p>
+				</div>
+				<div class="col-sm">
+					<p id="device-issue">
+						Sự cố:
+					</p>
+				</div>
+			</div>
+			<div class ="row" style="margin-top: 10px;">
+				<div class="col-sm" id="device-infor">
 					<div class="row">
 						<div class="mb10"></div>
 						<div class="col-sm-6">
@@ -107,14 +113,15 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<p id="charTitle">Nhiệt độ.</p>
+			</div>
+			<div>
+				<div class="col-sm">
+					<p id="charTitle" style="display: none">Nhiệt độ.</p>
 					<div class="demo-container">
 						<div id="placeholder" class="demo-placeholder"></div>
 					</div>
 				</div>
 			</div>
-			
 		</div>
 		<!-- panel-body -->
 	</div>

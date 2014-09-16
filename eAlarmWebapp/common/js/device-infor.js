@@ -1,10 +1,11 @@
 var plot;
 var data = [], totalPoints = 100;
-var updateInterval = 30;
+var updateInterval = 2000;
 var currentDeviceID;
 var currentDeviceInforID;
 var InforIndex = 0;
 var device_infor;
+var device;
 var tid;
 function onGetDeviceInfor(device_id) {
 	currentDeviceID = device_id;
@@ -17,12 +18,14 @@ function onGetDeviceInfor(device_id) {
 	{
 		InforIndex = 0;
 		device_infor = data.device_infor;
+		device = data.device;
 		resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
 		updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
-		updateDeviceInfor(data.device, data.device_infor);
+		updateDevice();
+		updateDeviceProperties(data.device_infor);
 		abortTimer();
-		tid = setTimeout(mycode, 1000);
+		tid = setTimeout(mycode, updateInterval);
 	});
 }
 
@@ -34,12 +37,16 @@ function getCurrentDeviceInfor()
 		'device_id' : currentDeviceID,
 	});
 	posting.done(function(data) {
-		updateDeviceInfor(data.device, data.device_infor);
+		if(data.device.status!==device.status)
+		{
+			device = data.device;
+			updateDevice();
+		}
+		updateDeviceProperties(data.device_infor);
 		updateData(data.device_infor[InforIndex].value);
 	});
 }
-
-function updateDeviceInfor(device, infors)
+function updateDevice()
 {
 	//update device name
 	var deviceName = $('#device-name');
@@ -50,32 +57,30 @@ function updateDeviceInfor(device, infors)
 	var deviceServer = $('#device-server');
 	deviceServer.html("Connected server: "+nvl(device.connected_server,"Chưa kết nối"));
 	var deviceStatus = $('#device-status');
+	//device status on table
+	var deviceStatusTable = $('#device-status-'+device.id);
 	var deviceIssue = $('#device-issue');
-	if(device.status=="1")
+	if(device.status==="1")
 	{
 		deviceIssue.html("");
 		deviceStatus.attr("src","images/ic_green.png");
+		deviceStatusTable.attr("src","images/ic_green.png");
 	}
-	else if(device.status=="2")
+	else if(device.status==="2")
 	{
 		deviceIssue.html("Sự cố: <p style = \"padding-left: 5px;\">" + device.description+"</p>");
-		deviceStatus.attr("src","images/ic_red.png")
+		deviceStatus.attr("src","images/ic_red.png");
+		deviceStatusTable.attr("src","images/ic_red.png");
 	}
-	else if(device.status=="0")
+	else if(device.status==="0")
 	{
 		deviceIssue.html("Sự cố: <p> Mất kết nối"+"</p>");
 		deviceStatus.attr("src","images/ic_blue.png");
+		deviceStatusTable.attr("src","images/ic_blue.png");
 	}
-		
-//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
-	
-//	if(device.status=="2")
-//	{
-//		deviceIssue.css("display","");
-//	}
-//	else
-//		deviceIssue.css("display","none");
-//	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
+}
+function updateDeviceProperties(infors)
+{
 	//update device information
 	var deviceInfor = $('#device-infor');
 	deviceInfor.empty();
@@ -83,13 +88,14 @@ function updateDeviceInfor(device, infors)
 		var infor = infors[i];
 		var row = $('<div>');
 		row.attr("class", "row");
-
-		var separator = $('<div>');
-		separator.attr("class", "mb10");
-		separator.appendTo(row);
-
 		addProperty(device,row, infor)
-		if (i < infors.length - 2) {
+		if (i < infors.length - 4) {
+			i++;
+			infor = infors[i];
+			addProperty(device,row, infor)
+			i++;
+			infor = infors[i];
+			addProperty(device,row, infor)
 			i++;
 			infor = infors[i];
 			addProperty(device,row, infor)
@@ -102,7 +108,7 @@ function addProperty(device,row, infor)
 {
 	var column = $('<div>');
 	column.attr("id",infor.id);
-	column.attr("class", "col-sm-6");
+	column.attr("class", "col-sm-3");
 	if(device.status =="0")
 	{
 		column.html("<p>" + infor.properties.name
@@ -153,10 +159,10 @@ function addProperty(device,row, infor)
 
 function mycode() {
 	getCurrentDeviceInfor();
-	
-	updateChart();
+	if(device.status !=="0")
+		updateChart();
 	// do some stuff...
-	tid = setTimeout(mycode, 1000); // repeat myself
+	tid = setTimeout(mycode, updateInterval); // repeat myself
 }
 function abortTimer() { // to be called when you want to stop the timer
 	clearTimeout(tid);
@@ -227,7 +233,7 @@ function getRandomData() {
 
 	return res;
 }
-var chartTID = setTimeout(updateChart, updateInterval);
+
 function resetChart(min,max)
 {
 	plot = $.plot("#placeholder", [ getNewData() ], {
