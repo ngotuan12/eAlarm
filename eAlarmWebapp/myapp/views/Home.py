@@ -17,11 +17,20 @@ def index(request):
 	return HttpResponseRedirect("/home")
 @login_required(login_url='/login')
 def home(request):
+	context= {}
 	if request.method == 'GET':
 		try:
-			_device_id = request.GET['device_id']
-			devices = Device.objects.all()
-			context={'devices':devices,'device_id':_device_id}
+			devices = {}
+			device_id = request.GET.get('device_id')
+			status = request.GET.get('status')
+			if device_id:
+				devices = Device.objects.filter(id=device_id)
+				context.update({'device_id':device_id})
+			elif status:
+				devices = Device.objects.filter(status=status)
+			else: 
+				devices = Device.objects.all()
+			context.update({'devices':devices})
 			return render_to_response("index.html", context, RequestContext(request))
 		except Exception as ex:
 			print(ex)

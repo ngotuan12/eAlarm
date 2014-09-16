@@ -19,6 +19,7 @@
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
+	{% if devices %}
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="table-responsive">
@@ -69,49 +70,22 @@
 			<div class ="row" style="border-bottom: 1px solid; border-color: yellow;">
 				<div class="col-sm">
 					<h3 id="device-name">
-						<a href="#">RW0001 </a> - 11A Nguyễn Khuyến, Văn Miếu, Đống Đa,Hà
-						Nội,Việt Nam
 					</h3>
 					<p id="device-mac" style="display: none">
-						MAC: 65:AD:GD:09:09:89
 					</p>
 					<p id="device-server" style="display: none">
-						Connected server: 127.0.0.1
 					</p>
-					<p >
+					<p>
 						Trạng thái: <img id="device-status" width="15px" height="15px" src="images/ic_blue.png" alt="" />
 					</p>
 				</div>
 				<div class="col-sm">
 					<p id="device-issue">
-						Sự cố:
 					</p>
 				</div>
 			</div>
 			<div class ="row" style="margin-top: 10px;">
 				<div class="col-sm" id="device-infor">
-					<div class="row">
-						<div class="mb10"></div>
-						<div class="col-sm-6">
-							<p>Nhiệt độ</p>
-							<h4 style="color: red">90 °C</h4>
-						</div>
-						<div class="col-sm-6">
-							<p>Tần số điện lưới</p>
-							<h4 style="color: green">50.0 Hz %</h4>
-						</div>
-					</div>
-					<div class="row">
-						<div class="mb10"></div>
-						<div class="col-sm-6">
-							<p>Độ ẩm</p>
-							<h4 style="color: red">35%</h4>
-						</div>
-						<div class="col-sm-6">
-							<p>Điện áp cầu</p>
-							<h4 style="color: green">25.5VDC</h4>
-						</div>
-					</div>
 				</div>
 			</div>
 			<div>
@@ -125,12 +99,9 @@
 		</div>
 		<!-- panel-body -->
 	</div>
-
+	{% endif %}
 </div>
 <!-- contentpanel -->
-<div id="footer">
-		Copyright &copy; 2007 - 2014 IOLA and Ole Laursen
-	</div>
 {% endblock %} 
 {% block scripts %}
 <script src="js/jquery-1.10.2.min.js"></script>
@@ -170,13 +141,11 @@
 		});
 		//onGetDeviceInfor({{ devices.0.id }});
 	});
-	jQuery(window).load(function(){ 
-		var _device_id ='{{ device_id }}';
-		if(_device_id )
-			var device_id = _device_id;
-		else
-			var device_id = $("#table2 tbody tr[device_id]").first().attr('id');
-		
+	jQuery(window).load(function()
+	{ 
+		var device_id = '{{ device_id|safe }}';
+		if (!device_id)
+			device_id = $("#table2 tbody tr[device_id]").first().attr('id');
 		$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 		$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 		onGetDeviceInfor(device_id);
