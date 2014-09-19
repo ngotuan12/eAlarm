@@ -84,27 +84,39 @@ function updateDeviceProperties(infors)
 	//update device information
 	var deviceInfor = $('#device-infor');
 	deviceInfor.empty();
+	var infor = []
 	for (var i = 0; i < infors.length; i++) {
-		var infor = infors[i];
+		var count = 0; //dem so column da insert vao row
 		var row = $('<div>');
 		row.attr("class", "row");
-		addProperty(device,row, infor)
-		if (i < infors.length - 4) {
-			i++;
+		while(count <4)
+		{
+			if( i === infors.length)
+				break;
 			infor = infors[i];
-			addProperty(device,row, infor)
+			//neu la cam bien phu
+			if(infor.properties.require === '0')
+			{
+				//tim cha
+				parent = infors.filter(function (el) 
+				{
+					return el.properties.id === infor.properties.parent
+				})[0];
+				addProperty(device,row,infor, parent);
+			}
+			else 
+			{
+				//add infor
+				addProperty(device,row, infor);
+			}
+			count ++;
 			i++;
-			infor = infors[i];
-			addProperty(device,row, infor)
-			i++;
-			infor = infors[i];
-			addProperty(device,row, infor)
 		}
 		row.appendTo(deviceInfor);
 	}
 }
 
-function addProperty(device,row, infor)
+function addProperty(device,row, infor,parent)
 {
 	var column = $('<div>');
 	column.attr("id",infor.id);
@@ -116,12 +128,12 @@ function addProperty(device,row, infor)
 	}
 	else
 	{
-		if(infor.properties.require == '0')
+		if(infor.properties.require === '0' && parent.value !== 0)
 		{
 			column.html("<p>" + infor.properties.name
 			+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 		}
-		else if(infor.properties.require == '1')
+		else
 		{
 			if (infor.value == 0)
 			{

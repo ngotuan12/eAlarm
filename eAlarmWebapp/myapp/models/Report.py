@@ -13,4 +13,5 @@ class Report(models.Model):
             ("view_device_report", "Xem báo cáo tổng hợp trạng thái phòng máy"),
             ("view_device_detail_report", "Xem báo cáo tổng hợp chi tiết hoạt động phòng máy"),
             ("view_device_error_report", "Xem báo cáo thống kê lỗi phòng máy"),
+            ("view_sensor_mirror_report","Xem báo cáo điện máy phát")
         )

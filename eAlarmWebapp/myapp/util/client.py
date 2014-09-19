@@ -53,3 +53,18 @@ def exportDeviceErrorReport(authorization,device_id,area_id,device_status,proper
     response = r.json()
     fileout = response['FileOut']
     return fileout
+def exportSensorMirrorReport(authorization,device_id,area_id,device_status,property_id,from_date,to_date):
+    url = settings.ALARM_SERVER + settings.REPORT_SERVICE
+    payload = {"SessionUserName":"TuanNA","Method":"SensorMirrorReport",
+               "device_id":device_id,
+               "area_id":area_id,
+               "device_status":device_status,
+               "property_id":property_id,
+               "from_date":from_date,
+               "to_date":to_date,
+               }
+    headers = {'content-type': 'application/json;charset=utf-8',"Authorization":authorization}
+    r = requests.request('POST',url, data=json.dumps(payload), headers=headers)
+    response = r.json()
+    fileout = response['FileOut']
+    return fileout

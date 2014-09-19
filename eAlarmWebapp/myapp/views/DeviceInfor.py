@@ -5,7 +5,7 @@ Created on Apr 3, 2014
 '''
 import json
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.views.decorators.http import require_http_methods

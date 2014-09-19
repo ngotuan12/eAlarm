@@ -47,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^device-report$', Report.view_device_report,name='device-report'),
     url(r'^device-detail-report$', Report.view_device_detail_report,name='device-detail-report'),
     url(r'^device-error-report$', Report.view_device_error_report,name='device-error-report'),
+    url(r'^sensor-mirror-report/$', Report.view_sensor_mirror_report,name='sensor-mirror-report'),
     # Device Detail Report
     url(r'^group$', Group.view_group,name='user'),
     url(r'^permission-error$', Error.permission_error,name='permission-error'),

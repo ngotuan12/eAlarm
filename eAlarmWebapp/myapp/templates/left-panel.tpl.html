@@ -81,6 +81,11 @@
 						<li><a href="/device-error-report"><i class="fa fa-caret-right"></i>
 								Chi tiết sự cố phòng máy</a></li>
 					{% endif %}
+					
+					{% if perms.myapp.view_sensor_mirror_report %}
+						<li><a href="/sensor-mirror-report/"><i class="fa fa-caret-right"></i>
+								Lịch sử máy phát điện </a></li>
+					{% endif %}
 				</ul></li>
 		</ul>
 

@@ -164,6 +164,49 @@ function updateDevice(socket, device_id, status, strServerIP, strDescription,
 }
 /**
  * @author TuanNA
+ * @since 19/09/2014
+ * @description: <p>Kiem tra cam bien phu</p> 
+ *		<p>Neu bi mat cam bien chinh khong hoat dong dem thoi gian hoat dong cam bien phu</p>
+ */
+function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_code,mirror_value)
+{
+	//get current transaction
+	var strSQL = "SELECT id FROM sensor_transaction a WHERE infor_id = ? AND end_date IS NULL ";
+	connDB
+	.query(
+			strSQL,
+			[ infor_id ],
+			function(err, rows)
+			{
+				var transaction_id;
+				if (rows.length !== 0)
+				{
+					transaction_id = rows[0].id;
+				}
+				var strSQL = "";
+				//neu cam bien chinh khong hoat dong
+				if(parent_value === 0)
+				{
+					if(typeof transaction_id ==='undefined')
+					{
+						strSQL = "INSERT INTO sensor_transaction(infor_id,value) VALUES(?,?) ";
+						connDB.query(strSQL,[infor_id,mirror_value]);
+					}
+				}
+				//neu da hoac dang hoat dong binh thuong
+				else
+				{
+					//check transaction neu co thi ket thuc
+					if(typeof transaction_id !=='undefined')
+					{
+						strSQL = "UPDATE sensor_transaction SET end_date = now() WHERE infor_id = ? AND end_date IS NULL ";
+						connDB.query(strSQL,[infor_id]);
+					}
+				}
+			});
+}
+/**
+ * @author TuanNA
  * @since 03/03/2014
  * @version 1.0
  */
@@ -171,7 +214,7 @@ function updateDeviceInfor(socket, device_id, infors)
 {
 	// var strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and
 	// device_pro_id = (SELECT id FROM device_properties WHERE code = ? )";
-	var strSQL = "SELECT b.* FROM device_infor a,device_properties b ";
+	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? ";
 	strSQL += "AND a.`status` = '1' ";
 	var transaction_detail = [];
@@ -203,25 +246,50 @@ function updateDeviceInfor(socket, device_id, infors)
 								for (i = 0; i < properties.length; i++)
 								{
 									var property = properties[i];
-									if (property.code === key && property.require === "1")
+									if (property.code === key)
 									{
-										var issue_description = "";
-										if (value >= property.max_alarm)
+										//neu la cam bien chinh
+										if(property.require === "1")
 										{
-											strDescription += property.name + " quá cao" + " <br> ";
-											transaction_detail.push({
-												"description" : property.name + " quá cao",
-												"value" : value,
-												"device_pro_id" : property.id
-											});
-										} else if (value <= property.min_alarm)
+											var issue_description = "";
+											if (value >= property.max_alarm)
+											{
+												strDescription += property.name + " quá cao" + " <br> ";
+												transaction_detail.push({
+													"description" : property.name + " quá cao",
+													"value" : value,
+													"device_pro_id" : property.id
+												});
+											} else if (value <= property.min_alarm)
+											{
+												strDescription += property.name + " quá thấp" + " <br> ";
+												transaction_detail.push({
+													"description" : property.name + " quá thấp",
+													"value" : value,
+													"device_pro_id" : property.id
+												});
+											}
+										}
+										//neu la cam bien phu
+										else if(property.require === "0")
 										{
-											strDescription += property.name + " quá thấp" + " <br> ";
-											transaction_detail.push({
-												"description" : property.name + " quá thấp",
-												"value" : value,
-												"device_pro_id" : property.id
-											});
+											var parent_property;
+											//parent property
+											for(var j=0;j<properties;j++)
+											{
+												if(properties[j].parent_id === property.id)
+												{
+													parent_property = properties[j];
+													break;
+												}
+											}
+											//check sensor
+											if(typeof parent_property !=='undefined')
+											{
+												var parent_value = infors[parent_property.code];
+												var parent_code = parent_property.code;
+												checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
+											}
 										}
 										break;
 									}
@@ -256,6 +324,7 @@ function updateDeviceInfor(socket, device_id, infors)
 						}
 					});
 }
+
 
 /**
  * @param gmac

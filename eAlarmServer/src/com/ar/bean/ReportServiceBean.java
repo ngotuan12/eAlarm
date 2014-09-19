@@ -35,6 +35,9 @@ public class ReportServiceBean extends AppProcessor
 			case "DeviceErrorReport":
 				response.put("FileOut", exportDeviceErrorReport());
 				break;
+			case "SensorMirrorReport":
+				response.put("FileOut", exportSensorMirrorReport());
+				break;
 		}
 
 	}
@@ -195,6 +198,115 @@ public class ReportServiceBean extends AppProcessor
 			if (!strToDate.trim().equals(""))
 			{
 				strToDateSQL = " AND b.end_date < str_to_date('"+strToDate+"','%d/%m/%Y') ";
+			}
+			strSQL = strSQL.replaceAll("<%p_to_date%>",
+					strToDateSQL);
+			// prepare statement
+			pstm = mcnMain.prepareStatement(strSQL);
+			// execute query
+			rs = pstm.executeQuery();
+			// create report
+			Report report = new Report(rs, excelTemplatePath + strFileName
+					+ ".xls", strReportOut + strFileOut + ".xls");
+			report.setParameter("$Report_Date",
+					StringUtil.format(new Date(), "yyyy-MM-dd"));
+			report.setParameter("$Report_Time",
+					StringUtil.format(new Date(), "HH:mm:ss"));
+			// fill data
+			report.fillDataToExcel();
+			// create file
+			// createRealFile(strFileOut);
+			// return link
+			return strFileOut + ".xls";
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		finally
+		{
+			Database.closeObject(rs);
+			Database.closeObject(pstm);
+			close();
+		}
+	}
+	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	private String exportSensorMirrorReport() throws Exception
+	{
+		ResultSet rs = null;
+		PreparedStatement pstm = null;
+		try
+		{
+			// template path
+			String excelTemplatePath = AppServer.getParam("ExcelTemplatePath");
+			String templatePath = AppServer.getParam("TemplatePath");
+			String strReportOut = AppServer.getParam("ReportOut");
+			String strFileName = "TemplateSensorMirrorReport";
+			String strFileOut = strFileName
+					+ StringUtil.format(new Date(), "yyyyMMddhhmmss");
+			// String strFileOut = "dev_report";
+			// read sql file
+			String strSQL = new ReadSQLFile(templatePath + strFileName + ".sql")
+					.getSQLQuery();
+			// open connection
+			open();
+			// get parameter
+			String strDeviceID = request.getString("device_id");
+			String strDeviceSQL = "";
+			String strAreaID = request.getString("area_id");
+			String strAreaeSQL = "";
+			String strDeviceStatus = request.getString("device_status");
+			String strDeviceStatusSQL = "";
+			String strPropertyID = request.getString("property_id");
+			String strPropertySQL = "";
+			String strFromDate = request.getString("from_date");
+			String strFromDateSQL = "";
+			String strToDate = request.getString("to_date");
+			String strToDateSQL = "";
+			// set sql parameter
+			// device
+			if (!strDeviceID.equals("ALL"))
+			{
+				strDeviceSQL = " AND c.id ='" + strDeviceID + "' ";
+			}
+			strSQL = strSQL.replaceAll("<%p_device%>", strDeviceSQL);
+			// area
+			if (!strAreaID.equals("ALL"))
+			{
+				strAreaeSQL = " AND c.area_id ='" + strAreaID + "' ";
+			}
+			strSQL = strSQL.replaceAll("<%p_area%>", strAreaeSQL);
+			// device status
+			if (!strDeviceStatus.equals("ALL"))
+			{
+				strDeviceStatusSQL = " AND a.device_status ='" + strDeviceStatus
+						+ "' ";
+			}
+			strSQL = strSQL.replaceAll("<%p_device_status%>",
+					strDeviceStatusSQL);
+			// property_id
+			if (!strPropertyID.equals("ALL"))
+			{
+				strPropertySQL = " AND b.device_pro_id = '"+strPropertyID+"' ";
+			}
+			strSQL = strSQL.replaceAll("<%p_property%>",
+					strPropertySQL);
+			// from_date
+			if (!strFromDate.trim().equals(""))
+			{
+				strFromDateSQL = " AND a.start_date > str_to_date('"+strFromDate+"','%d/%m/%Y') ";
+			}
+			strSQL = strSQL.replaceAll("<%p_from_date%>",
+					strFromDateSQL);
+			// property_id
+			if (!strToDate.trim().equals(""))
+			{
+				strToDateSQL = " AND a.end_date < str_to_date('"+strToDate+"','%d/%m/%Y') ";
 			}
 			strSQL = strSQL.replaceAll("<%p_to_date%>",
 					strToDateSQL);
