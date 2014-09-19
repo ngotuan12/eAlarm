@@ -185,9 +185,8 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
 				}
 				var strSQL = "";
 				//neu cam bien chinh khong hoat dong
-				if(parent_value === 0)
+				if(parent_value === 0 && mirror_value !==0)
 				{
-					log("cam bien chinh khong hoat dong");
 					if(typeof transaction_id ==='undefined')
 					{
 						log("insert sensor transaction");
