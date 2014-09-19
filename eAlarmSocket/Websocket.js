@@ -187,8 +187,10 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
 				//neu cam bien chinh khong hoat dong
 				if(parent_value === 0)
 				{
+					log("cam bien chinh khong hoat dong");
 					if(typeof transaction_id ==='undefined')
 					{
+						log("insert sensor transaction");
 						strSQL = "INSERT INTO sensor_transaction(infor_id,value) VALUES(?,?) ";
 						connDB.query(strSQL,[infor_id,mirror_value]);
 					}
@@ -286,6 +288,7 @@ function updateDeviceInfor(socket, device_id, infors)
 											//check sensor
 											if(typeof parent_property !=='undefined')
 											{
+												log("check cam bien phu");
 												var parent_value = infors[parent_property.code];
 												var parent_code = parent_property.code;
 												checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
