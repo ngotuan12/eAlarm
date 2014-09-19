@@ -277,7 +277,7 @@ function updateDeviceInfor(socket, device_id, infors)
 										{
 											var parent_property;
 											//parent property
-											for(var j=0;j<properties;j++)
+											for(var j=0;j<properties.length;j++)
 											{
 												if(properties[j].parent_id === property.id)
 												{
