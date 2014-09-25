@@ -84,8 +84,10 @@ function updateDeviceProperties(infors)
 	//update device information
 	var deviceInfor = $('#device-infor');
 	deviceInfor.empty();
-	var infor = []
-	for (var i = 0; i < infors.length; i++) {
+	var infor = [];
+	var i = 0;
+	while( i < infors.length) 
+	{
 		var count = 0; //dem so column da insert vao row
 		var row = $('<div>');
 		row.attr("class", "row");
@@ -113,6 +115,8 @@ function updateDeviceProperties(infors)
 			i++;
 		}
 		row.appendTo(deviceInfor);
+		if( i === infors.length)
+			break;
 	}
 }
 
