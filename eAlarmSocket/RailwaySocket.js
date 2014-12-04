@@ -19,7 +19,7 @@ var properties;
 var server_ip = '10.10.0.17';
 //var server_ip = '0.0.0.0';
 var clients = [];
-var connDB = require("./AppServer.js").connDB;
+var connDB = require("./RailwayAppServer.js").connDB;
 
 var logFile = fs.createWriteStream('./log/ErrorLog.txt');
 //-----------------------------------------
