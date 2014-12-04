@@ -747,9 +747,9 @@ var socketServer = net.createServer(function(socket)
 function start()
 {
 	// listen socket
-	socketServer.listen(8888, server_ip);
+	socketServer.listen(6666, server_ip);
 	// listen websocket
-	log('socket server start on port 8888');
+	log('socket server start on port 6666');
 	log('websocket server start on port 8080');
 }
 
