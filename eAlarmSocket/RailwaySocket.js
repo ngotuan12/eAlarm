@@ -540,7 +540,7 @@ init_properties();
 // -----------------------------------------
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
-	port : 8080
+	port : 8686
 });
 wss.on('connection', function(conn)
 {

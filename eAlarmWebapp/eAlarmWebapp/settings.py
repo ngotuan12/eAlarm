@@ -113,6 +113,6 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     'myapp.util.context_processors.deviceSummary',
 )
 
-ALARM_SERVER = 'http://localhost:7777/AlarmServer/'
+ALARM_SERVER = 'http://localhost/AlarmServer/'
 REPORT_SERVICE = 'ReportService'
 PERMISSION_SERVICE = 'AuthorizationService'
