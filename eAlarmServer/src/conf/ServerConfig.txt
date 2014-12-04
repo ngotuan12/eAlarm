@@ -38,6 +38,6 @@ Report
 		MaxDay==5
 		DefaultTime==1
 		DefaultDay==5
-ExcelTemplatePath==D:/Projects/Django/eAlarm/template/
+ExcelTemplatePath==D:/Projects/eAlarm1,0/eAlarm/eAlarmWebapp/template/
 TemplatePath==/report/sql/
-ReportOut==D:/Projects/Django/eAlarm/report/
+ReportOut==D:/Projects/eAlarm1,0/eAlarm/eAlarmWebapp/report/

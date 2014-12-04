@@ -200,7 +200,6 @@ public class LoginBean extends AppProcessor
 	@Override
 	public void doDelete() throws Exception
 	{
-		// TODO Auto-generated method stub
 		
 	}
 }

@@ -3,13 +3,19 @@ from django.contrib import admin
 
 from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
-, Device, User, Error, Group,ListDevice,AddDevice,EditDevice,Report
+, Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
+    RailwayList, RailwayProperty
 
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^home$', Home.home),
+    #railway
+    url(r'^railway/monitor/$', Railway.monitor),
+    url(r'^railway/list/$', RailwayList.index),
+    url(r'^railway/property/$', RailwayProperty.index),
+    #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),
     url(r'^admin/', include(admin.site.urls)),

@@ -32,6 +32,8 @@
 		<ul class="nav nav-pills nav-stacked nav-bracket">
 			<li><a href="/home"><i
 					class="fa fa-home"></i> <span>Giám sát phòng máy</span></a></li>
+			<li><a href="/railway/monitor/"><i
+					class="fa fa-home"></i> <span>Giám sát đường ngang</span></a></li>
 			{% if user.is_superuser %}
 			<li class="nav-parent"><a href="#"><i class="fa fa-edit"></i>
 					<span>Quản trị</span></a>
@@ -57,6 +59,14 @@
 						<li><a href="/device-property"><i class="fa fa-caret-right"></i>
 								Danh sách cảm biến</a></li>
 						{% endif %}
+				</ul></li>
+			<li class="nav-parent"><a href="#"><i class="fa fa-laptop"></i>
+					<span>Đường ngang </span></a>
+				<ul class="children">
+						<li><a href="/railway/list/"><i class="fa fa-caret-right"></i>
+							Danh sách đường ngang</a></li>
+						<li><a href="/railway/property/"><i class="fa fa-caret-right"></i>
+								Danh sách cảm biến</a></li>
 				</ul></li>
 			<!-- <li class="nav-parent"><a href="#"><i class="fa fa-suitcase"></i>
 					<span>Tiện ích</span></a>

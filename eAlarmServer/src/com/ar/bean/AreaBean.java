@@ -198,20 +198,18 @@ public class AreaBean extends AppProcessor
 		default:
 			response.put("Mess", "API does not exist");
 			break;
-		}// TODO Auto-generated method stub
+		}
 	}
 
 	@Override
 	public void doGet() throws Exception
 	{
 
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void doDelete() throws Exception
 	{
-		// TODO Auto-generated method stub
 	}
 }

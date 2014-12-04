@@ -22,7 +22,6 @@ public class UserManagementService extends HttpServlet{
 			super.service(req, resp);
 			Util.processRequest(req, resp);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
