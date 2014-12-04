@@ -15,6 +15,10 @@ urlpatterns = patterns('',
     url(r'^railway/monitor/$', Railway.monitor),
     url(r'^railway/list/$', RailwayList.index),
     url(r'^railway/property/$', RailwayProperty.index),
+    #add,edit,delete railway
+    url(r'^railway/list/add$', RailwayList.add_railway),
+    url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway),
+    url(r'^railway/list/delete/(?P<railway_id>\w+)/$', RailwayList.delete_railway),
     #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),
