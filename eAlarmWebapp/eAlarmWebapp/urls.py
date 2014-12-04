@@ -12,13 +12,13 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^home$', Home.home),
     #railway
-    url(r'^railway/monitor/$', Railway.monitor),
-    url(r'^railway/list/$', RailwayList.index),
-    url(r'^railway/property/$', RailwayProperty.index),
+    url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
+    url(r'^railway/list/$', RailwayList.index,name='railway-list'),
+    url(r'^railway/property/$', RailwayProperty.index,name='railway-property'),
     #add,edit,delete railway
-    url(r'^railway/list/add$', RailwayList.add_railway),
-    url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway),
-    url(r'^railway/list/delete/(?P<railway_id>\w+)/$', RailwayList.delete_railway),
+    url(r'^railway/list/add/$', RailwayList.add_railway,name='railway-list-add'),
+    url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway,name='railway-list-edit'),
+    url(r'^railway/list/delete/(?P<railway_id>\w+)/$', RailwayList.delete_railway,name='railway-list-delete'),
     #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),
