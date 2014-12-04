@@ -16,8 +16,9 @@ var monitors = [];
 var server;
 var gateway;
 var properties;
-var server_ip = '10.10.0.17';
-//var server_ip = '0.0.0.0';
+var server_ip = '10.10.0.17:8888';
+var ip = '10.10.0.17';
+//var ip = '0.0.0.0';
 var clients = [];
 var connDB = require("./AppServer.js").connDB;
 
@@ -747,7 +748,7 @@ var socketServer = net.createServer(function(socket)
 function start()
 {
 	// listen socket
-	socketServer.listen(8888, server_ip);
+	socketServer.listen(8888, ip);
 	// listen websocket
 	log('socket server start on port 8888');
 	log('websocket server start on port 8080');
