@@ -22,7 +22,7 @@ var ip = '10.10.0.17';
 var clients = [];
 var connDB = require("./RailwayAppServer.js").connDB;
 
-var logFile = fs.createWriteStream('./log/ErrorLog.txt');
+var logFile = fs.createWriteStream('./log/RailwayErrorLog.txt');
 //-----------------------------------------
 //FUNCTION
 //-----------------------------------------
