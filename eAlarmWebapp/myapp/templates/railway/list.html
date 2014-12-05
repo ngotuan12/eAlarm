@@ -5,20 +5,168 @@
 {% block content-header %}
 <div class="pageheader">
 	<h2>
-		<i class="fa fa-home"></i> Giám sát đường ngang <span>Thông tin đường ngang</span>
+		<i class="fa fa-home"></i> ĐƯỜNG NGANG <span>Thông tin đường ngang</span>
 	</h2>
-	<div class="breadcrumb-wrapper">
-			<span class="label">Giao diện </span>
-			<ol class="breadcrumb">
-				<li><a href="/device">Bản đồ</a></li>
-				<li class="active">Dashboard</li>
-			</ol>
-	</div>
 </div>
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
-	
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-hover" id="tb_device">
+					<thead>
+						<tr>
+							<th style="width: 20%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Lý trình</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tuyến</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Địa chỉ</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">ĐV quản lý</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đội trưởng</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">SĐT</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
+						</tr>
+					</thead>
+					<tbody id="tbd_device">
+						{% for device in devices %}
+						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" mac="{{ device.mac_add }}" >
+							<td>{{ device.name }}</td>
+							<td>{{ device.code }}</td>
+							<td>{{ device.address }}</td>
+							<td></td>
+							<td class="center"></td>
+							<td class="center"></td>
+							<td class="center">{{ device.description }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- table-responsive -->
+
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-9">
+				<h4>THÔNG TIN ĐƯỜNG NGANG</h4>
+					<input type="hidden" name="hd_device_id" id="hd_device_id" value="">
+					<div class="row row-pad-5">
+						<div class="col-lg-3">
+							<label>Lý trình</label> <input type="text"
+								id="v_name" name="v_name" value="{{ goal.code }}" placeholder="Lý trình"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Tuyến</label> <input type="text"
+								id="v_code" name=""v_code"" value="{{ goal.code }}" placeholder="Tuyến"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Đường ngang trước</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đường ngang trước"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Đường ngang sau</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đường ngang sau"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+					</div>
+					<div class="row row-pad-5">
+						<div class="col-lg-3">
+							<label>Đội trưởng</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đội trưởng"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Điện thoại</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Điện thoại"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Địa chỉ MAC</label> <input type="text"
+								id="v_mac" name="v_mac" value="" placeholder="Địa chỉ MAC"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Tài khoản điều khiến</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Tài khoản điều khiến"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+					</div>
+					<div class="row row-pad-5">
+						<div class="col-lg-3">
+							<label>Kiểu đường ngang</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Kiểu đường ngang"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Số lượng cột hiệu</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Số lượng cột hiệu"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Đơn vị quản lý</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đơn vị quản lý"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+						<div class="col-lg-3">
+							<label>Lý do thay đổi</label> <input type="text"
+								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Lý do thay đổi"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+					</div>
+					<div class="row row-pad-5" style="padding-top: 20px;">
+						<div class="col-lg-12">
+							<a class="btn btn-danger" style="min-width: 100px;margin-right: 5px;" href="#" onclick="removeDevice();">Xóa</a>
+							<a class="btn btn-warning" style="min-width: 100px;margin-right: 5px;" href="#" onclick="editDevice();">Sửa</a>
+							<a class="btn btn-success" style="min-width: 100px;margin-right: 5px;" href="/railway/list/add/">Thêm</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<h5>CỘT HIỆU</h5>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;"> Đường ngang tự động</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- Cột hiệu gồm 2 đèn đỏ</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 đèn vàng</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 chuông cảnh báo</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;"> Đường ngang nhân công</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- Cột hiệu gồm 2 đèn đỏ</span></p>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 chuông cảnh báo</span></p>
+					<h5>TÀI KHOẢN ĐIỀU KHIỂN</h5>
+					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;">Tài khoản được phép ra lệnh chuyển mạch lựa chọn PLC-Slave,khi PLC-Master có sự cố</span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- panel panel-default -->
 </div>
 {% endblock %} 
 {% block scripts %}
@@ -33,16 +181,63 @@
 
 <script src="/js/jquery.datatables.min.js"></script>
 <script src="/js/chosen.jquery.min.js"></script>
-
+<script src="/js/message.js"></script>
 
 <script src="/js/custom.js"></script>
+<script src="/js/jquery.confirm.js"></script>
 <script>
-	jQuery(document).ready(function() 
+jQuery(document).ready(function() {
+	jQuery('#tb_device').dataTable({
+		"sPaginationType" : "full_numbers"
+	});
+	//Chosen Select
+	jQuery("select").chosen({
+		'min-width' : '150px',
+		'white-space' : 'nowrap',
+		disable_search_threshold : 10
+	});
+	$('#tbd_device tr').click(function(e)
 	{
-
+		var device_id = $(this).attr('id');
+		var name = $(this).attr('name');
+		var code = $(this).attr('code');
+		var mac =  $(this).attr('mac');
+		
+		$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
+		$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
+		
+		onShowDetail(device_id,name,code,mac);
 	});
-	jQuery(window).load(function()
-	{ 
+});
+function removeDevice(){
+	var device_id=$("#hd_device_id").val();
+	confirm = $.message.confirm('Bạn muốn xóa lý trình '+ $("#v_name").val()+' ? ');
+	confirm.on('message.confirm',function(){
+		window.location.replace("/railway/list/delete/"+device_id+"/");
+		$.message.destroy();
 	});
+}
+function editDevice(){
+	var device_id=$("#hd_device_id").val();
+	window.location.replace("/railway/list/edit/"+device_id+"/");
+}
+function onShowDetail(device_id,name,code,mac){
+	$("#v_code").val(code);
+	$("#v_name").val(name);
+	$("#v_mac").val(mac);
+	$("#hd_device_id").val(device_id);
+}
+jQuery(window).load(function()
+{ 
+	var device_id= $("#tbd_device tr[id]").first().attr('id');
+	var name = $("#tbd_device tr[id]").first().attr('name');
+	var code = $("#tbd_device tr[id]").first().attr('code');
+	var mac = $("#tbd_device tr[id]").first().attr('mac');
+	//
+	$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
+	$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
+	//
+	onShowDetail(device_id,name,code,mac);
+});
 </script>
 {% endblock scripts%}
