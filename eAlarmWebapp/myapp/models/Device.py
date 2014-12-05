@@ -20,6 +20,7 @@ class Device(models.Model):
     status = models.CharField(max_length=1,default ='0')
     type = models.CharField(max_length=1,default ='1')
     description = models.CharField(max_length=500,db_column="description")
+    next = models.ForeignKey('self',db_column='next_id',null=True)
     class Meta:
         db_table = 'device'
         app_label = 'myapp'
