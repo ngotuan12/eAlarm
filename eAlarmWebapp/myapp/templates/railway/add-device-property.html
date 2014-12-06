@@ -1,0 +1,145 @@
+<!-- Modal -->
+<div class="modal fade" id="add-device-property" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel" style="text-align: center;">THÊM ĐẦU ĐO</h4>
+			</div>
+
+			<div class="panel panel-default">
+				<form class="form" id="addDeviceProperty" novalidate="novalidate" method="post" action="/railway/property/add/">
+					{% csrf_token %}
+					<div class="panel-body" >
+						<div class="row">
+							<div class="col-md-6">
+								<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Tên:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtName" class="form-control"
+												style="padding: 8px;"
+												placeholder="<Tên đầu đo" required>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Mã:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtCode" id="txtCode" class="form-control"
+												style="padding: 8px;"
+												placeholder="<Mã đầu đo>" required>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-sm-5">
+											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
+												<input type="checkbox" id="cbRequire" name="cbRequire" style="margin-top: 0px !important;">
+												<label for="cbRequire">Đầu đo con</label>
+											</div>
+										</div>
+										
+										<div class="col-sm-7">
+											<label class="control-label">Đầu đo cha:</label>
+											<select name='slParent' id="slParent" class="form-control chosen-select" data-placeholder="Chọn đầu đo cha" disabled required>
+											<option value=""></option>
+											{% for device in devices %}
+												<option value="{{ device.id }}">{{ device.name }}</option>
+											{% endfor %}
+											</select>
+											<label for="slParent" class="error" style="display: none;">Trường không được để trống</label>
+										</div>
+										
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Ghi chú:</label>
+										<div class="col-sm-12">
+											<textarea rows="6" class="form-control"
+												placeholder="<Ghi chú>" name="txtDescription" required></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Nhỏ nhất:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtMin" class="form-control numberic"
+												style="padding: 8px;"
+												placeholder="<Giá trị nhỏ nhất của đầu đo>" required="" maxlength="10">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Lớn nhất:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtMax" class="form-control numberic"
+												style="padding: 8px;"
+												placeholder="<Giá tri lớn nhất của đầu đo>" required="" maxlength="10">
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Ngưỡng dưới:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtMinAlarm" class="form-control numberic"
+												style="padding: 8px;"
+												placeholder="<Ngưỡng dưới của đầu đo>" required maxlength="10">
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Ngưỡng trên:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtMaxAlarm" class="form-control numberic"
+												style="padding: 8px;"
+												placeholder="<Ngưỡng trên cửa đầu đo>" required maxlength="10">
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Đơn vị:</label>
+										<div class="col-sm-12">
+											<input type="text" name="txtSymbol" class="form-control"
+												style="padding: 8px;"
+												placeholder="<Đơn vị>" required>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="type" value="addDeviceProperty">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+						<button type="button" class="btn btn-primary" onclick="return onAddDevicePropertyFromSubmit();">Lưu</button>
+					</div>
+				</form>
+			</div>
+			<!-- End of block -->
+			
+		</div>
+		<!-- modal-content -->
+		
+	</div>
+	<!-- modal-dialog -->
+</div>
+<!-- modal -->
+
+<script>
+	function onAddDevicePropertyFromSubmit()
+	{
+		var $valid = jQuery('#addDeviceProperty').valid();
+		if(!$valid) 
+		{
+			$validator.focusInvalid();
+			return false;
+		}
+		jQuery('#addDeviceProperty').submit();
+	};
+</script>

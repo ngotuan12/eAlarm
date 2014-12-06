@@ -9,7 +9,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
-from myapp.models import Device, Area, DeviceProperties, DeviceInfor
+from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Department
 
 
 @login_required(login_url='/login')
@@ -23,7 +23,8 @@ def add_railway(request):
     if request.method == 'GET':
         lsArea = Area.objects.filter(level = '2')
         lsProperty = DeviceProperties.objects.all()
-        context={'lsArea':lsArea,'lsProperty':lsProperty}
+        departments =Department.objects.all()
+        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments}
         context.update(csrf(request))
     elif request.method == 'POST':
         try:

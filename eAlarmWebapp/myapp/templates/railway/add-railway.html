@@ -51,8 +51,8 @@
 												<div class="col-sm-12">
 													<select name='slManagementUnit' id="slManagementUnit" class="form-control chosen-select" required style="padding: 8px;">
 														{% if lsArea %}
-															{% for area in lsArea %}
-																<option value="{{ area.id }}" area_name="{{ area.name }}">{{ area.name }}</option>
+															{% for department in departments %}
+																<option value="{{ department.id }}" department_name="{{ department.name }}">{{ department.name }}</option>
 															{% endfor %}
 														{% endif %}
 													</select>

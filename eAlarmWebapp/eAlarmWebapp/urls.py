@@ -19,6 +19,10 @@ urlpatterns = patterns('',
     url(r'^railway/list/add/$', RailwayList.add_railway,name='railway-list-add'),
     url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway,name='railway-list-edit'),
     url(r'^railway/list/delete/(?P<railway_id>\w+)/$', RailwayList.delete_railway,name='railway-list-delete'),
+     #add,edit,delete property
+    url(r'^railway/property/add/$', RailwayProperty.add_property,name='railway-property-add'),
+    url(r'^railway/property/edit/(?P<property_id>\w+)/$', RailwayProperty.edit_property,name='railway-property-edit'),
+    url(r'^railway/property/delete/(?P<property_id>\w+)/$', RailwayProperty.delete_property,name='railway-property-delete'),
     #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),
