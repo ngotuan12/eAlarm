@@ -18,8 +18,35 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="contentpanel">
-	
+<div class="panel panel-default">
+	<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-hover" id="tb_device">
+					<thead>
+						<tr>
+							<th style="width: 20%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Lý trình</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tuyến</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Địa chỉ</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">ĐV quản lý</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đội trưởng</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">SĐT</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+					</tbody>
+				</table>
+			</div>
+			<!-- <div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div>
+			<div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div>
+			<div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div> -->
+			
+		<!-- <div class="col-sm-6" style="min-height: 500px;">
+			<div class="row">gdfgfg</div>
+		</div> -->
+	</div>
+
 </div>
 {% endblock %} 
 {% block scripts %}
@@ -40,10 +67,23 @@
 <script>
 	jQuery(document).ready(function() 
 	{
-
+		$('#tb_device').dataTable(
+		{
+			"sPaginationType" : "full_numbers",
+			"info" : false,
+			"oLanguage": {"sInfo": "Showing page _PAGE_ of _PAGES_",  "oPaginate": {"sFirst": "<<","sPrevious": "<","sNext": ">","sLast": ">>"}},
+			
+			"language" : {
+						"lengthMenu" : "Hiển thị _MENU_ bản ghi",
+						"zeroRecords" : "Nothing found - sorry",
+						"info" : "Showing page _PAGE_ of _PAGES_",
+						"infoEmpty" : "No records available",
+						"infoFiltered" : "(filtered from _MAX_ total records)"
+					}
+		});
 	});
 	jQuery(window).load(function()
-	{ 
+	{
 	});
 </script>
 {% endblock scripts%}
