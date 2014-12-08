@@ -32,6 +32,7 @@ def add_railway(request):
             _code = request.POST['txtRoute'].strip()
             _name = request.POST['txtJourney'].strip()
             _ManagementUnit =request.POST['slManagementUnit'].strip()
+            _UserUnit =request.POST['slUserUnit'].strip()
             _manager =request.POST['txtManager'].strip()
             _phoneNumber =request.POST['txtPhoneNumber'].strip()
             _note =request.POST['txtNote'].strip()
@@ -43,10 +44,10 @@ def add_railway(request):
             _lat = request.POST['txtLat'].strip()
             _lng = request.POST['txtLng'].strip()
             area = Area.objects.get(id = _area_id)
-#                 
-            device = Device()
-             
             group =Group.objects.get(id=_ManagementUnit)
+            user =User.objects.get(id=_UserUnit)
+            
+            device = Device()
             device.name = _name
             device.address = _fullName
             device.short_address = _address
@@ -59,6 +60,7 @@ def add_railway(request):
             device.owner_name=_manager
             device.owner_phone=_phoneNumber
             device.group= group
+            device.user=user
             device.type ='4'
             device.save()
  
@@ -85,13 +87,16 @@ def add_railway(request):
 def edit_railway(request,railway_id):
     lsArea = Area.objects.filter(level = '2')
     lsInfor = DeviceInfor.objects.filter(device = railway_id)
+    departments =Group.objects.all()
+    users =User.objects.all().order_by("username")
     device = Device.objects.get(id=railway_id)
-    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device}
+    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device,'departments':departments,'users':users}
     if request.method == 'POST':
         try:
             _code = request.POST['txtRoute'].strip()
             _name = request.POST['txtJourney'].strip()
             _ManagementUnit =request.POST['slManagementUnit'].strip()
+            _UserUnit =request.POST['slUserUnit'].strip()
             _manager =request.POST['txtManager'].strip()
             _phoneNumber =request.POST['txtPhoneNumber'].strip()
             _note =request.POST['txtNote'].strip()
@@ -103,6 +108,8 @@ def edit_railway(request,railway_id):
             _lat = request.POST['txtLat'].strip()
             _lng = request.POST['txtLng'].strip()
             area = Area.objects.get(id = _area_id)
+            group =Group.objects.get(id=_ManagementUnit)
+            user =User.objects.get(id=_UserUnit)
     #                 
             device.name = _name
             device.address = _fullName
@@ -113,6 +120,10 @@ def edit_railway(request,railway_id):
             device.lat = float(_lat)
             device.lng = float(_lng)
             device.description = _note
+            device.owner_name=_manager
+            device.owner_phone=_phoneNumber
+            device.group= group
+            device.user=user
             device.type ='4'
             device.save()
             

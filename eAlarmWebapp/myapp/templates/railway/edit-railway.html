@@ -45,16 +45,34 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-12" style="padding-left: 0px;">
+										<div class="col-md-6" style="padding-left: 0px;">
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Đơn vị quản lý:</label>
 												<div class="col-sm-12">
 													<select name='slManagementUnit' id="slManagementUnit" class="form-control chosen-select" required style="padding: 8px;">
-														{% if lsArea %}
-															{% for area in lsArea %}
-																<option value="{{ area.id }}" area_name="{{ area.name }}">{{ area.name }}</option>
-															{% endfor %}
-														{% endif %}
+														{% for department in departments %}
+															{% if department.id|truncatechars:100 == device.group.id|truncatechars:100 %}
+																<option value="{{ department.id }}" department_name="{{ department.name }}" selected>{{ department.name }}</option>
+															{% else %}
+																<option value="{{ department.id }}" department_name="{{ department.name }}">{{ department.name }}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6" style="padding-left: 0px;">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Tài khoản điều khiển:</label>
+												<div class="col-sm-12">
+													<select name='slUserUnit' id="slUserUnit" class="form-control chosen-select" required style="padding: 8px;">
+														{% for user in users %}
+															{% if user.id|truncatechars:100 == device.user.id|truncatechars:100 %}
+																<option value="{{ user.id }}" user_name="{{ user.username }}" selected>{{ user.username }}</option>
+															{% else %}
+																<option value="{{ user.id }}" user_name="{{ user.username }}">{{ user.username }}</option>
+															{% endif %}
+														{% endfor %}
 													</select>
 												</div>
 											</div>
@@ -65,7 +83,7 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Người quản lý:</label>
 												<div class="col-sm-12">
-													<input type="text" id="txtManager" name="txtManager" value="" class="form-control"
+													<input type="text" id="txtManager" name="txtManager" value="{{ device.owner_name }}" class="form-control"
 														style="padding: 8px;"
 														placeholder="<Người quản lý>" maxlength="50" required>
 												</div>
@@ -75,7 +93,7 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Số điện thoại</label>
 												<div class="col-sm-12">
-													<input type="text" id="txtPhoneNumber" name="txtPhoneNumber" value="" class="form-control numberic"
+													<input type="text" id="txtPhoneNumber" name="txtPhoneNumber" value="{{ device.owner_phone }}" class="form-control numberic"
 														style="padding: 8px;"
 														placeholder="<Số điện thoại>" maxlength="20" required>
 												</div>
