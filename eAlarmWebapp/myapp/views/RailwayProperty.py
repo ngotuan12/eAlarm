@@ -3,14 +3,17 @@ Created on Dec 3, 2014
 
 @author: TuanNA
 '''
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
 from myapp.models import DeviceProperties
 from myapp.models.Device import Device
 from myapp.models.DeviceInfor import DeviceInfor
+from myapp.util.DateEncoder import DateEncoder
 
 
 @login_required(login_url='/login')
@@ -114,3 +117,12 @@ def delete_property(request,property_id):
         di.delete()
     dp.delete()
     return HttpResponseRedirect('/railway/property/')
+def get_property(request,p_code):
+    try:
+        properties = DeviceProperties.objects.filter(p_type='2',code=p_code)
+        value='0'
+        if len(properties) >0 :
+            value ='1'
+        return HttpResponse(json.dumps({'property':value},cls=DateEncoder) ,content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({"error": str(ex)}),content_type="application/json")

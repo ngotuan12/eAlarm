@@ -7,12 +7,13 @@
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="myModalLabel" style="text-align: center;">THÊM ĐẦU ĐO</h4>
+				<h5 class="modal-title" id="lbError" style="text-align: left;color: red;"></h5>
 			</div>
 
 			<div class="panel panel-default">
 				<form class="form" id="addDeviceProperty" novalidate="novalidate" method="post" action="/railway/property/add/">
 					{% csrf_token %}
-					<div class="panel-body" >
+					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
@@ -38,13 +39,13 @@
 										<div class="col-sm-5">
 											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
 												<input type="checkbox" id="cbRequire" name="cbRequire" style="margin-top: 0px !important;">
-												<label for="cbRequire">Đầu đo con</label>
+												<label for="cbRequire">Đầu đo phụ</label>
 											</div>
 										</div>
 										
 										<div class="col-sm-7">
-											<label class="control-label">Đầu đo cha:</label>
-											<select name='slParent' id="slParent" class="form-control chosen-select" data-placeholder="Chọn đầu đo cha" disabled required>
+											<label class="control-label">Đầu đo chính:</label>
+											<select name='slParent' id="slParent" class="form-control chosen-select" data-placeholder="Chọn đầu đo chính" disabled required>
 											<option value=""></option>
 											{% for device in devices %}
 												<option value="{{ device.id }}">{{ device.name }}</option>
@@ -132,14 +133,44 @@
 <!-- modal -->
 
 <script>
+	function onGetProperty(p_code)
+	{
+		//show loading
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/get-property"+"/"+p_code.toString()+"/", {
+			'csrfmiddlewaretoken' : csrftoken,
+		});
+		posting.done(function(data) 
+		{
+			//alert(JSON.stringify(data))
+			var equal = data.property
+			if(equal === '1')
+			{
+				$("#lbError").html('Mã '+p_code+ " đã tồn tại !!!");
+				$("#lbError").show();
+			}
+			else
+			{
+				jQuery('#addDeviceProperty').submit();
+				$("#lbError").hide();
+			}
+			
+			//hide loading
+			$.fn.loading.hide();
+		});
+	}
 	function onAddDevicePropertyFromSubmit()
 	{
+		var p_code = $("#txtCode").val();
 		var $valid = jQuery('#addDeviceProperty').valid();
 		if(!$valid) 
 		{
 			$validator.focusInvalid();
 			return false;
 		}
-		jQuery('#addDeviceProperty').submit();
+		else
+			onGetProperty(p_code)
+		
 	};
 </script>

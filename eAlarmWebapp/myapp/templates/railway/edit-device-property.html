@@ -36,13 +36,13 @@
 										<div class="col-sm-5">
 											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
 												<input type="checkbox" id="cbRequireEdit" name="cbRequireEdit" style="margin-top: 0px !important;">
-												<label for="cbRequireEdit">Đầu đo con</label>
+												<label for="cbRequireEdit">Đầu đo phụ</label>
 											</div>
 										</div>
 										
 										<div class="col-sm-7">
-											<label class="control-label">Đầu đo cha:</label>
-											<select name='slParentEdit' id="slParentEdit" class="form-control chosen-select" data-placeholder="Chọn đầu đo cha" disabled required>
+											<label class="control-label">Đầu đo chính:</label>
+											<select name='slParentEdit' id="slParentEdit" class="form-control chosen-select" data-placeholder="Chọn đầu đo chính" disabled required>
 											<option value=""></option>
 											{% for device in devices %}
 												<option value="{{ device.id }}">{{ device.name }}</option>
