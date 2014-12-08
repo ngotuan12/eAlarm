@@ -4,6 +4,7 @@ Created on Aug 15, 2014
 @author: TuanNA
 '''
 from myapp.models.Area import Area
+from django.contrib.auth.models import  Group,User
 from django.db import models
 
 # Create your models here.
@@ -21,6 +22,10 @@ class Device(models.Model):
     type = models.CharField(max_length=1,default ='1')
     description = models.CharField(max_length=500,db_column="description")
     next = models.ForeignKey('self',db_column='next_id',null=True)
+    user=models.ForeignKey(User,db_column='user_id')
+    group=models.ForeignKey(Group,db_column='group_id')
+    owner_name=models.CharField(max_length=100)
+    owner_phone=models.CharField(max_length=25)
     class Meta:
         db_table = 'device'
         app_label = 'myapp'

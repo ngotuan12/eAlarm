@@ -45,16 +45,26 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-12" style="padding-left: 0px;">
+										<div class="col-md-6" style="padding-left: 0px;">
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Đơn vị quản lý:</label>
 												<div class="col-sm-12">
 													<select name='slManagementUnit' id="slManagementUnit" class="form-control chosen-select" required style="padding: 8px;">
-														{% if lsArea %}
-															{% for department in departments %}
-																<option value="{{ department.id }}" department_name="{{ department.name }}">{{ department.name }}</option>
-															{% endfor %}
-														{% endif %}
+														{% for department in departments %}
+															<option value="{{ department.id }}" department_name="{{ department.name }}">{{ department.name }}</option>
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6" style="padding-left: 0px;">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Tài khoản điều khiển:</label>
+												<div class="col-sm-12">
+													<select name='slUserUnit' id="slUserUnit" class="form-control chosen-select" required style="padding: 8px;">
+														{% for user in users %}
+															<option value="{{ user.id }}" user_name="{{ user.name }}">{{ user.name }}</option>
+														{% endfor %}
 													</select>
 												</div>
 											</div>
