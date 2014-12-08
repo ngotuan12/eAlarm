@@ -31,7 +31,9 @@
 					</thead>
 					<tbody id="tbd_device">
 						{% for device in devices %}
-						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" mac="{{ device.mac_add }}" >
+						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" 
+							mac="{{ device.mac_add }}" user="{{ device.user.username }}" 
+							owner_name="{{ device.owner_name }}" owner_phone="{{ device.owner_phone }}">
 							<td>{{ device.name }}</td>
 							<td>{{ device.code }}</td>
 							<td>{{ device.address }}</td>
@@ -89,14 +91,14 @@
 					<div class="row row-pad-5">
 						<div class="col-lg-3">
 							<label>Đội trưởng</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đội trưởng"
+								id="v_owner_name" name="v_owner_name" value="{{ goal.code }}" placeholder="Đội trưởng"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
 							<label>Điện thoại</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Điện thoại"
+								id="v_owner_phone" name="v_owner_phone" value="{{ goal.code }}" placeholder="Điện thoại"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -110,7 +112,7 @@
 						</div>
 						<div class="col-lg-3">
 							<label>Tài khoản điều khiến</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Tài khoản điều khiến"
+								id="v_user" name="v_user" value="{{ goal.code }}" placeholder="Tài khoản điều khiến"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -205,11 +207,14 @@ jQuery(document).ready(function() {
 		var name = $(this).attr('name');
 		var code = $(this).attr('code');
 		var mac =  $(this).attr('mac');
+		var user =  $(this).attr('user');
+		var owner_name = $(this).attr('owner_name');
+		var owner_phone = $(this).attr('owner_phone');
 		
 		$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 		$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
 		
-		onShowDetail(device_id,name,code,mac);
+		onShowDetail(device_id,name,code,mac,user,owner_name,owner_phone);
 	});
 });
 function removeDevice(){
@@ -224,10 +229,13 @@ function editDevice(){
 	var device_id=$("#hd_device_id").val();
 	window.location.replace("/railway/list/edit/"+device_id+"/");
 }
-function onShowDetail(device_id,name,code,mac){
+function onShowDetail(device_id,name,code,mac,user,owner_name,owner_phone){
 	$("#v_code").val(code);
 	$("#v_name").val(name);
 	$("#v_mac").val(mac);
+	$("#v_user").val(user);
+	$("#v_owner_name").val(owner_name);
+	$("#v_owner_phone").val(owner_phone);
 	$("#hd_device_id").val(device_id);
 }
 jQuery(window).load(function()
@@ -236,11 +244,14 @@ jQuery(window).load(function()
 	var name = $("#tbd_device tr[id]").first().attr('name');
 	var code = $("#tbd_device tr[id]").first().attr('code');
 	var mac = $("#tbd_device tr[id]").first().attr('mac');
+	var user = $("#tbd_device tr[id]").first().attr('user');
+	var owner_name = $("#tbd_device tr[id]").first().attr('owner_name');
+	var owner_phone = $("#tbd_device tr[id]").first().attr('owner_phone');
 	//
 	$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 	$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
 	//
-	onShowDetail(device_id,name,code,mac);
+	onShowDetail(device_id,name,code,mac,user,owner_name,owner_phone);
 });
 </script>
 {% endblock scripts%}
