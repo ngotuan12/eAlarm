@@ -158,11 +158,15 @@
 								
 									<div class="form-group">
 										<label class="col-sm-12 control-label" style="line-height: 20px;">Cảm biến:</label>
-										{% for property in lsProperty%}
+										{% for infor in lsInfor%}
 											<div class="col-sm-6">
 												<div class="ckbox ckbox-primary" style="height: 28px;">
-													<input type="checkbox" id="lb{{ property.id }}" name="{{ property.code }}" style="margin-top: 0px !important;">
-													<label for="lb{{property.id}}"> {{ property.name }}</label>
+													{% if infor.status == '1' %}
+														<input type="checkbox" id="lb{{ infor.device_pro.id }}" name="{{ infor.device_pro.code }}" checked>
+													{% else %}
+														<input type="checkbox" id="lb{{ infor.device_pro.id }}" name="{{ infor.device_pro.code }}" >
+													{% endif %}
+													<label for="lb{{ infor.device_pro.id }}"> {{ infor.device_pro.name }}</label>
 												</div>
 											</div>
 										{% endfor %}
