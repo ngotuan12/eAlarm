@@ -4,7 +4,7 @@ from django.contrib import admin
 from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
-    RailwayList, RailwayProperty
+    RailwayList, RailwayProperty,Log
 
 
 admin.autodiscover()
@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^railway/property/delete/(?P<property_id>\w+)/$', RailwayProperty.delete_property,name='railway-property-delete'),
     #get_property
     url(r'^get-property/(?P<p_id>\w+)/(?P<p_code>\w+)/$', RailwayProperty.get_property, name='get-property'),
+    #view log
+    url(r'^log/view/$', Log.index,name='log-view'),
     #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),

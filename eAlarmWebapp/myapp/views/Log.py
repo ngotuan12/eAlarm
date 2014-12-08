@@ -8,24 +8,23 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from django.contrib.auth.models import  Group,User
-from myapp.models import Device, Area, DeviceProperties, DeviceInfor
+
+from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Department
 
 
 @login_required(login_url='/login')
 def index(request):
     devices = Device.objects.filter(type='4')
     context={'devices':devices}
-    return render_to_response("railway/list.html", context, RequestContext(request))
+    return render_to_response("log/view-log.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def add_railway(request):
     context={}
     if request.method == 'GET':
         lsArea = Area.objects.filter(level = '2')
         lsProperty = DeviceProperties.objects.filter(p_type='2')
-        departments =Group.objects.all()
-        users =User.objects.all().order_by("username")
-        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments,'users':users}
+        departments =Department.objects.all()
+        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments}
         context.update(csrf(request))
     elif request.method == 'POST':
         try:
@@ -46,7 +45,6 @@ def add_railway(request):
 #                 
             device = Device()
              
-            group =Group.objects.get(id=_ManagementUnit)
             device.name = _name
             device.address = _fullName
             device.short_address = _address
@@ -56,9 +54,6 @@ def add_railway(request):
             device.lat = float(_lat)
             device.lng = float(_lng)
             device.description = _note
-            device.owner_name=_manager
-            device.owner_phone=_phoneNumber
-            device.group= group
             device.type ='4'
             device.save()
  
