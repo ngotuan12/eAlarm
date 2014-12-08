@@ -249,6 +249,9 @@ function onEditDeviceProperty()
 	$("#txtMinAlarmEdit").val(min_alarm);
 	$("#txtMaxAlarmEdit").val(max_alarm);
 	$("#txtSymbolEdit").val(symbol);
+	
+	$("#hd_device_property_id").val(device_id);
+	
 	//hide device_property self
 	$("#slParentEdit option[value=" + device_id + "]").hide();
 	$("#slParentEdit").trigger("chosen:updated");

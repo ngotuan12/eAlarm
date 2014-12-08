@@ -133,12 +133,12 @@
 <!-- modal -->
 
 <script>
-	function onGetProperty(p_code)
+	function onGetProperty(p_id,p_code)
 	{
 		//show loading
 		$.fn.loading.show();
 		var csrftoken = $.cookie('csrftoken');
-		var posting = $.post("/get-property"+"/"+p_code.toString()+"/", {
+		var posting = $.post("/get-property"+"/"+p_id.toString()+"/"+p_code.toString()+"/", {
 			'csrfmiddlewaretoken' : csrftoken,
 		});
 		posting.done(function(data) 
@@ -163,6 +163,7 @@
 	function onAddDevicePropertyFromSubmit()
 	{
 		var p_code = $("#txtCode").val();
+		var p_id='no_id'
 		var $valid = jQuery('#addDeviceProperty').valid();
 		if(!$valid) 
 		{
@@ -170,7 +171,7 @@
 			return false;
 		}
 		else
-			onGetProperty(p_code)
+			onGetProperty(p_id,p_code)
 		
 	};
 </script>

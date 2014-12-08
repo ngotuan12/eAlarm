@@ -7,6 +7,7 @@
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="myModalLabel" style="text-align: center;">SỬA THÔNG TIN ĐẦU ĐO</h4>
+				<h5 class="modal-title" id="lbErrorEdit" style="text-align: left;color: red;"></h5>
 			</div>
 
 			<div class="panel panel-default">
@@ -106,7 +107,7 @@
 							</div>
 						</div>
 						<input type="hidden" name="type" value="editDeviceProperty">
-						<input type="hidden" name="hd_device_property_id" id="hd_device_property_id">
+						<input type="hidden" name="hd_device_property_id" id="hd_device_property_id" value="">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
@@ -125,14 +126,44 @@
 <!-- modal -->
 
 <script>
+	function onGetPropertyEdit(p_id,p_code)
+	{
+		//show loading
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/get-property"+"/"+p_id.toString()+"/"+p_code.toString()+"/", {
+			'csrfmiddlewaretoken' : csrftoken,
+		});
+		posting.done(function(data) 
+		{
+			//alert(JSON.stringify(data))
+			var equal = data.property
+			if(equal === '1')
+			{
+				$("#lbErrorEdit").html('Mã '+p_code+ " đã tồn tại !!!");
+				$("#lbErrorEdit").show();
+			}
+			else
+			{
+				jQuery('#editDeviceProperty').submit();
+				$("#lbErrorEdit").hide();
+			}
+			
+			//hide loading
+			$.fn.loading.hide();
+		});
+	}
 	function onEditDevicePropertyFromSubmit()
 	{
+		var p_code = $("#txtCodeEdit").val();
+		var p_id=$("#hd_device_property_id").val();
 		var $valid = jQuery('#editDeviceProperty').valid();
 		if(!$valid) 
 		{
 			$validator.focusInvalid();
 			return false;
 		}
-		jQuery('#editDeviceProperty').submit();
+		else
+			onGetPropertyEdit(p_id,p_code)
 	};
 </script>

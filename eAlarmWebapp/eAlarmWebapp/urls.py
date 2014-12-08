@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^railway/property/edit/(?P<property_id>\w+)/$', RailwayProperty.edit_property,name='railway-property-edit'),
     url(r'^railway/property/delete/(?P<property_id>\w+)/$', RailwayProperty.delete_property,name='railway-property-delete'),
     #get_property
-    url(r'^get-property/(?P<p_code>\w+)/$', RailwayProperty.get_property, name='get-property'),
+    url(r'^get-property/(?P<p_id>\w+)/(?P<p_code>\w+)/$', RailwayProperty.get_property, name='get-property'),
     #machine room
     url(r'^device-infor$', DeviceInfor.index),
     url(r'^$', Home.index),

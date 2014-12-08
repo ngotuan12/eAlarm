@@ -117,9 +117,12 @@ def delete_property(request,property_id):
         di.delete()
     dp.delete()
     return HttpResponseRedirect('/railway/property/')
-def get_property(request,p_code):
+def get_property(request,p_id,p_code):
     try:
-        properties = DeviceProperties.objects.filter(p_type='2',code=p_code)
+        if p_id== 'no_id':
+            properties = DeviceProperties.objects.filter(p_type='2',code=p_code)
+        else:
+            properties = DeviceProperties.objects.exclude(id=p_id).filter(p_type='2',code=p_code)
         value='0'
         if len(properties) >0 :
             value ='1'
