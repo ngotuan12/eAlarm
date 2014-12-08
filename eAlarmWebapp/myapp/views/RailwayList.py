@@ -9,7 +9,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
-from myapp.models import Device, Area, DeviceProperties, DeviceInfor
+from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Department
 
 
 @login_required(login_url='/login')
@@ -22,8 +22,9 @@ def add_railway(request):
     context={}
     if request.method == 'GET':
         lsArea = Area.objects.filter(level = '2')
-        lsProperty = DeviceProperties.objects.all()
-        context={'lsArea':lsArea,'lsProperty':lsProperty}
+        lsProperty = DeviceProperties.objects.filter(p_type='2')
+        departments =Department.objects.all()
+        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments}
         context.update(csrf(request))
     elif request.method == 'POST':
         try:
@@ -57,19 +58,19 @@ def add_railway(request):
             device.save()
  
  
-#             lsDeviceProperties = DeviceProperties.objects.all()
-#             for deviceProperties in lsDeviceProperties:
-#                 temp = deviceProperties
-#                 deviceInfor = DeviceInfor()
-#                 deviceInfor.device = device
-#                 deviceInfor.value = float('0')
-#                 if request.POST.get(str(temp.code)):
-#                     deviceInfor.status = '1'
-#                 else :
-#                     deviceInfor.status = '0'
-#                      
-#                 deviceInfor.device_pro = temp
-#                 deviceInfor.save()
+            lsDeviceProperties = DeviceProperties.objects.filter(p_type='2')
+            for deviceProperties in lsDeviceProperties:
+                temp = deviceProperties
+                deviceInfor = DeviceInfor()
+                deviceInfor.device = device
+                deviceInfor.value = float('0')
+                if request.POST.get(str(temp.code)):
+                    deviceInfor.status = '1'
+                else :
+                    deviceInfor.status = '0'
+                      
+                deviceInfor.device_pro = temp
+                deviceInfor.save()
                  
             return HttpResponseRedirect('/railway/list/')
         except Exception as ex:
@@ -78,9 +79,9 @@ def add_railway(request):
 @login_required(login_url='/login')
 def edit_railway(request,railway_id):
     lsArea = Area.objects.filter(level = '2')
-    lsProperty = DeviceProperties.objects.all()
+    lsInfor = DeviceInfor.objects.filter(device = railway_id)
     device = Device.objects.get(id=railway_id)
-    context={'lsArea':lsArea,'lsProperty':lsProperty,'device':device}
+    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device}
     if request.method == 'POST':
         try:
             _code = request.POST['txtRoute'].strip()
@@ -109,6 +110,15 @@ def edit_railway(request,railway_id):
             device.description = _note
             device.type ='4'
             device.save()
+            
+            for deviceInfor in lsInfor:
+                temp = deviceInfor
+                deviceProperty = DeviceProperties.objects.get(id = temp.device_pro_id)
+                if request.POST.get(str(deviceProperty.code)):
+                    temp.status = '1'
+                else :
+                    temp.status = '0'
+                temp.save()
             return HttpResponseRedirect('/railway/list/')
         
         except Exception as ex:
@@ -118,5 +128,8 @@ def edit_railway(request,railway_id):
 @login_required(login_url='/login')
 def delete_railway(request,railway_id):
     device = Device.objects.get(id=railway_id)
+    deviceInfos = DeviceInfor.objects.filter(device =str(device.id))
+    for di in deviceInfos:
+        di.delete()
     device.delete()
     return HttpResponseRedirect('/railway/list/')

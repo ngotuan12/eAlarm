@@ -15,7 +15,7 @@ from myapp.models import DeviceProperties
 @login_required(login_url='/login')
 @permission_required('myapp.view_deviceproperties',login_url='/permission-error')
 def index(request):
-	lsDeviceProperty = DeviceProperties.objects.all()
+	lsDeviceProperty = DeviceProperties.objects.filter(p_type='1')
 	context={'lsDeviceProperty':lsDeviceProperty}
 	context.update(csrf(request))
 	return render_to_response("device-property.html", context,RequestContext(request))

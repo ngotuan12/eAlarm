@@ -3,10 +3,15 @@
 	<link href="css/chart.css" rel="stylesheet">
 {% endblock %}
 {% block content-header %}
+{% include 'railway/add-device-property.html' %}
+{% include 'railway/edit-device-property.html' %}
 <div class="pageheader">
 	<h2>
 		<i class="fa fa-home"></i>ĐƯỜNG NGANG<span>Danh sách đầu đo</span>
 	</h2>
+	<div class="breadcrumb-wrapper">
+		<a class="btn btn-success" data-toggle="modal" data-target="#add-device-property">Thêm đầu đo</a>
+	</div>
 </div>
 {% endblock %}
 {% block content %}
@@ -19,23 +24,29 @@
 						<tr>
 							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tên đầu đo</th>
 							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Mã</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đơn vị</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Min value</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Max value</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng dưới</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng trên</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đơn vị</th>
+							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Min value</th>
+							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Max value</th>
+							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng dưới</th>
+							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng trên</th>
+							<th style="width: 17%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
 						</tr>
 					</thead>
 					<tbody id="tbd_device">
 						{% for device in devices %}
-						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" mac="{{ device.mac_add }}" >
+						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" 
+						symbol ="{{ device.symbol }}" min ="{{ device.min }}" max ="{{ device.max }}" 
+						require="{{ device.require }}" parent_id="{{ device.parent_id }}"
+						min_alarm ="{{ device.min_alarm }}" max_alarm ="{{ device.max_alarm }}" description="{{ device.description }}" 
+						onclick="clickTR('{{ device.id }}');">
 							<td>{{ device.name }}</td>
 							<td>{{ device.code }}</td>
-							<td>{{ device.address }}</td>
-							<td></td>
-							<td class="center"></td>
-							<td class="center"></td>
-							<td class="center">{{ device.description }}</td>
+							<td>{{ device.symbol }}</td>
+							<td>{{ device.min }}</td>
+							<td>{{ device.max }}</td>
+							<td>{{ device.min_alarm }}</td>
+							<td>{{ device.max_alarm }}</td>
+							<td>{{ device.description }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -50,64 +61,34 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-12">
 				<h4>THÔNG TIN ĐẦU ĐO</h4>
 					<input type="hidden" name="hd_device_id" id="hd_device_id" value="">
 					<div class="row row-pad-5">
 						<div class="col-lg-3">
-							<label>Lý trình</label> <input type="text"
-								id="v_name" name="v_name" value="{{ goal.code }}" placeholder="Lý trình"
+							<label>Tên đầu đo</label> <input type="text"
+								id="v_name" name="v_name" value="{{ goal.code }}" placeholder="Tên đầu đo"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Tuyến</label> <input type="text"
-								id="v_code" name=""v_code"" value="{{ goal.code }}" placeholder="Tuyến"
+							<label>Mã đầu đo</label> <input type="text"
+								id="v_code" name=""v_code"" value="{{ goal.code }}" placeholder="Mã đầu đo"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Đường ngang trước</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đường ngang trước"
+							<label>Đơn vị</label> <input type="text"
+								id="v_symbol" name="v_symbol" value="{{ goal.code }}" placeholder="Đơn vị"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Đường ngang sau</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đường ngang sau"
-								style="padding: 6px;"
-								disabled
-								class="form-control" required maxlength="10">
-						</div>
-					</div>
-					<div class="row row-pad-5">
-						<div class="col-lg-3">
-							<label>Đội trưởng</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đội trưởng"
-								style="padding: 6px;"
-								disabled
-								class="form-control" required maxlength="10">
-						</div>
-						<div class="col-lg-3">
-							<label>Điện thoại</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Điện thoại"
-								style="padding: 6px;"
-								disabled
-								class="form-control" required maxlength="10">
-						</div>
-						<div class="col-lg-3">
-							<label>Địa chỉ MAC</label> <input type="text"
-								id="v_mac" name="v_mac" value="" placeholder="Địa chỉ MAC"
-								style="padding: 6px;"
-								disabled
-								class="form-control" required maxlength="10">
-						</div>
-						<div class="col-lg-3">
-							<label>Tài khoản điều khiến</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Tài khoản điều khiến"
+							<label>Ghi chú</label> <input type="text"
+								id="v_des" name="v_des" value="{{ goal.code }}" placeholder="Ghi chú"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -115,29 +96,29 @@
 					</div>
 					<div class="row row-pad-5">
 						<div class="col-lg-3">
-							<label>Kiểu đường ngang</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Kiểu đường ngang"
+							<label>Min value</label> <input type="text"
+								id="v_min" name="v_min" value="{{ goal.code }}" placeholder="Min value"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Số lượng cột hiệu</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Số lượng cột hiệu"
+							<label>Max value</label> <input type="text"
+								id="v_max" name="v_max" value="{{ goal.code }}" placeholder="Max value"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Đơn vị quản lý</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Đơn vị quản lý"
+							<label>Ngưỡng trên</label> <input type="text"
+								id="v_min_alarm" name="v_min_alarm" value="{{ goal.code }}" placeholder="Ngưỡng trên"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
 						<div class="col-lg-3">
-							<label>Lý do thay đổi</label> <input type="text"
-								id="txtCode" name="txtCode" value="{{ goal.code }}" placeholder="Lý do thay đổi"
+							<label>Ngưỡng dưới</label> <input type="text"
+								id="v_max_alarm" name="v_max_alarm" value="" placeholder="Ngưỡng dưới"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -146,22 +127,12 @@
 					<div class="row row-pad-5" style="padding-top: 20px;">
 						<div class="col-lg-12">
 							<a class="btn btn-danger" style="min-width: 100px;margin-right: 5px;" href="#" onclick="removeDevice();">Xóa</a>
-							<a class="btn btn-warning" style="min-width: 100px;margin-right: 5px;" href="#" onclick="editDevice();">Sửa</a>
-							<a class="btn btn-success" style="min-width: 100px;margin-right: 5px;" href="/railway/list/add/">Thêm</a>
+							<a class="btn btn-warning" style="min-width: 100px;margin-right: 5px;" data-toggle="modal" data-target="#edit-device-property" 
+							onclick="onEditDeviceProperty();"
+							>Sửa</a>
+							<a class="btn btn-success" style="min-width: 100px;margin-right: 5px;" data-toggle="modal" data-target="#add-device-property">Thêm</a>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-3">
-					<h5>CỘT HIỆU</h5>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;"> Đường ngang tự động</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- Cột hiệu gồm 2 đèn đỏ</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 đèn vàng</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 chuông cảnh báo</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;"> Đường ngang nhân công</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- Cột hiệu gồm 2 đèn đỏ</span></p>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 30px;">- 1 chuông cảnh báo</span></p>
-					<h5>TÀI KHOẢN ĐIỀU KHIỂN</h5>
-					<p><span style="font-style: italic;font-family: initial;margin-left: 10px;">Tài khoản được phép ra lệnh chuyển mạch lựa chọn PLC-Slave,khi PLC-Master có sự cố</span></p>
 				</div>
 			</div>
 		</div>
@@ -180,51 +151,144 @@
 <script src="/js/jquery.cookies.js"></script>
 
 <script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
 <script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery.numeric.js"></script>
 <script src="/js/message.js"></script>
 
 <script src="/js/custom.js"></script>
 <script src="/js/jquery.confirm.js"></script>
+<script src="/js/loading.js"></script>
 <script>
 jQuery(document).ready(function() {
 	jQuery('#tb_device').dataTable({
 		"sPaginationType" : "full_numbers"
 	});
-	//Chosen Select
-	jQuery("select").chosen({
-		'min-width' : '150px',
-		'white-space' : 'nowrap',
-		disable_search_threshold : 10
+
+	// Chosen Select
+	jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
+	$("#slParent" ).change(function() {
+		$(".error[for][for='slParent']").hide();
 	});
-	$('#tbd_device tr').click(function(e)
-	{
-		var device_id = $(this).attr('id');
-		var name = $(this).attr('name');
-		var code = $(this).attr('code');
-		var mac =  $(this).attr('mac');
-		
-		$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
-		$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
-		
-		onShowDetail(device_id,name,code,mac);
+	$("#slParentEdit" ).change(function() {
+		$(".error[for][for='slParentEdit']").hide();
 	});
+	$("#cbRequire").change(function() {
+	if (this.checked)
+		{
+			$("#slParent").attr('disabled', false);
+			$("#slParent").trigger("chosen:updated");
+		} else
+		{
+			$("#slParent").attr('disabled', true);
+			$('#slParent').prop("selectedIndex", -1);
+			$("#slParent").trigger("chosen:updated");
+		}
+	});
+	$("#cbRequireEdit").change(function() {
+	if (this.checked)
+		{
+			$("#slParentEdit").attr('disabled', false);
+			$("#slParentEdit").trigger("chosen:updated");
+		} else
+		{
+			$("#slParentEdit").attr('disabled', true);
+			$('#slParentEdit').prop("selectedIndex", -1);
+			$("#slParentEdit").trigger("chosen:updated");
+		}
+	});
+	$("#txtCode").on("keydown", function (e) {
+	if(e.which === 32) 
+		return false;
+	});
+	$("#txtCodeEdit").on("keydown", function (e) {
+	if(e.which === 32) 
+		return false;
+	});
+	//validate
+	$.validator.setDefaults({ ignore: ":hidden:not(select)" })
 });
+function onEditDeviceProperty()
+{
+	var device_id = $("#hd_device_id").val();
+	var name = $("tr[id][id='"+ device_id +"']").attr('name');
+	var code = $("tr[id][id='"+ device_id +"']").attr('code');
+	var symbol = $("tr[id][id='"+ device_id +"']").attr('symbol');
+	var min = $("tr[id][id='"+ device_id +"']").attr('min');
+	var max = $("tr[id][id='"+ device_id +"']").attr('max');
+	var min_alarm = $("tr[id][id='"+ device_id +"']").attr('min_alarm');
+	var max_alarm = $("tr[id][id='"+ device_id +"']").attr('max_alarm');
+	var description = $("tr[id][id='"+ device_id +"']").attr('description');
+	var require = $("tr[id][id='"+ device_id +"']").attr('require');
+	
+	//set
+	$("#txtCodeEdit").val(code);
+	$("#txtNameEdit").val(name);
+	$("#txtDescriptionEdit").val(description);
+	
+	
+	$('#slParentEdit').prop("selectedIndex", -1);
+	$("#slParentEdit").trigger("chosen:updated");
+	if(require ==="0")
+	{
+		$('#cbRequireEdit').prop('checked', true);
+		var parent_id = $("tr[id][id='"+ device_id +"']").attr('parent_id');
+		$("#slParentEdit").val(parent_id);
+		$("#slParentEdit").attr('disabled', false);
+		$("#slParentEdit").trigger("chosen:updated");
+	}
+	else
+	{
+		$('#cbRequireEdit').prop('checked', false);
+		$("#slParentEdit").attr('disabled', true);
+		$("#slParentEdit").trigger("chosen:updated");
+	}
+		
+	$("#txtMinEdit").val(min);
+	$("#txtMaxEdit").val(max);
+	$("#txtMinAlarmEdit").val(min_alarm);
+	$("#txtMaxAlarmEdit").val(max_alarm);
+	$("#txtSymbolEdit").val(symbol);
+	
+	$("#hd_device_property_id").val(device_id);
+	
+	//hide device_property self
+	$("#slParentEdit option[value=" + device_id + "]").hide();
+	$("#slParentEdit").trigger("chosen:updated");
+	//set action form action
+	$("#editDeviceProperty").attr('action','/railway/property/edit/'+ device_id.toString() +'/')
+}
+function clickTR(device_id){
+	var device_id = device_id
+	var name = $("tr[id][id='"+ device_id +"']").attr('name');
+	var code = $("tr[id][id='"+ device_id +"']").attr('code');
+	var symbol = $("tr[id][id='"+ device_id +"']").attr('symbol');
+	var min = $("tr[id][id='"+ device_id +"']").attr('min');
+	var max = $("tr[id][id='"+ device_id +"']").attr('max');
+	var min_alarm = $("tr[id][id='"+ device_id +"']").attr('min_alarm');
+	var max_alarm = $("tr[id][id='"+ device_id +"']").attr('max_alarm');
+	var description = $("tr[id][id='"+ device_id +"']").attr('description');
+	$("tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
+	$("tr[id][id!='"+ device_id +"']").css('background-color','#fff');
+	onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description);
+};
 function removeDevice(){
 	var device_id=$("#hd_device_id").val();
-	confirm = $.message.confirm('Bạn muốn xóa lý trình '+ $("#v_name").val()+' ? ');
+	confirm = $.message.confirm('Bạn muốn xóa đầu đo '+ $("#v_name").val()+' ? ');
 	confirm.on('message.confirm',function(){
-		window.location.replace("/railway/list/delete/"+device_id+"/");
+		window.location.replace("/railway/property/delete/"+device_id.toString()+"/");
 		$.message.destroy();
 	});
 }
-function editDevice(){
-	var device_id=$("#hd_device_id").val();
-	window.location.replace("/railway/list/edit/"+device_id+"/");
-}
-function onShowDetail(device_id,name,code,mac){
+function onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description){
 	$("#v_code").val(code);
 	$("#v_name").val(name);
-	$("#v_mac").val(mac);
+	$("#v_symbol").val(symbol);
+	$("#v_des").val(description);
+	$("#v_min").val(min);
+	$("#v_max").val(max);
+	$("#v_min_alarm").val(min_alarm);
+	$("#v_max_alarm").val(max_alarm);
 	$("#hd_device_id").val(device_id);
 }
 jQuery(window).load(function()
@@ -232,12 +296,19 @@ jQuery(window).load(function()
 	var device_id= $("#tbd_device tr[id]").first().attr('id');
 	var name = $("#tbd_device tr[id]").first().attr('name');
 	var code = $("#tbd_device tr[id]").first().attr('code');
-	var mac = $("#tbd_device tr[id]").first().attr('mac');
+	var symbol = $("#tbd_device tr[id]").first().attr('symbol');
+	var min = $("#tbd_device tr[id]").first().attr('min');
+	var max = $("#tbd_device tr[id]").first().attr('max');
+	var min_alarm = $("#tbd_device tr[id]").first().attr('min_alarm');
+	var max_alarm = $("#tbd_device tr[id]").first().attr('max_alarm');
+	var description = $("#tbd_device tr[id]").first().attr('description');
+	
 	//
 	$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 	$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
 	//
-	onShowDetail(device_id,name,code,mac);
+	onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description);
+	$(".numberic").numeric();
 });
 </script>
 {% endblock scripts%}
