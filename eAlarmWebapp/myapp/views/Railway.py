@@ -26,9 +26,9 @@ def monitor(request):
             else: 
                 devices = Device.objects.filter(type='4')
             context.update({'devices':devices})
-            return render_to_response("index.html", context, RequestContext(request))
+            return render_to_response("monitor.html", context, RequestContext(request))
         except Exception as ex:
             print(ex)
             devices = Device.objects.all()
             context = {'devices':devices}
-            return render_to_response("index.html", context, RequestContext(request))
+            return render_to_response("monitor.html", context, RequestContext(request))
