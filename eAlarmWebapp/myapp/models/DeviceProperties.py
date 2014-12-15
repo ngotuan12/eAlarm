@@ -19,6 +19,7 @@ class DeviceProperties(models.Model):
     require = models.CharField(max_length=1)
     p_type = models.CharField(max_length=1,default ='1')
     parent = models.ForeignKey('self',db_column='parent_id',null=True)
+    on_railway = models.CharField(max_length=1,default ='0')
     class Meta:
         db_table = 'device_properties'
         app_label = 'myapp'

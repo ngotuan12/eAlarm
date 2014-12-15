@@ -498,7 +498,6 @@ function timeOutFromServer(gateway_id)
 		} ]);
 		gateways[gateway_id] = null;
 	}
-
 }
 /**
  * @update 09/09/2014

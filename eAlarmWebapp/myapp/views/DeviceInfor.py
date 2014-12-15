@@ -19,7 +19,7 @@ def index(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').order_by('device_pro__id')
+		device_infor= DeviceInfor.objects.filter(device_id=device,status='1',device_pro__on_railway='0').order_by('device_pro__id')
 # 		print(device_infor.query)
 		infors =[]
 		for infor in device_infor:
