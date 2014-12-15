@@ -56,13 +56,12 @@ def add_property(request):
             dp.symbol = _symbol
             dp.p_type = p_type
             
-            if request.POST.get('cbRequire1') :
-                dp.require = '0'
-            else :
-                dp.require = '1'
             if request.POST.get('cbRequire') :
+                dp.require = '0'
                 _parent_id =request.POST['slParent']
-            
+            else:
+                dp.require = '1'
+                
             dp.parent_id = _parent_id
             dp.save()
             
@@ -116,13 +115,11 @@ def edit_property(request,property_id):
             dp.symbol = _symbol
             dp.p_type = p_type
             
-            if request.POST.get('cbRequireEdit1') :
-                dp.require = '0'
-            else :
-                dp.require = '1'
-                
             if request.POST.get('cbRequireEdit') :
+                dp.require = '0'
                 _parent_id =request.POST['slParentEdit']
+            else:
+                dp.require = '1'
             dp.parent_id = _parent_id
             dp.save()
             return HttpResponseRedirect('/railway/property/')
