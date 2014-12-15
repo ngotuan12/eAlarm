@@ -13,9 +13,9 @@
 	<h2>
 		<i class="fa fa-home"></i>ĐƯỜNG NGANG<span>Danh sách đầu đo</span>
 	</h2>
-	<div class="breadcrumb-wrapper">
+	<!-- <div class="breadcrumb-wrapper">
 		<a class="btn btn-success" data-toggle="modal" data-target="#add-device-property">Thêm đầu đo</a>
-	</div>
+	</div> -->
 </div>
 {% endblock %}
 {% block content %}
@@ -41,7 +41,8 @@
 						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" 
 						symbol ="{{ device.symbol }}" min ="{{ device.min }}" max ="{{ device.max }}" 
 						require="{{ device.require }}" parent_id="{{ device.parent_id }}"
-						min_alarm ="{{ device.min_alarm }}" max_alarm ="{{ device.max_alarm }}" description="{{ device.description }}" 
+						min_alarm ="{{ device.min_alarm }}" max_alarm ="{{ device.max_alarm }}" 
+						description="{{ device.description }}" type = "{{ device.type }}" 
 						onclick="clickTR('{{ device.id }}');">
 							<td>{{ device.name }}</td>
 							<td>{{ device.code }}</td>
@@ -201,6 +202,60 @@ jQuery(document).ready(function() {
 			$("#slParentEdit").trigger("chosen:updated");
 		}
 	});
+	$("#slType").change(function() {
+		var type =$(this).val();
+		if(type ==='2')
+		{
+			
+			$("#txtMin").val('');
+			$("#txtMax").val('');
+			$("#txtMinAlarm").val('');
+			$("#txtMaxAlarm").val('');
+			$("#txtSymbol").val('');
+			
+			$("#txtMin").prop('disabled', true);
+			$("#txtMax").prop('disabled', true);
+			$("#txtMinAlarm").prop('disabled', true);
+			$("#txtMaxAlarm").prop('disabled', true);
+			$("#txtSymbol").prop('disabled', true);
+			
+		}
+		else
+		{
+			$("#txtMin").prop('disabled', false);
+			$("#txtMax").prop('disabled', false);
+			$("#txtMinAlarm").prop('disabled', false);
+			$("#txtMaxAlarm").prop('disabled', false);
+			$("#txtSymbol").prop('disabled', false);
+		}
+	});
+	$("#slTypeEdit").change(function() {
+		var type =$(this).val();
+		if(type ==='2')
+		{
+			
+			$("#txtMinEdit").val('');
+			$("#txtMaxEdit").val('');
+			$("#txtMinAlarmEdit").val('');
+			$("#txtMaxAlarmEdit").val('');
+			$("#txtSymbolEdit").val('');
+			
+			$("#txtMinEdit").prop('disabled', true);
+			$("#txtMaxEdit").prop('disabled', true);
+			$("#txtMinAlarmEdit").prop('disabled', true);
+			$("#txtMaxAlarmEdit").prop('disabled', true);
+			$("#txtSymbolEdit").prop('disabled', true);
+			
+		}
+		else
+		{
+			$("#txtMinEdit").prop('disabled', false);
+			$("#txtMaxEdit").prop('disabled', false);
+			$("#txtMinAlarmEdit").prop('disabled', false);
+			$("#txtMaxAlarmEdit").prop('disabled', false);
+			$("#txtSymbolEdit").prop('disabled', false);
+		}
+	});
 	$("#txtCode").on("keydown", function (e) {
 	if(e.which === 32) 
 		return false;
@@ -224,7 +279,7 @@ function onEditDeviceProperty()
 	var max_alarm = $("tr[id][id='"+ device_id +"']").attr('max_alarm');
 	var description = $("tr[id][id='"+ device_id +"']").attr('description');
 	var require = $("tr[id][id='"+ device_id +"']").attr('require');
-	
+	var type =$("tr[id][id='"+ device_id +"']").attr('type');
 	//set
 	$("#txtCodeEdit").val(code);
 	$("#txtNameEdit").val(name);
@@ -234,6 +289,11 @@ function onEditDeviceProperty()
 	$('#slParentEdit').prop("selectedIndex", -1);
 	$("#slParentEdit").trigger("chosen:updated");
 	if(require ==="0")
+		$('#cbRequireEdit1').prop('checked', true);
+	else
+		$('#cbRequireEdit1').prop('checked', false);
+	
+	if($("tr[id][id='"+ device_id +"']").attr('parent_id') !=="None")
 	{
 		$('#cbRequireEdit').prop('checked', true);
 		var parent_id = $("tr[id][id='"+ device_id +"']").attr('parent_id');
@@ -247,12 +307,41 @@ function onEditDeviceProperty()
 		$("#slParentEdit").attr('disabled', true);
 		$("#slParentEdit").trigger("chosen:updated");
 	}
-		
+	
+	
 	$("#txtMinEdit").val(min);
 	$("#txtMaxEdit").val(max);
 	$("#txtMinAlarmEdit").val(min_alarm);
 	$("#txtMaxAlarmEdit").val(max_alarm);
 	$("#txtSymbolEdit").val(symbol);
+	
+	$("#slTypeEdit").val(type);
+	$("#slTypeEdit").trigger("chosen:updated");
+	
+	if(type ==='2')
+	{
+		$("#txtMinEdit").val('');
+		$("#txtMaxEdit").val('');
+		$("#txtMinAlarmEdit").val('');
+		$("#txtMaxAlarmEdit").val('');
+		$("#txtSymbolEdit").val('');
+		
+		$("#txtMinEdit").prop('disabled', true);
+		$("#txtMaxEdit").prop('disabled', true);
+		$("#txtMinAlarmEdit").prop('disabled', true);
+		$("#txtMaxAlarmEdit").prop('disabled', true);
+		$("#txtSymbolEdit").prop('disabled', true);
+	}
+	else
+	{
+		$("#txtMinEdit").prop('disabled', false);
+		$("#txtMaxEdit").prop('disabled', false);
+		$("#txtMinAlarmEdit").prop('disabled', false);
+		$("#txtMaxAlarmEdit").prop('disabled', false);
+		$("#txtSymbolEdit").prop('disabled', false);
+		
+		
+	}
 	
 	$("#hd_device_property_id").val(device_id);
 	

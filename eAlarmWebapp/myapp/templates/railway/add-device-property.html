@@ -22,7 +22,7 @@
 										<div class="col-sm-12">
 											<input type="text" name="txtName" class="form-control"
 												style="padding: 8px;"
-												placeholder="<Tên đầu đo" required>
+												placeholder="<Tên đầu đo>" maxlength="50" required>
 										</div>
 									</div>
 
@@ -31,7 +31,7 @@
 										<div class="col-sm-12">
 											<input type="text" name="txtCode" id="txtCode" class="form-control"
 												style="padding: 8px;"
-												placeholder="<Mã đầu đo>" required>
+												placeholder="<Mã đầu đo>" maxlength="20" required>
 										</div>
 									</div>
 
@@ -55,12 +55,29 @@
 										</div>
 										
 									</div>
-									
+									<div class="form-group">
+										<div class="col-sm-5">
+											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
+												<input type="checkbox" id="cbRequire1" name="cbRequire1" style="margin-top: 0px !important;">
+												<label for="cbRequire1">Bắt buộc</label>
+											</div>
+										</div>
+										
+										<div class="col-sm-7">
+											<label class="control-label">Loại:</label>
+											<select name='slType' id="slType" class="form-control chosen-select" data-placeholder="Chọn đầu đo chính" required>
+											<option value="1">Cảm biến</option>
+											<option value="2">ON/OFF</option>
+											</select>
+											<label for="slType" class="error" style="display: none;">Trường không được để trống</label>
+										</div>
+										
+									</div>
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Ghi chú:</label>
 										<div class="col-sm-12">
-											<textarea rows="6" class="form-control"
-												placeholder="<Ghi chú>" name="txtDescription" required></textarea>
+											<textarea rows="2" class="form-control"
+												placeholder="<Ghi chú>" name="txtDescription" required maxlength="100"></textarea>
 										</div>
 									</div>
 								</div>
@@ -70,25 +87,25 @@
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Nhỏ nhất:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtMin" class="form-control numberic"
+											<input type="text" name="txtMin" id="txtMin" class="form-control numberic"
 												style="padding: 8px;"
-												placeholder="<Giá trị nhỏ nhất của đầu đo>" required="" maxlength="10">
+												placeholder="<Giá trị nhỏ nhất của đầu đo>" required maxlength="10">
 										</div>
 									</div>
 
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Lớn nhất:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtMax" class="form-control numberic"
+											<input type="text" name="txtMax" id="txtMax" class="form-control numberic"
 												style="padding: 8px;"
-												placeholder="<Giá tri lớn nhất của đầu đo>" required="" maxlength="10">
+												placeholder="<Giá tri lớn nhất của đầu đo>" required maxlength="10">
 										</div>
 									</div>
 									
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Ngưỡng dưới:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtMinAlarm" class="form-control numberic"
+											<input type="text" name="txtMinAlarm" id="txtMinAlarm" class="form-control numberic"
 												style="padding: 8px;"
 												placeholder="<Ngưỡng dưới của đầu đo>" required maxlength="10">
 										</div>
@@ -97,7 +114,7 @@
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Ngưỡng trên:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtMaxAlarm" class="form-control numberic"
+											<input type="text" name="txtMaxAlarm" id="txtMaxAlarm" class="form-control numberic"
 												style="padding: 8px;"
 												placeholder="<Ngưỡng trên cửa đầu đo>" required maxlength="10">
 										</div>
@@ -106,7 +123,7 @@
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Đơn vị:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtSymbol" class="form-control"
+											<input type="text" name="txtSymbol" id="txtSymbol" class="form-control"
 												style="padding: 8px;"
 												placeholder="<Đơn vị>" required>
 										</div>

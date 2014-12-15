@@ -21,7 +21,7 @@
 										<label class="col-sm-12 control-label">Tên:</label>
 										<div class="col-sm-12">
 											<input type="text" id="txtNameEdit" name="txtNameEdit" class="form-control"
-												placeholder="<Tên cảm biến>" required="">
+												placeholder="<Tên cảm biến>" maxlength="50" required>
 										</div>
 									</div>
 
@@ -29,7 +29,7 @@
 										<label class="col-sm-12 control-label">Mã:</label>
 										<div class="col-sm-12">
 											<input type="text" id="txtCodeEdit" name="txtCodeEdit" class="form-control"
-												placeholder="<Mã cảm biến>" required="">
+												placeholder="<Mã cảm biến>" maxlength="20" required>
 										</div>
 									</div>
 
@@ -52,12 +52,30 @@
 											<label for="slParentEdit" class="error" style="display: none;">Trường không được để trống</label>
 										</div>
 									</div>
-
+									<div class="form-group">
+										<div class="col-sm-5">
+											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
+												<input type="checkbox" id="cbRequireEdit1" name="cbRequireEdit1" style="margin-top: 0px !important;">
+												<label for="cbRequireEdit1">Bắt buộc</label>
+											</div>
+										</div>
+										
+										<div class="col-sm-7">
+											<label class="control-label">Loại:</label>
+											<select name='slTypeEdit' id="slTypeEdit" class="form-control chosen-select" data-placeholder="Chọn đầu đo chính" required>
+											<option value="1">Cảm biến</option>
+											<option value="2">ON/OFF</option>
+											</select>
+											<label for="slTypeEdit" class="error" style="display: none;">Trường không được để trống</label>
+										</div>
+										
+									</div>
+									
 									<div class="form-group">
 										<label class="col-sm-12 control-label">Mô tả:</label>
 										<div class="col-sm-12">
-											<textarea rows="6" class="form-control"
-												placeholder="<Mô tả>" id="txtDescriptionEdit" name="txtDescriptionEdit" required=""></textarea>
+											<textarea rows="2" class="form-control"
+												placeholder="<Mô tả>" id="txtDescriptionEdit" name="txtDescriptionEdit" maxlength="100" required></textarea>
 										</div>
 									</div>
 								</div>
