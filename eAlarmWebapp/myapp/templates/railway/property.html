@@ -289,11 +289,6 @@ function onEditDeviceProperty()
 	$('#slParentEdit').prop("selectedIndex", -1);
 	$("#slParentEdit").trigger("chosen:updated");
 	if(require ==="0")
-		$('#cbRequireEdit1').prop('checked', true);
-	else
-		$('#cbRequireEdit1').prop('checked', false);
-	
-	if($("tr[id][id='"+ device_id +"']").attr('parent_id') !=="None")
 	{
 		$('#cbRequireEdit').prop('checked', true);
 		var parent_id = $("tr[id][id='"+ device_id +"']").attr('parent_id');
