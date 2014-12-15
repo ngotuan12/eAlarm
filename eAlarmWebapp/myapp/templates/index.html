@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 {% block styles %}
-	<link href="css/chart.css" rel="stylesheet">
+	<link href="/css/chart.css" rel="stylesheet">
 {% endblock %}
 {% block content-header %}
 <div class="pageheader">
@@ -43,11 +43,11 @@
 							<td>{{ device.mac_add }}</td>
 							<td class="center">{{ device.connected_server }}</td>
 							{% if  device.status == '0' %}
-								<td class="center"><p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_blue.png" alt="" /></td>
+								<td class="center"><p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" /></td>
 							{% elif device.status == '1' %}
-								<td class="center"><p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_green.png" alt="" /></td>
+								<td class="center"><p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" /></td>
 							{% elif device.status == '2' %}
-								<td class="center"><p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="images/ic_red.png" alt="" /></td>
+								<td class="center"><p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" /></td>
 							{% endif %}
 						</tr>
 						{% endfor %}
@@ -76,7 +76,7 @@
 					<p id="device-server" style="display: none">
 					</p>
 					<p>
-						Trạng thái: <img id="device-status" width="15px" height="15px" src="images/ic_blue.png" alt="" />
+						Trạng thái: <img id="device-status" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
 					</p>
 				</div>
 				<div class="col-sm">
