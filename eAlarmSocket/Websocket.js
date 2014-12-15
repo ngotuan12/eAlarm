@@ -488,7 +488,6 @@ function init_properties()
  */
 function timeOutFromServer(gateway_id)
 {
-	gateways[gateway_id] = null;
 	if (typeof gateways[gateway_id].tid !== 'undefined')
 	{
 		clearTimeout(gateways[gateway_id].tid);
@@ -497,6 +496,7 @@ function timeOutFromServer(gateway_id)
 			"value" : null,
 			"device_pro_id" : null
 		} ]);
+		gateways[gateway_id] = null;
 	}
 
 }
