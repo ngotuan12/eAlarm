@@ -215,7 +215,7 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
 function updateDeviceInfor(socket, device_id, infors)
 {
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
-	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? ";
+	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
 	strSQL += "AND a.`status` = '1' ";
 	var transaction_detail = [];
 	log("Device id: " + device_id);
@@ -232,7 +232,7 @@ function updateDeviceInfor(socket, device_id, infors)
 						}
 						var strDescription = "";
 						var strStatus = "1";
-						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? )";
+						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' )";
 						var properties = rows;
 						var i;
 						for (var key in infors)
@@ -451,7 +451,7 @@ function sendToMonitor(str)
  */
 function init_properties()
 {
-	var strSQL = "SELECT * FROM device_properties ";
+	var strSQL = "SELECT * FROM device_properties WHERE p_type = '2' ";
 	connDB.query(strSQL, function(err, rows, fields)
 	{
 		if (err)
