@@ -1,6 +1,12 @@
 {% extends "base.html" %} 
 {% block styles %}
 	<link href="/css/chart.css" rel="stylesheet">
+	<style>
+		#railway-infor .col-sm-2, .col-sm-3 {
+			display: inline-block; 
+			white-space: nowrap;
+		}
+	</style>
 {% endblock %}
 {% block content-header %}
 <div class="pageheader">
@@ -84,8 +90,30 @@
 					</p>
 					<p id="device-issue"></p>
 				</div>
-				<div class="col-sm-6">CB1  ------  CB2  ------  CB3 ------  CB4  ------  CB5
-					 ------  CB6</div>
+				<div class="col-sm-6">
+					<div class="row" id="railway-infor">
+						<div class="row">
+							<div class="col-sm-2">CB1 &nbsp; ------</div>
+							<div class="col-sm-2">CB2 &nbsp; ------</div>
+							<div class="col-sm-2">CB3 &nbsp; ------</div>
+							<div class="col-sm-2">CB4 &nbsp; ------</div>
+							<div class="col-sm-2">CB5 &nbsp; ------</div>
+							<div class="col-sm-2">CB6</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">RED1</div>
+							<div class="col-sm-3">RED2</div>
+							<div class="col-sm-3">RED3</div>
+							<div class="col-sm-3">RED4</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">YEL1</div>
+							<div class="col-sm-3">YEL2</div>
+							<div class="col-sm-3">RING1</div>
+							<div class="col-sm-3">RING2</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			
 			<div class ="row" style="margin-top: 10px;">

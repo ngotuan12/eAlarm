@@ -74,7 +74,7 @@ function updateDevice()
 	}
 	else if(device.status==="0")
 	{
-		deviceIssue.html("Sự cố: <p> Mất kết nối"+"</p>");
+		deviceIssue.html("Sự cố: &nbsp; &nbsp; Mất kết nối");
 		deviceStatus.attr("src","/images/ic_blue.png");
 		deviceStatusTable.attr("src","/images/ic_blue.png");
 	}
