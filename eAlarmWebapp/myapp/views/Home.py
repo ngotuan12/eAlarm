@@ -24,12 +24,12 @@ def home(request):
 			device_id = request.GET.get('device_id')
 			status = request.GET.get('status')
 			if device_id:
-				devices = Device.objects.filter(id=device_id)
+				devices = Device.objects.filter(id=device_id,type='1')
 				context.update({'device_id':device_id})
 			elif status:
-				devices = Device.objects.filter(status=status)
+				devices = Device.objects.filter(status=status,type='1')
 			else: 
-				devices = Device.objects.all()
+				devices = Device.objects.filter(type='1')
 			context.update({'devices':devices})
 			return render_to_response("index.html", context, RequestContext(request))
 		except Exception as ex:
