@@ -1,11 +1,11 @@
 {% extends "base.html" %} 
 {% block styles %}
-	<link href="css/chart.css" rel="stylesheet">
+	<link href="/css/chart.css" rel="stylesheet">
 {% endblock %}
 {% block content-header %}
 <div class="pageheader">
 	<h2>
-		<i class="fa fa-home"></i> Giám sát đường ngang <span>Theo dõi sự cố
+		<i class="fa fa-home"></i> Giám sát phòng máy <span>Theo dõi sự cố
 			hệ thống</span>
 	</h2>
 	<div class="breadcrumb-wrapper">
@@ -18,36 +18,91 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
+<div class="contentpanel">
+	{% if devices %}
+	<div class="panel panel-default">
+		<div class="panel-body">
 			<div class="table-responsive">
-				<table class="table table-hover" id="tb_device">
+				<table class="table table-hover" id="table2">
 					<thead>
 						<tr>
-							<th style="width: 20%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Lý trình</th>
-							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tuyến</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Địa chỉ</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">ĐV quản lý</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đội trưởng</th>
-							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">SĐT</th>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
+							<th>Tuyến</th>
+							<th>Lý Trình</th>
+							<th>Địa chỉ</th>
+							
+							<th>MAC</th>
+							<th>Server</th>
+							<th>Trạng thái</th>
 						</tr>
 					</thead>
 					<tbody>
-					
+						{% for device in devices %}
+						<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}">
+							<td>{{ device.code }}</td>
+							<td>{{ device.name }}</td>
+							<td><a href="#">{{ device.address }}</a></td>
+							<td>{{ device.mac_add }}</td>
+							<td class="center">{{ device.connected_server }}</td>
+							{% if  device.status == '0' %}
+								<td class="center"><p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" /></td>
+							{% elif device.status == '1' %}
+								<td class="center"><p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" /></td>
+							{% elif device.status == '2' %}
+								<td class="center"><p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" /></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>
-			<!-- <div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div>
-			<div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div>
-			<div class="row" style="padding: 20px;margin: 0;border-bottom: 1px solid yellow">gdfgfg</div> -->
-			
-		<!-- <div class="col-sm-6" style="min-height: 500px;">
-			<div class="row">gdfgfg</div>
-		</div> -->
-	</div>
+			<!-- table-responsive -->
 
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+
+	<div class="panel panel-default">
+		<!-- <div class="panel-heading">
+			
+		</div> -->
+		<!-- panel-heading -->
+		<div class="panel-body" style="min-height: 300px;padding-top: 0;">
+			<div class ="row" style="border-bottom: 1px solid; border-color: yellow;">
+				<div class="col-sm">
+					<h3 id="device-name">
+					</h3>
+					<p id="device-mac" style="display: none">
+					</p>
+					<p id="device-server" style="display: none">
+					</p>
+					<p>
+						Trạng thái: <img id="device-status" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
+					</p>
+				</div>
+				<div class="col-sm">
+					<p id="device-issue">
+					</p>
+				</div>
+			</div>
+			<div class ="row" style="margin-top: 10px;">
+				<div class="col-sm" id="device-infor">
+				</div>
+			</div>
+			<div>
+				<div class="col-sm">
+					<p id="charTitle" style="display: none">Nhiệt độ.</p>
+					<div class="demo-container">
+						<div id="placeholder" class="demo-placeholder"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- panel-body -->
+	</div>
+	{% endif %}
 </div>
+<!-- contentpanel -->
 {% endblock %} 
 {% block scripts %}
 <script src="/js/jquery-1.10.2.min.js"></script>
@@ -62,28 +117,39 @@
 <script src="/js/jquery.datatables.min.js"></script>
 <script src="/js/chosen.jquery.min.js"></script>
 
+<script src="/js/flot/jquery.flot.js"></script>
 
 <script src="/js/custom.js"></script>
+<script src="/js/device-infor.js"></script>
 <script>
-	jQuery(document).ready(function() 
-	{
-		$('#tb_device').dataTable(
-		{
-			"sPaginationType" : "full_numbers",
-			"info" : false,
-			"oLanguage": {"sInfo": "Showing page _PAGE_ of _PAGES_",  "oPaginate": {"sFirst": "<<","sPrevious": "<","sNext": ">","sLast": ">>"}},
-			
-			"language" : {
-						"lengthMenu" : "Hiển thị _MENU_ bản ghi",
-						"zeroRecords" : "Nothing found - sorry",
-						"info" : "Showing page _PAGE_ of _PAGES_",
-						"infoEmpty" : "No records available",
-						"infoFiltered" : "(filtered from _MAX_ total records)"
-					}
+	jQuery(document).ready(function() {
+
+		jQuery('#table2').dataTable({
+			"sPaginationType" : "full_numbers"
 		});
+		// Chosen Select
+		jQuery("select").chosen({
+				'min-width' : '150px',
+				'white-space' : 'nowrap',
+				disable_search_threshold : 10
+			});
+		$('#table2 tbody tr').click(function(e)
+		{
+			var device_id = $(this).attr('id');
+			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
+			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
+			onGetDeviceInfor(device_id);
+		});
+		//onGetDeviceInfor({{ devices.0.id }});
 	});
 	jQuery(window).load(function()
-	{
+	{ 
+		var device_id = '{{ device_id|safe }}';
+		if (!device_id)
+			device_id = $("#table2 tbody tr[device_id]").first().attr('id');
+		$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
+		$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
+		onGetDeviceInfor(device_id);
 	});
 </script>
 {% endblock scripts%}
