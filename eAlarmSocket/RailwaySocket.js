@@ -489,7 +489,7 @@ function init_properties()
 function timeOutFromServer(gateway_id)
 {
 	gateways[gateway_id] = null;
-	if (gateways[gateway_id].tid !== null)
+	if (typeof gateways[gateway_id].tid !=='undefined')
 	{
 		clearTimeout(gateways[gateway_id].tid);
 		updateDevice(null, gateway_id, '0', '', "Mất kết nối với server.", [ {
