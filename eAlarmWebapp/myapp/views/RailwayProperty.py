@@ -28,18 +28,26 @@ def add_property(request):
         try:
             _code = request.POST['txtCode']
             _name = request.POST['txtName']
+            _type = request.POST['slType']
             _description = request.POST['txtDescription']
-            _min = float(request.POST['txtMin'])
-            _max = float(request.POST['txtMax'])
-            _minAlarm = float(request.POST['txtMinAlarm'])
-            _maxAlarm = float(request.POST['txtMaxAlarm'])
-            _symbol = request.POST['txtSymbol']
+            if str(_type) =='1':
+                _min = float(request.POST['txtMin'])
+                _max = float(request.POST['txtMax'])
+                _minAlarm = float(request.POST['txtMinAlarm'])
+                _maxAlarm = float(request.POST['txtMaxAlarm'])
+                _symbol = request.POST['txtSymbol']
+            else:
+                _min = float('0')
+                _max = float('0')
+                _minAlarm = float('0')
+                _maxAlarm = float('0')
+                _symbol = ''
             _parent_id = None
             p_type ='2'
             dp = DeviceProperties()
             dp.code = _code
             dp.name = _name
-            dp.type = '1' 
+            dp.type = _type
             dp.description = _description
             dp.min = _min 
             dp.max = _max
@@ -48,11 +56,13 @@ def add_property(request):
             dp.symbol = _symbol
             dp.p_type = p_type
             
-            if request.POST.get('cbRequire') :
+            if request.POST.get('cbRequire1') :
                 dp.require = '0'
-                _parent_id =request.POST['slParent']
             else :
                 dp.require = '1'
+            if request.POST.get('cbRequire') :
+                _parent_id =request.POST['slParent']
+            
             dp.parent_id = _parent_id
             dp.save()
             
@@ -78,18 +88,26 @@ def edit_property(request,property_id):
             _code = request.POST['txtCodeEdit']
             _name = request.POST['txtNameEdit']
             _description = request.POST['txtDescriptionEdit']
-            _min = float(request.POST['txtMinEdit'])
-            _max = float(request.POST['txtMaxEdit'])
-            _minAlarm = float(request.POST['txtMinAlarmEdit'])
-            _maxAlarm = float(request.POST['txtMaxAlarmEdit'])
-            _symbol = request.POST['txtSymbolEdit']
+            _type = request.POST['slTypeEdit']
+            if str(_type) =='1':
+                _min = float(request.POST['txtMinEdit'])
+                _max = float(request.POST['txtMaxEdit'])
+                _minAlarm = float(request.POST['txtMinAlarmEdit'])
+                _maxAlarm = float(request.POST['txtMaxAlarmEdit'])
+                _symbol = request.POST['txtSymbolEdit']
+            else:
+                _min = float('0')
+                _max = float('0')
+                _minAlarm = float('0')
+                _maxAlarm = float('0')
+                _symbol = ''
             _parent_id = None
             p_type ='2'
             
             dp = DeviceProperties.objects.get(id=property_id,p_type='2')
             dp.code = _code
             dp.name = _name
-            dp.type = '1' 
+            dp.type = _type
             dp.description = _description
             dp.min = _min 
             dp.max = _max
@@ -98,11 +116,13 @@ def edit_property(request,property_id):
             dp.symbol = _symbol
             dp.p_type = p_type
             
-            if request.POST.get('cbRequireEdit') :
+            if request.POST.get('cbRequireEdit1') :
                 dp.require = '0'
-                _parent_id =request.POST['slParentEdit']
             else :
                 dp.require = '1'
+                
+            if request.POST.get('cbRequireEdit') :
+                _parent_id =request.POST['slParentEdit']
             dp.parent_id = _parent_id
             dp.save()
             return HttpResponseRedirect('/railway/property/')
