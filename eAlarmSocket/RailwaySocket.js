@@ -564,6 +564,7 @@ wss.on('connection', function(conn)
 		try
 		{
 			var request = gjson.jsonParse(str);
+			log(request.handle);
 			// check announce
 			if (!conn.isAnnounce && request.handle !== "announce")
 			{
