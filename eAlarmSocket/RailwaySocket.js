@@ -646,16 +646,21 @@ wss.on('connection', function(conn)
 	
 	function send_cmd(conn,device_id,body)
 	{
-		conn.send('Send cmd '+ body);
-		
+		conn.send('Send cmd ');
+		var isSend = false;
 		for (var i = 0; i < gateways.length; i++)
 		{
 			var gateway = gateways[i];
 			if (gateway.gatewayinfo.id === device_id)
 			{
 				sendGatewayCommand(body, gateway);
+				isSend = true;
 				break;
 			}
+		}
+		if(!isSend)
+		{
+			conn.send('Device is not connect! ');
 		}
 	}
 	// ws.send('something');
