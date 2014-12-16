@@ -613,7 +613,7 @@ wss.on('connection', function(conn)
 				case "connect_device":
 					connectDevice(conn, request.device_id,request.MAC);
 					break;
-				case "send_command":
+				case "send_cmd":
 					send_cmd(conn,request.device_id,request.body);
 					break;
 				default:
