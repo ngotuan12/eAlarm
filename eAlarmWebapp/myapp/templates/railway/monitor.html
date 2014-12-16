@@ -32,8 +32,8 @@
 				<table class="table table-hover" id="table2">
 					<thead>
 						<tr>
-							<th>Tuyến</th>
 							<th>Lý Trình</th>
+							<th>Tuyến</th>
 							<th>Địa chỉ</th>
 							
 							<th>MAC</th>
@@ -44,8 +44,8 @@
 					<tbody>
 						{% for device in devices %}
 						<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}">
-							<td>{{ device.code }}</td>
 							<td>{{ device.name }}</td>
+							<td>{{ device.route.name }}</td>
 							<td><a href="#">{{ device.address }}</a></td>
 							<td>{{ device.mac_add }}</td>
 							<td class="center">{{ device.connected_server }}</td>
