@@ -578,7 +578,23 @@ wss.on('connection', function(conn)
 	{
 		try
 		{
-			var request = gjson.jsonParse(str);
+			var request;
+			try
+			{
+				request = gjson.jsonParse(str);
+			}
+			catch (e)
+			{
+				if(conn.isAnnounce)
+				{
+					conn.send("command is not correct!");
+				}
+				else
+				{
+					conn.close();
+					return;
+				}
+			}
 			log(str);
 			log(request.handle);
 			// check announce
