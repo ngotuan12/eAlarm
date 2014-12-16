@@ -31,7 +31,7 @@
 			<div class="table-responsive">
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<div class="panel-body" style="padding: 0px;">
 								{% if has_error %}
 									<label id="codeError" class="error" style="margin-top: 2%;margin-left: 3%;">{{ has_error }} </label>
@@ -39,12 +39,32 @@
 								<div class="row">
 									<div class="col-md-12" style="padding-left: 0px;">
 										<div class="form-group">
+											<label class="col-sm-12 control-label">Địa chỉ:</label>
+											<div class="col-sm-12">
+												<input type="text" id="txtAddress" name="txtAddress" value="113.160.52.194:9889" class="form-control"
+													style="padding: 8px;"
+													placeholder="<Địa chỉ>" maxlength="50" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12" style="padding-left: 0px;">
+										<div class="col-sm-4">
+											<button class="btn btn-default" id="btnConnect" onclick="onConnect();" style="float: left;width: 109px;">Kết nối</button>
+										</div>
+										<div class="col-sm-8">
+											<button class="btn btn-default" id="btnDisconect" onclick="onDisconnect();" style="float: left;" disabled>Ngắt kết nối</button>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12" style="padding-left: 0px;">
+										<div class="form-group">
 											<label class="col-sm-12 control-label">Đường ngang:</label>
 											<div class="col-sm-12">
-												<select name='slDevice' id="slDevice" data-placeholder="Chọn đường ngang" class="form-control chosen-select" required style="padding: 8px;">
+												<select name='slDevice' id="slDevice" data-placeholder="Chọn đường ngang" class="form-control chosen-select" required style="padding: 8px;" disabled>
 													<option value=""></option>
 													{% for device in devices %}
-														<option value="{{ device.id }}" device_name="{{ department.name }}">{{ device.name }}</option>
+														<option value="{{ device.id }}" device_name="{{ device.name }}" device_id="{{ device.id }}" device_mac="{{ device.mac_add }}">{{ device.name }}-{{ device.route.name }}</option>
 													{% endfor %}
 												</select>
 											</div>
@@ -57,33 +77,28 @@
 											<label class="col-sm-12 control-label">Tập lệnh:</label>
 											<div class="col-sm-12">
 												<textarea rows="3" class="form-control"
-													placeholder="<Nội dung tập lệnh>" name="txtDescription" required></textarea>
+													placeholder="<Nội dung tập lệnh>" name="txtContent" id="txtContent" required disabled></textarea>
 											</div>
 										</div>
 									</div>
 									<div class="col-sm-12" style="padding-left: 0px;">
 										<div class="col-sm-12">
-											<button class="btn btn-primary" style="float: right;margin-top: 5px;" disabled>Thực hiện</button>
+											<button class="btn btn-primary" id="btnSubmit" onclick="onSend();" style="float: left;" disabled>Thực hiện</button>
 										</div>
 									</div>
 								</div>
 								
 							</div>
 						</div>
-						<div class="col-md-7" style="padding-left: 0px;" >
-							<form id="form1" class="form-horizontal">
-								<div class="panel panel-default">
-									<div class="panel-body"  style="min-height: 500px">
-										<div id="log"></div>
-									</div>
+						<div class="col-md-8" style="padding-left: 0px;" >
+							<div class="panel panel-default">
+								<div class="panel-body"  style="min-height: 300px">
+									<div id="log"></div>
+									<button class="btn btn-default" onclick="onClear();" style="float: left; margin-top:10px ">Xóa lịch sử</button>
 								</div>
-							</form>
+							</div>
 						</div>
 					</div>
-					<input type="hidden" name="type" value="addDevice">
-					<input type="hidden" id="txtLat" name="txtLat" value="{% if lat %} {{ lat }} {% endif %}">
-					<input type="hidden" id="txtLng" name="txtLng" value="{% if lng %} {{ lng }} {% endif %}">
-					<input type="hidden" id="txtFullName" name="txtFullName" value="">
 				</div>
 			</div>
 			<!-- table-responsive -->
@@ -111,10 +126,118 @@
 <script src="/js/custom.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 <script>
-jQuery(document).ready(function() {
+
+	jQuery(document).ready(function()
+	{
+		//Chosen Select
+		jQuery(".chosen-select").chosen({
+			'width' : '100%',
+			'white-space' : 'nowrap',
+			disable_search_threshold : 20
+		});
+		//change slRoute
+		$('#slDevice').change(function()
+		{
+			$("#btnSubmit").prop('disabled', false);
+			$("#txtContent").prop('disabled', false);
+			mac_address=$(this).find('option:selected').attr("device_mac");
+			device_id=$(this).find('option:selected').attr("device_id");
+			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
+		});
+	});
+
+	var wsUri = "ws://113.160.52.194:9889";
+	var output;
+	var websocket;
+	var mac_address="";
+	var device_id="";
 	
-	//Chosen Select
-	jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
-});
+	function init()
+	{
+		output = document.getElementById("log");
+		websocket= new WebSocket(wsUri);
+		testWebSocket();
+	}
+
+	function testWebSocket()
+	{
+		websocket = new WebSocket(wsUri);
+		websocket.onopen = function(evt)
+		{
+			onOpen(evt)
+		};
+		websocket.onclose = function(evt)
+		{
+			onClose(evt)
+		}; 
+		websocket.onmessage = function(evt)
+		{
+			onMessage(evt)
+		};
+		websocket.onerror = function(evt)
+		{
+			onError(evt)
+		};
+	}
+	function onOpen(evt)
+	{
+		writeToScreen("CONNECTED");
+		doSend('{"handle":"announce"}');
+	}
+	function onClose(evt)
+	{
+		$("#btnConnect").prop('disabled', false);
+		$("#btnDisconect").prop('disabled', true);
+		$('#slDevice').prop("disabled", true);
+		$("#btnSubmit").prop('disabled', true);
+		$("#txtContent").prop('disabled', true);
+		
+		$("#slDevice").prop("selectedIndex", -1).chosen('destroy').chosen();
+		writeToScreen("DISCONNECTED");
+	}
+	function onMessage(evt)
+	{
+		writeToScreen('<span style="color: blue;">' + evt.data
+				+ '</span>');
+	}
+	function onError(evt)
+	{
+		writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+	}
+	function doSend(message)
+	{
+		writeToScreen("SENT: " + message);
+		websocket.send(message);
+	}
+	function writeToScreen(message)
+	{
+		var pre = document.createElement("p");
+		pre.style.wordWrap = "break-word";
+		pre.innerHTML = message;
+		output.appendChild(pre);
+	}
+	
+	
+	function onConnect()
+	{
+		$("#btnConnect").prop('disabled', true);
+		$("#btnDisconect").prop('disabled', false);
+		$('#slDevice').prop("disabled", false);
+		$("#slDevice").prop("selectedIndex", -1).chosen('destroy').chosen();
+		init();
+	}
+	function onDisconnect()
+	{
+		websocket.close();
+	}
+	function onSend()
+	{
+		var value =$("#txtContent").val();
+		doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"'+value.toString()+'"}');
+	}
+	function onClear()
+	{
+		$("#log").empty();
+	}
 </script>
 {% endblock scripts%}
