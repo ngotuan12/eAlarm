@@ -1,7 +1,5 @@
 {% extends "base.html" %} 
 {% block content-header %}
-{% include 'add-device-property.html' %}
-{% include 'edit-device-property.html' %}
 <div class="pageheader">
 	<h2>
 		<i class="fa fa-home"></i> Sửa thông tin tuyến đường <span> </span>
@@ -17,6 +15,7 @@
 					{% csrf_token %}
 					<div class="panel-body">
 						<div class="row">
+							<h5 class="modal-title" id="lbError" style="text-align: left;color: red;"></h5>
 							<div class="col-md-12">
 								<div class="panel-body" style="padding: 0px;">
 									{% if has_error %}
@@ -52,6 +51,7 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='/railway/route/'">Thoát</button>
 						<button type="button" class="btn btn-primary" onclick="return onAddDeviceFromSubmit();">Lưu</button>
 					</div>
+					<input type="hidden" name="hd_route_id" id="hd_route_id" value="{{ route.id }}">
 				</form>
 			</div>
 			<!-- table-responsive -->
@@ -79,6 +79,7 @@
 <script src="/js/jquery.numeric.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
+<script src="/js/loading.js"></script>
 <script>
 	jQuery(document).ready(function() {
 		// Chosen Select
@@ -89,16 +90,45 @@
 			return false;
 		});
 	});
-	
+	function onGetRoute(r_id,r_code)
+	{
+		//show loading
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/get-route"+"/"+r_id.toString()+"/"+r_code.toString()+"/", {
+			'csrfmiddlewaretoken' : csrftoken,
+		});
+		posting.done(function(data) 
+		{
+			//alert(JSON.stringify(data))
+			var equal = data.route
+			if(equal === '1')
+			{
+				$("#lbError").html('Mã '+r_code+ " đã tồn tại !!!");
+				$("#lbError").show();
+			}
+			else
+			{
+				jQuery('#addDevice').submit();
+				$("#lbError").hide();
+			}
+			
+			//hide loading
+			$.fn.loading.hide();
+		});
+	}
 	function onAddDeviceFromSubmit()
 	{
+		var r_code = $("#txtCode").val();
+		var r_id=$("#hd_route_id").val();
 		var $valid = jQuery('#addDevice').valid();
 		if(!$valid) 
 		{
 			$validator.focusInvalid();
 			return false;
 		}
-		jQuery('#addDevice').submit();
+		else
+			onGetRoute(r_id,r_code)
 	}
 	jQuery(window).load(function()
 	{

@@ -30,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^railway/route/delete/(?P<route_id>\w+)/$', Route.delete_route,name='railway-route-delete'),
     #get_property
     url(r'^get-property/(?P<p_id>\w+)/(?P<p_code>\w+)/$', RailwayProperty.get_property, name='get-property'),
+    #get_route
+    url(r'^get-route/(?P<r_id>\w+)/(?P<r_code>\w+)/$', Route.get_route, name='get-route'),
     #view log
     url(r'^log/view/$', Log.index,name='log-view'),
     #machine room

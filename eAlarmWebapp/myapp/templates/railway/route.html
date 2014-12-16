@@ -24,8 +24,8 @@
 				<table class="table table-hover" id="tb_device">
 					<thead>
 						<tr>
-							<th style="width: 20%;text-align:center;font-family: Arial,Helvetica,sans-serif;">Mã tuyến</th>
-							<th style="width: 70%;text-align:center;font-family: Arial,Helvetica,sans-serif;">Tên tuyến</th>
+							<th style="width: 20%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Mã tuyến</th>
+							<th style="width: 70%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tên tuyến</th>
 							<th style="width: 10%;text-align:center;font-family: Arial,Helvetica,sans-serif;">Sửa|Xóa</th>
 						</tr>
 					</thead>
@@ -36,12 +36,7 @@
 							<td style="text-align: left;">{{ route.name }}</td>
 							<td class="table-action" style="text-align: center;">
 								<a href="/railway/route/edit/{{ route.id }}/"><i class="fa fa-pencil"></i></a>
-								<a href="#" onclick="onDeleteArea('{{ route.id }}');" class="delete-row"><i class="fa fa-trash-o"></i></a>
-								<form method="post" id="DeleteArea{{ route.id }}" action="/edit-route">
-									{% csrf_token %}
-									<input type="hidden" name="hd_route" value="{{ route.id }}">
-									<input type="hidden" name="type" value="deleteArea">
-								</form>
+								<a href="#" onclick="onDeleteRoute('{{ route.id }}','{{ route.code }}');" class="delete-row"><i class="fa fa-trash-o"></i></a>
 							</td>
 						</tr>
 						{% endfor %}
@@ -82,17 +77,12 @@ jQuery(document).ready(function() {
 		disable_search_threshold : 10
 	});
 });
-function removeDevice(){
-	var device_id=$("#hd_route_id").val();
-	confirm = $.message.confirm('Bạn muốn xóa lý trình '+ $("#v_name").val()+' ? ');
+function onDeleteRoute(route_id,route_code){
+	confirm = $.message.confirm('Bạn muốn xóa tuyến '+ route_code +' ? ');
 	confirm.on('message.confirm',function(){
-		window.location.replace("/railway/route/delete/"+device_id+"/");
+		window.location.replace("/railway/route/delete/"+route_id+"/");
 		$.message.destroy();
 	});
-}
-function editDevice(){
-	var device_id=$("#hd_route_id").val();
-	window.location.replace("/railway/route/edit/"+device_id+"/");
 }
 </script>
 {% endblock scripts%}
