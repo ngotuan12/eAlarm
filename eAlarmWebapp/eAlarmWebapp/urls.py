@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
     url(r'^railway/list/$', RailwayList.index,name='railway-list'),
     url(r'^railway/property/$', RailwayProperty.index,name='railway-property'),
-    url(r'^railway/route/$', RailwayProperty.index,name='railway-route'),
+    url(r'^railway/route/$', Route.index,name='railway-route'),
     #add,edit,delete railway
     url(r'^railway/list/add/$', RailwayList.add_railway,name='railway-list-add'),
     url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway,name='railway-list-edit'),
