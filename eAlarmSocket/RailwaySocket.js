@@ -618,6 +618,7 @@ wss.on('connection', function(conn)
 	function announce(conn)
 	{
 		conn.isAnnounce = true;
+		conn.send('Announce ok!');
 		// websockets.push(conn);
 	}
 	// connect device
