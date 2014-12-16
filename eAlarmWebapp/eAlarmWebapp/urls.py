@@ -4,7 +4,7 @@ from django.contrib import admin
 from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
-    RailwayList, RailwayProperty,Log
+    RailwayList, RailwayProperty,Log,Route
 
 
 admin.autodiscover()
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
     url(r'^railway/list/$', RailwayList.index,name='railway-list'),
     url(r'^railway/property/$', RailwayProperty.index,name='railway-property'),
+    url(r'^railway/route/$', Route.index,name='railway-route'),
     #add,edit,delete railway
     url(r'^railway/list/add/$', RailwayList.add_railway,name='railway-list-add'),
     url(r'^railway/list/edit/(?P<railway_id>\w+)/$', RailwayList.edit_railway,name='railway-list-edit'),
@@ -23,8 +24,14 @@ urlpatterns = patterns('',
     url(r'^railway/property/add/$', RailwayProperty.add_property,name='railway-property-add'),
     url(r'^railway/property/edit/(?P<property_id>\w+)/$', RailwayProperty.edit_property,name='railway-property-edit'),
     url(r'^railway/property/delete/(?P<property_id>\w+)/$', RailwayProperty.delete_property,name='railway-property-delete'),
+    #add,edit,delete route
+    url(r'^railway/route/add/$', Route.add_route,name='railway-route-add'),
+    url(r'^railway/route/edit/(?P<route_id>\w+)/$', Route.edit_route,name='railway-route-edit'),
+    url(r'^railway/route/delete/(?P<route_id>\w+)/$', Route.delete_route,name='railway-route-delete'),
     #get_property
     url(r'^get-property/(?P<p_id>\w+)/(?P<p_code>\w+)/$', RailwayProperty.get_property, name='get-property'),
+    #get_route
+    url(r'^get-route/(?P<r_id>\w+)/(?P<r_code>\w+)/$', Route.get_route, name='get-route'),
     #view log
     url(r'^log/view/$', Log.index,name='log-view'),
     #machine room

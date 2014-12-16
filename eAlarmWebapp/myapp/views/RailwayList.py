@@ -9,7 +9,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.contrib.auth.models import  Group,User
-from myapp.models import Device, Area, DeviceProperties, DeviceInfor
+from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Route
 
 
 @login_required(login_url='/login')
@@ -22,15 +22,18 @@ def add_railway(request):
     context={}
     if request.method == 'GET':
         lsArea = Area.objects.filter(level = '2')
+        
         lsProperty = DeviceProperties.objects.filter(p_type='2')
         departments =Group.objects.all()
+        routes =Route.objects.all()
         users =User.objects.all().order_by("username")
-        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments,'users':users}
+        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments,'users':users,'routes':routes}
         context.update(csrf(request))
     elif request.method == 'POST':
         try:
-            _code = request.POST['txtRoute'].strip()
+            _code = request.POST['txtCode'].strip()
             _name = request.POST['txtJourney'].strip()
+            _route =request.POST['slRoute'].strip()
             _ManagementUnit =request.POST['slManagementUnit'].strip()
             _UserUnit =request.POST['slUserUnit'].strip()
             _manager =request.POST['txtManager'].strip()
@@ -46,6 +49,7 @@ def add_railway(request):
             area = Area.objects.get(id = _area_id)
             group =Group.objects.get(id=_ManagementUnit)
             user =User.objects.get(id=_UserUnit)
+            route =Route.objects.get(id=_route)
             
             device = Device()
             device.name = _name
@@ -61,6 +65,7 @@ def add_railway(request):
             device.owner_phone=_phoneNumber
             device.group= group
             device.user=user
+            device.route =route
             device.type ='4'
             device.save()
  
@@ -82,19 +87,22 @@ def add_railway(request):
             return HttpResponseRedirect('/railway/list/')
         except Exception as ex:
             print(ex)
+            context.update({'has_error':str(ex)})
     return render_to_response("railway/add-railway.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def edit_railway(request,railway_id):
     lsArea = Area.objects.filter(level = '2')
     lsInfor = DeviceInfor.objects.filter(device = railway_id)
     departments =Group.objects.all()
+    routes =Route.objects.all()
     users =User.objects.all().order_by("username")
     device = Device.objects.get(id=railway_id)
-    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device,'departments':departments,'users':users}
+    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device,'departments':departments,'users':users,'routes':routes}
     if request.method == 'POST':
         try:
-            _code = request.POST['txtRoute'].strip()
+            _code = request.POST['txtCode'].strip()
             _name = request.POST['txtJourney'].strip()
+            _route =request.POST['slRoute'].strip()
             _ManagementUnit =request.POST['slManagementUnit'].strip()
             _UserUnit =request.POST['slUserUnit'].strip()
             _manager =request.POST['txtManager'].strip()
@@ -110,6 +118,7 @@ def edit_railway(request,railway_id):
             area = Area.objects.get(id = _area_id)
             group =Group.objects.get(id=_ManagementUnit)
             user =User.objects.get(id=_UserUnit)
+            route =Route.objects.get(id=_route)
     #                 
             device.name = _name
             device.address = _fullName
@@ -124,6 +133,7 @@ def edit_railway(request,railway_id):
             device.owner_phone=_phoneNumber
             device.group= group
             device.user=user
+            device.route=route
             device.type ='4'
             device.save()
             
@@ -139,6 +149,7 @@ def edit_railway(request,railway_id):
         
         except Exception as ex:
             print(ex)
+            context.update({'has_error':str(ex)})
     context.update(csrf(request))
     return render_to_response("railway/edit-railway.html", context, RequestContext(request))
 @login_required(login_url='/login')

@@ -4,6 +4,7 @@ Created on Aug 15, 2014
 @author: TuanNA
 '''
 from myapp.models.Area import Area
+from myapp.models.Route import Route
 from django.contrib.auth.models import  Group,User
 from django.db import models
 
@@ -26,6 +27,7 @@ class Device(models.Model):
     group=models.ForeignKey(Group,db_column='group_id')
     owner_name=models.CharField(max_length=100)
     owner_phone=models.CharField(max_length=25)
+    route = models.ForeignKey(Route,db_column='route_id',null=True)
     class Meta:
         db_table = 'device'
         app_label = 'myapp'

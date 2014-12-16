@@ -1,0 +1,138 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Sửa thông tin tuyến đường <span> </span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<div class="panel-body" style="padding: 0px;">
+			<div class="table-responsive">
+				<form class="form" id="addDevice" novalidate="novalidate" method="post" action="">
+					{% csrf_token %}
+					<div class="panel-body">
+						<div class="row">
+							<h5 class="modal-title" id="lbError" style="text-align: left;color: red;"></h5>
+							<div class="col-md-12">
+								<div class="panel-body" style="padding: 0px;">
+									{% if has_error %}
+										<label id="codeError" class="error" style="margin-top: 2%;margin-left: 3%;">{{ has_error }} </label>
+									{% endif %}
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Mã:</label>
+												<div class="col-sm-12">
+													<input type="text" id="txtCode" name="txtCode" value="{{ route.code}}" class="form-control"
+														style="padding: 8px;"
+														placeholder="Mã" maxlength="20" required>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Tên:</label>
+												<div class="col-sm-12">
+													<input type="text" id="txtName" name="txtName" value="{{ route.name }}" class="form-control"
+														style="padding: 8px;" 
+														placeholder="<Tên>" maxlength="50" required>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='/railway/route/'">Thoát</button>
+						<button type="button" class="btn btn-primary" onclick="return onAddDeviceFromSubmit();">Lưu</button>
+					</div>
+					<input type="hidden" name="hd_route_id" id="hd_route_id" value="{{ route.id }}">
+				</form>
+			</div>
+			<!-- table-responsive -->
+
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+<script src="/js/jquery.numeric.js"></script>
+
+<script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery.numeric.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+<script src="/js/loading.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		// Chosen Select
+		jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
+		
+		$("#txtCode").on("keydown", function (e) {
+		if(e.which === 32) 
+			return false;
+		});
+	});
+	function onGetRoute(r_id,r_code)
+	{
+		//show loading
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/get-route"+"/"+r_id.toString()+"/"+r_code.toString()+"/", {
+			'csrfmiddlewaretoken' : csrftoken,
+		});
+		posting.done(function(data) 
+		{
+			//alert(JSON.stringify(data))
+			var equal = data.route
+			if(equal === '1')
+			{
+				$("#lbError").html('Mã '+r_code+ " đã tồn tại !!!");
+				$("#lbError").show();
+			}
+			else
+			{
+				jQuery('#addDevice').submit();
+				$("#lbError").hide();
+			}
+			
+			//hide loading
+			$.fn.loading.hide();
+		});
+	}
+	function onAddDeviceFromSubmit()
+	{
+		var r_code = $("#txtCode").val();
+		var r_id=$("#hd_route_id").val();
+		var $valid = jQuery('#addDevice').valid();
+		if(!$valid) 
+		{
+			$validator.focusInvalid();
+			return false;
+		}
+		else
+			onGetRoute(r_id,r_code)
+	}
+	jQuery(window).load(function()
+	{
+		$("form:not(.filter) :input:visible:enabled:first").focus();
+	});
+</script>
+{% endblock scripts%}
