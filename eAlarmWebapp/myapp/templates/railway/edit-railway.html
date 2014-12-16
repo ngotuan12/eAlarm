@@ -1,7 +1,5 @@
 {% extends "base.html" %} 
 {% block content-header %}
-{% include 'add-device-property.html' %}
-{% include 'edit-device-property.html' %}
 <div class="pageheader">
 	<h2>
 		<i class="fa fa-home"></i> Sửa thông tin đường ngang <span> </span>
@@ -12,6 +10,11 @@
 <div class="contentpanel">
 	<div class="panel panel-default">
 		<div class="panel-body" style="padding: 0px;">
+			{% if has_error %}
+				<div class="panel">
+					<label class="error">{{ has_error }}</label>
+				</div>
+			{% endif %}
 			<div class="table-responsive">
 				<form class="form" id="addDevice" novalidate="novalidate" method="post" action="">
 					{% csrf_token %}
@@ -22,14 +25,35 @@
 									{% if has_error %}
 										<label id="codeError" class="error" style="margin-top: 2%;margin-left: 3%;">{{ has_error }} </label>
 									{% endif %}
+									
+									<div class="row">
+										<div class="col-sm-12" style="padding-left: 0px;">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Mã đường ngang:</label>
+												<div class="col-sm-12">
+													<input type="text" id="txtCode" name="txtCode" value="{{ device.code }}" class="form-control"
+														style="padding: 8px;"
+														placeholder="<Mã đường ngang>" maxlength="50" required>
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="row">
 										<div class="col-sm-6" style="padding-left: 0px;">
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Tuyến:</label>
 												<div class="col-sm-12">
-													<input type="text" id="txtRoute" name="txtRoute" value="{{ device.code }}" class="form-control"
-														style="padding: 8px;"
-														placeholder="<Tuyến>" maxlength="50" required>
+													<select name='slRoute' id="slRoute" class="form-control chosen-select" required style="padding: 8px;">
+														<option value="">----------------Chọn tuyến----------------</option>
+														{% for route in routes %}
+															{% if route.id|truncatechars:100 == device.route.id|truncatechars:100 %}
+																<option value="{{ route.id }}" route_name="{{ route.name }}" selected>{{ route.name }}</option>
+															{% else %}
+																<option value="{{ route.id }}" route_name="{{ route.name }}">{{ route.name }}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
+													<label for="slRoute" class="error" style="display: none;">Trường không được để trống</label>
 												</div>
 											</div>
 										</div>
@@ -326,6 +350,10 @@
 		jQuery('#table2').dataTable({
 			"sPaginationType" : "full_numbers"
 		});
+		//change slRoute
+		$('#slRoute').change(function(){
+			$(".error[for][for='slRoute']").hide();
+		});
 		$("#txtMAC").on("keydown", function (e) {
 		if(e.which === 32) 
 			return false;
@@ -334,6 +362,12 @@
 		if(e.which === 32) 
 			return false;
 		});
+		$("#txtCode").on("keydown", function (e) {
+		if(e.which === 32) 
+			return false;
+		});
+		//validate
+		$.validator.setDefaults({ ignore: ":hidden:not(select)" })
 	});
 	function showAddress(lat,lng,address)
 	{
