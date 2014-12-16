@@ -61,6 +61,14 @@ function sendGatewayCommand(response, socket)
 		socket.write(strResponse);
 	}
 	log("response:" + strResponse);
+	//send to connected device
+	for(var i=0;i<clients.length;i++)
+	{
+		if(clients[i].device_id === socket.gatewayinfo.id)
+		{
+			clients[i].send(response);
+		}
+	}
 }
 /**
  * @author: TuanNA
@@ -407,6 +415,13 @@ function checkMac(request, socket)
 							sendGatewayCommand(response, socket);
 							socket.isConnect = true;
 							// updateGatewayStatus(socket,true);
+							for(var i=0;i<clients.length;i++)
+							{
+								if(clients[i].device_id === socket.gatewayinfo.id)
+								{
+									clients[i].send(JSON.stringify(request));
+								}
+							}
 						} else
 						{
 							log("---------connect-failed-------------");
@@ -580,26 +595,10 @@ wss.on('connection', function(conn)
 					announce(conn);
 					break;
 				case "connect_device":
-					connectDevice(conn, request.device_id);
+					connectDevice(conn, request.device_id,request.MAC);
 					break;
 				case "send_command":
-					var gwRequest = request.body;
-					var device_id = request.device_id;
-					var isOK = false;
-					for (var i = 0; i < gateways.length; i++)
-					{
-						var gateway = gateways[i];
-						if (gateway.gatewayinfo.id === device_id)
-						{
-							sendGatewayCommand(gwRequest, gateway);
-							isOK = true;
-							break;
-						}
-					}
-					var response = {};
-					response.isOK = isOK;
-					sendWebsocketMessage(conn, "send_command_response",
-							response);
+					send_cmd(conn,request.device_id,request.body);
 					break;
 				default:
 					break;
@@ -622,10 +621,26 @@ wss.on('connection', function(conn)
 		// websockets.push(conn);
 	}
 	// connect device
-	function connectDevice(conn, deviceID)
+	function connectDevice(conn, device_id,MAC)
 	{
-		log("connect device: " + deviceID);
-		conn.device_id = deviceID;
+		log("connect device: " + device_id);
+		conn.device_id = device_id;
+		conn.send('Connected to ' + MAC);
+	}
+	
+	function send_cmd(conn,device_id,body)
+	{
+		conn.send('Send cmd '+ body);
+		
+		for (var i = 0; i < gateways.length; i++)
+		{
+			var gateway = gateways[i];
+			if (gateway.gatewayinfo.id === device_id)
+			{
+				sendGatewayCommand(body, gateway);
+				break;
+			}
+		}
 	}
 	// ws.send('something');
 });
@@ -737,7 +752,15 @@ var socketServer = net.createServer(function(socket)
 					sendGatewayCommand(response, socket);
 					break;
 			}
-		} catch (e)
+			for(var i=0;i<clients.length;i++)
+			{
+				if(clients[i].device_id === socket.gatewayinfo.id)
+				{
+					clients[i].send(strReuest);
+				}
+			}
+		}
+		catch (e)
 		{
 			log(e.stack);
 			// socket.write(e.stack);
