@@ -647,6 +647,7 @@ wss.on('connection', function(conn)
 	function send_cmd(conn,device_id,body)
 	{
 		conn.send('Send cmd ');
+		conn.send("body: " + JSON.stringify(body));
 		var isSend = false;
 		if(typeof gateways[device_id.toString()] !== 'undefined' )
 		{
@@ -668,7 +669,7 @@ wss.on('connection', function(conn)
 //		}
 		if(!isSend)
 		{
-			log("device_id: " + device_id + "body: " + body);
+			
 			conn.send('Device is not connect! ');
 		}
 	}

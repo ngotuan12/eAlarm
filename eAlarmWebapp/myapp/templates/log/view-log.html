@@ -233,7 +233,7 @@
 	function onSend()
 	{
 		var value =$("#txtContent").val();
-		doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"'+value.toString()+'"}');
+		doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":'+value.toString()+'}');
 	}
 	function onClear()
 	{
