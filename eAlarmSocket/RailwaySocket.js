@@ -318,7 +318,7 @@ function updateDeviceInfor(socket, device_id, infors)
 									transaction_detail);
 						}
 							
-						// send to websocket connect
+						/*// send to websocket connect
 						var response = {};
 						response.infors = infors;
 						response.device_status = strStatus;
@@ -331,7 +331,7 @@ function updateDeviceInfor(socket, device_id, infors)
 								sendWebsocketMessage(clients[i],
 										"update_device_properties", response);
 							}
-						}
+						}*/
 					});
 }
 
