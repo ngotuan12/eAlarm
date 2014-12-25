@@ -651,6 +651,7 @@ wss.on('connection', function(conn)
 		for (var i = 0; i < gateways.length; i++)
 		{
 			var gateway = gateways[i];
+			log("gateway_id: " + gateway.gatewayinfo.id);
 			if (gateway.gatewayinfo.id === device_id)
 			{
 				sendGatewayCommand(body, gateway);
