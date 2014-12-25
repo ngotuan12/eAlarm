@@ -381,7 +381,7 @@ function checkMac(request, socket)
 							socket.isok = true;
 							var gatewaydata = rows[0];
 							// updateDeviceCommandLog(gatewaydata.id,JSON.stringify(request),"1");
-							socket.gatewayinfo = rows[0];
+							socket.gatewayinfo = gatewaydata;
 
 							log("---------connect-success-------------");
 							// check last transaction
@@ -648,11 +648,10 @@ wss.on('connection', function(conn)
 	{
 		conn.send('Send cmd ');
 		var isSend = false;
-		var gateway = gateways[device_id];
-		if(typeof gateway !== 'undefined' )
+		if(typeof gateways[device_id] !== 'undefined' )
 		{
-			log("gateway_id: " + gateway.gatewayinfo.id);
-			sendGatewayCommand(body, gateway);
+			log("gateway_id: " + gateways[device_id].gatewayinfo.id);
+			sendGatewayCommand(body, gateways[device_id]);
 			isSend = true;
 		}
 		
