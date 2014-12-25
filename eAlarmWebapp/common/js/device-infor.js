@@ -63,14 +63,14 @@ function updateDevice()
 	if(device.status==="1")
 	{
 		deviceIssue.html("");
-		deviceStatus.attr("src","images/ic_green.png");
+		deviceStatus.attr("src","/images/ic_green.png");
 		deviceStatusTable.attr("src","images/ic_green.png");
 	}
 	else if(device.status==="2")
 	{
 		deviceIssue.html("Sự cố: <p style = \"padding-left: 5px;\">" + device.description+"</p>");
-		deviceStatus.attr("src","images/ic_red.png");
-		deviceStatusTable.attr("src","images/ic_red.png");
+		deviceStatus.attr("src","/images/ic_red.png");
+		deviceStatusTable.attr("src","/images/ic_red.png");
 	}
 	else if(device.status==="0")
 	{
