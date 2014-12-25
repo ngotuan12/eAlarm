@@ -660,6 +660,7 @@ wss.on('connection', function(conn)
 		}
 		if(!isSend)
 		{
+			log("device_id: " + device_id + "body: " +body);
 			conn.send('Device is not connect! ');
 		}
 	}
