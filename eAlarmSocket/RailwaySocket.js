@@ -648,7 +648,7 @@ wss.on('connection', function(conn)
 	{
 		conn.send('Send cmd ');
 		var isSend = false;
-		if(typeof gateways[device_id] !== 'undefined' )
+		if(typeof gateways[device_id.toString()] !== 'undefined' )
 		{
 			log("gateway_id: " + gateways[device_id].gatewayinfo.id);
 			sendGatewayCommand(body, gateways[device_id]);
@@ -668,7 +668,7 @@ wss.on('connection', function(conn)
 //		}
 		if(!isSend)
 		{
-			log("device_id: " + device_id + "body: " +body);
+			log("device_id: " + device_id + "body: " + body);
 			conn.send('Device is not connect! ');
 		}
 	}
