@@ -262,17 +262,17 @@ function updateDeviceInfor(socket, device_id, infors)
 											var issue_description = "";
 											if (value >= property.max_alarm)
 											{
-												strDescription += property.name + " quá cao" + " <br> ";
+												strDescription += property.name + " cao(" +value +"); ";
 												transaction_detail.push({
-													"description" : property.name + " quá cao",
+													"description" : property.name + " cao",
 													"value" : value,
 													"device_pro_id" : property.id
 												});
 											} else if (value <= property.min_alarm)
 											{
-												strDescription += property.name + " quá thấp" + " <br> ";
+												strDescription += property.name + " thấp(" +value +"); ";
 												transaction_detail.push({
-													"description" : property.name + " quá thấp",
+													"description" : property.name + " thấp",
 													"value" : value,
 													"device_pro_id" : property.id
 												});
