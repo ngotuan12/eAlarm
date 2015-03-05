@@ -19,7 +19,7 @@ var datas = [
 var server_ip = '10.10.0.17:6666';
 var ip = '10.10.0.17';
 var socket = {};
-var delay_time = 20000;
+var delay_time = 2000;
 
 
 function log(strLog)
@@ -463,13 +463,13 @@ function updateDeviceCommandLog(device_id, command, type)
 					});
 }
 
-
+var tid;
 function updateData()
 {
 	var index =  Math.floor(Math.random() * (2 - 0)) + 0;
 	var data = datas[index];
 	updateDeviceInfor(socket,5,data);
-	setTimeout(updateData(),delay_time);
+	tid = setTimeout(updateData(),delay_time);
 }
 
 function init()
@@ -477,7 +477,7 @@ function init()
 	var strSQL = "update device set status ='0' ,connected_server = null";
 	connDB.query(strSQL);
 	socket.status = '1';
-	var tid = setTimeout(updateData(),delay_time);
+	updateData();
 }
 
 init();
