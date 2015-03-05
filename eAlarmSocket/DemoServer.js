@@ -19,7 +19,7 @@ var datas = [
 var server_ip = '10.10.0.17:6666';
 var ip = '10.10.0.17';
 var socket = {};
-var delay_time = 2000;
+var delay_time = 20000;
 
 
 function log(strLog)
