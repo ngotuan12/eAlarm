@@ -327,7 +327,7 @@ wss.on('connection', function(conn)
 function updateDeviceInfor(socket, device_id, infors)
 {
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
-	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
+	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? ";
 	strSQL += "AND a.`status` = '1' ";
 	var transaction_detail = [];
 	log("Device id: " + device_id);
