@@ -469,7 +469,7 @@ function updateData()
 
 function init()
 {
-	var strSQL = "update device set status ='1'";
+	var strSQL = "update device set status ='1' connected_server = null";
 	connDB.query(strSQL, function(err, rows,fields){
 		
 	});
