@@ -344,7 +344,7 @@ function updateDeviceInfor(socket, device_id, infors)
 						}
 						var strDescription = "";
 						var strStatus = "1";
-						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' )";
+						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? )";
 						var properties = rows;
 						var i;
 						for (var key in infors)
