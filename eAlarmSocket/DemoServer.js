@@ -469,7 +469,7 @@ function updateData()
 	var index =  Math.floor(Math.random() * (2 - 0)) + 0;
 	var data = datas[index];
 	updateDeviceInfor(socket,5,data);
-	//tid = setTimeout(updateData(),delay_time);
+	//tid = setInterval(updateData(),delay_time);
 }
 
 function init()
@@ -477,7 +477,7 @@ function init()
 	var strSQL = "update device set status ='0' ,connected_server = null";
 	connDB.query(strSQL);
 	socket.status = '1';
-	updateData();
+	setInterval(updateData,3000);
 }
 
 init();
