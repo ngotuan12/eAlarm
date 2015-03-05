@@ -464,16 +464,16 @@ function updateData()
 {
 	var index =  Math.floor(Math.random() * (2 - 0)) + 0;
 	var data = datas[index];
-	updateDeviceInfor(socket,1,data);
+	updateDeviceInfor(socket,5,data);
 }
 
 function init()
 {
-	var strSQL = "update device set status ='0'";
+	var strSQL = "update device set status ='1'";
 	connDB.query(strSQL, function(err, rows,fields){
 		
 	});
-	socket.status = '0';
+	socket.status = '1';
 	var tid = setTimeout(updateData(),
 			delay_time);
 }
