@@ -11,7 +11,11 @@ var gjson = require("./json_sans_eval.js");
 var connDB = require("./DemoAppServer.js").connDB;
 var clients = [];
 var gateways = {};
-var datas = [{"Ia":400,"Cosa":0.5},{"Ia":350,"Cosa":0.5},{"Ia":300,"Cosa":0.5},{"Cosa":0.5}];
+var datas = [
+             {"T":35,"TA":32,"TB":12,"TC":30,"H":54,"S0":0,"S1":0,"S2":0,"It":817,"Ia":58,"Ib":418,"Ic":113,"Ut":289,"Ua":253,"Ub":261,"Uc":196,"Cost":0,"Cosa":0,"Cosb":0,"Cosc":0},
+             {"T":35,"TA":32,"TB":12,"TC":30,"H":54,"S0":0,"S1":0,"S2":0,"It":817,"Ia":58,"Ib":418,"Ic":113,"Ut":289,"Ua":253,"Ub":261,"Uc":196,"Cost":0,"Cosa":0,"Cosb":0,"Cosc":0},
+             {"T":35,"TA":32,"TB":12,"TC":30,"H":54,"S0":0,"S1":0,"S2":0,"It":817,"Ia":58,"Ib":418,"Ic":113,"Ut":289,"Ua":253,"Ub":261,"Uc":196,"Cost":0,"Cosa":0,"Cosb":0,"Cosc":0}
+             ];
 var server_ip = '10.10.0.17:6666';
 var ip = '10.10.0.17';
 var socket = {};
