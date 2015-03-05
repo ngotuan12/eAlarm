@@ -471,9 +471,8 @@ function init()
 {
 	var strSQL = "update device set status ='0' ,connected_server = null";
 	connDB.query(strSQL);
-//	socket.status = '1';
-//	var tid = setTimeout(updateData(),
-//			delay_time);
+	socket.status = '1';
+	var tid = setTimeout(updateData(),delay_time);
 }
 
 init();
