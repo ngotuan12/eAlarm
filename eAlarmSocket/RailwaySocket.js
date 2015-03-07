@@ -49,6 +49,7 @@ function sendWebsocketMessage(conn, handle, response)
 function sendGatewayCommand(response, socket)
 {
 	var strResponse = JSON.stringify(response);
+	log("type gateway:" + socket.gatewayinfo.type);
 	if (socket.gatewayinfo.type === "1")
 	{
 		strResponse = String.fromCharCode(0x01) + strResponse + String.fromCharCode(0x0A) + String.fromCharCode(0x0D);
