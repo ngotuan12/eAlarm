@@ -748,6 +748,7 @@ var socketServer = net.createServer(function(socket)
 							"Seconds" : date.getSeconds()
 						}
 					};
+					log("send response get time");
 					sendGatewayCommand(gwRequest, socket);
 					break;
 				case "send_data":
