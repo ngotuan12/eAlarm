@@ -52,6 +52,7 @@ function sendGatewayCommand(response, socket)
 	if (socket.gatewayinfo.type === "1")
 	{
 		strResponse = String.fromCharCode(0x01) + strResponse + String.fromCharCode(0x0A) + String.fromCharCode(0x0D);
+		log("response:" + strResponse);
 	} else if (socket.gatewayinfo.type === "2" || socket.gatewayinfo.type === "3")
 	{
 		strResponse = strResponse + "\n";
@@ -60,7 +61,7 @@ function sendGatewayCommand(response, socket)
 	{
 		socket.write(strResponse);
 	}
-	log("response:" + strResponse);
+	
 	//send to connected device
 	for(var i=0;i<clients.length;i++)
 	{
