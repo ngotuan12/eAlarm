@@ -247,6 +247,7 @@
 		$('#table2 tbody tr').click(function(e)
 		{
 			device_id = $(this).attr('id');
+			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 			onGetDeviceInfor(device_id);
@@ -268,6 +269,7 @@
 	jQuery(window).load(function()
 	{ 
 		device_id = '{{ device_id|safe }}';
+		doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 		if (!device_id)
 			device_id = $("#table2 tbody tr[device_id]").first().attr('id');
 		$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
