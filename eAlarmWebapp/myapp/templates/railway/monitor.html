@@ -246,16 +246,28 @@
 			});
 		$('#table2 tbody tr').click(function(e)
 		{
-			var device_id = $(this).attr('id');
+			device_id = $(this).attr('id');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 			onGetDeviceInfor(device_id);
 		});
 		//onGetDeviceInfor({{ devices.0.id }});
+		$('#btnKiemTra').click(function(e))
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}"}');
+		}
+		$('#btnDuyTu').click(function(e))
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"ON","RESET":"OFF"}}"}');
+		}
+		$('#btnPhucHoi').click(function(e))
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}"}');
+		}
 	});
 	jQuery(window).load(function()
 	{ 
-		var device_id = '{{ device_id|safe }}';
+		device_id = '{{ device_id|safe }}';
 		if (!device_id)
 			device_id = $("#table2 tbody tr[device_id]").first().attr('id');
 		$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
