@@ -100,9 +100,9 @@
 						style=" border-color: gray;">
 						<div class="col-sm-6"><h3 id="device-name"></h3></div>
 						<div class="col-sm-6" style="padding: 10px;left: 10%">
-							<a class="btn btn-danger" style="width: 100px;margin-right: 5px;"> Nhân công</a> 
-							<a class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</a> 
-							<a class="btn btn-success" style="width: 100px"> Phục hồi </a>
+							<a id="btnNhanCong" class="btn btn-danger" style="width: 100px;margin-right: 5px;"> Nhân công</a> 
+							<a id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</a> 
+							<a id="btnPhucHoi" class="btn btn-success" style="width: 100px"> Phục hồi </a>
 						</div>
 					</div>
 				
@@ -186,8 +186,55 @@
 <script src="/js/custom.js"></script>
 <script src="/js/device-infor.js"></script>
 <script>
+	var wsUri = "ws://113.160.52.194:9889";
+	var websocket;
+	var mac_address="";
+	var device_id="ALL";
+	function initWebsocket()
+	{
+		websocket= new WebSocket(wsUri);
+		testWebSocket();
+	}
+	function testWebSocket()
+	{
+		websocket = new WebSocket(wsUri);
+		websocket.onopen = function(evt)
+		{
+			onOpen(evt)
+		};
+		websocket.onclose = function(evt)
+		{
+			onClose(evt)
+		}; 
+		websocket.onmessage = function(evt)
+		{
+			onMessage(evt)
+		};
+		websocket.onerror = function(evt)
+		{
+			onError(evt)
+		};
+	}
+	function onOpen(evt)
+	{
+		doSend('{"handle":"announce"}');
+		doSend('{"handle":"connect_device","device_id":"ALL"}');
+	}
+	function onClose(evt)
+	{
+	}
+	function onMessage(evt)
+	{
+	}
+	function onError(evt)
+	{
+	}
+	function doSend(message)
+	{
+		websocket.send(message);
+	}
 	jQuery(document).ready(function() {
-
+		initWebsocket();
 		jQuery('#table2').dataTable({
 			"sPaginationType" : "full_numbers"
 		});
