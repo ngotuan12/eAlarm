@@ -799,7 +799,7 @@ var socketServer = net.createServer(function(socket)
 				{
 					clients[i].send(JSON.stringify(request));
 				}
-				if(clients[i].device_id === socket.gatewayinfo.id)
+				else if(clients[i].device_id === socket.gatewayinfo.id)
 				{
 					clients[i].send(JSON.stringify(request));
 				}
