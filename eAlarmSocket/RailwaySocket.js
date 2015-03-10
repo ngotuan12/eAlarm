@@ -786,7 +786,11 @@ var socketServer = net.createServer(function(socket)
 					sendGatewayCommand(response, socket);
 					break;
 				case "on_change":
-					
+					log("--------------------");
+					log("----process-data----");
+					updateDeviceInfor(socket, socket.gatewayinfo.id,
+							request.body);
+					log("----end-process-data----");
 					break;
 			}
 			if(typeof socket.gatewayinfo !== 'undefined')
