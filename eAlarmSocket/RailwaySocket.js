@@ -785,12 +785,19 @@ var socketServer = net.createServer(function(socket)
 							request.body);
 					sendGatewayCommand(response, socket);
 					break;
+				case "on_change":
+					
+					break;
+			}
+			if(typeof socket.gatewayinfo !== 'undefined')
+			{
+				request.device_id = socket.gatewayinfo.id;
 			}
 			for(var i=0;i<clients.length;i++)
 			{
 				if(clients[i].device_id === socket.gatewayinfo.id)
 				{
-					clients[i].send(strReuest);
+					clients[i].send(JSON.parse(request));
 				}
 			}
 		}
