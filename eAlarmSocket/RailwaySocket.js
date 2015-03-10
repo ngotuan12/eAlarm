@@ -795,9 +795,13 @@ var socketServer = net.createServer(function(socket)
 			}
 			for(var i=0;i<clients.length;i++)
 			{
+				if(clients[i].device_id === "ALL")
+				{
+					clients[i].send(JSON.stringify(request));
+				}
 				if(clients[i].device_id === socket.gatewayinfo.id)
 				{
-					clients[i].send(JSON.parse(request));
+					clients[i].send(JSON.stringify(request));
 				}
 			}
 		}
