@@ -252,7 +252,7 @@
 			onGetDeviceInfor(device_id);
 		});
 		//onGetDeviceInfor({{ devices.0.id }});
-		$('#btnKiemTra').click(function(e))
+		$('#btnNhanCong').click(function(e))
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":"{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}"}');
 		}
