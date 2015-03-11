@@ -62,13 +62,22 @@
 							<td><a href="#">{{ device.address }}</a></td>
 							<td>{{ device.mac_add }}</td>
 							<td class="center">{{ device.connected_server }}</td>
-							{% if  device.status == '0' %}
-								<td class="center"><p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" /></td>
-							{% elif device.status == '1' %}
-								<td class="center"><p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" /></td>
-							{% elif device.status == '2' %}
-								<td class="center"><p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" /></td>
-							{% endif %}
+							<td class="center">
+								<p id ="device-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
+									{% if  device.action_status == '1' %}
+										>>>>>
+									{% elif device.action_status == '2' %}
+										<<<<<
+									{% endif %}
+								</p>
+								{% if  device.status == '0' %}
+									<p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
+								{% elif device.status == '1' %}
+									<p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" />
+								{% elif device.status == '2' %}
+									<p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" />
+								{% endif %}
+							</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -120,24 +129,24 @@
 						<div class="col-sm-6">
 							<div class="row" id="railway-infor">
 								<div class="row">
-									<div class="col-sm-2">CB1 &nbsp; ------</div>
-									<div class="col-sm-2">CB2 &nbsp; ------</div>
-									<div class="col-sm-2">CB3 &nbsp; ------</div>
-									<div class="col-sm-2">CB4 &nbsp; ------</div>
-									<div class="col-sm-2">CB5 &nbsp; ------</div>
-									<div class="col-sm-2">CB6</div>
+									<div class="col-sm-2">CB1 &nbsp; ------ <p id="CB1"></p></div>
+									<div class="col-sm-2">CB2 &nbsp; ------ <p id="CB2"></p></div>
+									<div class="col-sm-2">CB3 &nbsp; ------ <p id="CB3"></p></div>
+									<div class="col-sm-2">CB4 &nbsp; ------ <p id="CB4"></p></div>
+									<div class="col-sm-2">CB5 &nbsp; ------ <p id="CB5"></p> </div>
+									<div class="col-sm-2">CB6 <p id="CB6"></p></div>
 								</div>
 								<div class="row">
-									<div class="col-sm-3">RED1</div>
-									<div class="col-sm-3">RED2</div>
-									<div class="col-sm-3">RED3</div>
-									<div class="col-sm-3">RED4</div>
+									<div class="col-sm-3">RED1: <p id="RED1"></p></div>
+									<div class="col-sm-3">RED2: <p id="RED2"></p></div>
+									<div class="col-sm-3">RED3: <p id="RED3"></p></div>
+									<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
 								</div>
 								<div class="row">
-									<div class="col-sm-3">YEL1</div>
-									<div class="col-sm-3">YEL2</div>
-									<div class="col-sm-3">RING1</div>
-									<div class="col-sm-3">RING2</div>
+									<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
+									<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
+									<div class="col-sm-3">RING1: <p id="RING1"></p></div>
+									<div class="col-sm-3">RING2: <p id="RING2"></p></div>
 								</div>
 							</div>
 						</div>
@@ -218,7 +227,7 @@
 	function onOpen(evt)
 	{
 		doSend('{"handle":"announce"}');
-		doSend('{"handle":"connect_device","device_id":"ALL"}');
+		doSend('{"handle":"monitor"}');
 	}
 	function onClose(evt)
 	{
@@ -234,6 +243,28 @@
 		websocket.send(message);
 	}
 	jQuery(document).ready(function() {
+		var tid1;
+		var temp = true;
+		function mycode() 
+		{
+			$('.railway-action').each(function(index, element)
+			{
+				if(temp)
+				{
+					$(element).css('display','none');
+				}
+				else 
+				{
+					$(element).css('display','');
+				}
+			});
+			
+			tid1 = setTimeout(mycode, 500); // repeat myself
+			temp = !temp;
+		};
+		
+		tid1 = setTimeout(mycode, 500);
+		
 		initWebsocket();
 		jQuery('#table2').dataTable({
 			"sPaginationType" : "full_numbers"

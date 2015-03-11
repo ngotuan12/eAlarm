@@ -44,6 +44,7 @@ function getCurrentDeviceInfor()
 		}
 		updateDeviceProperties(data.device_infor);
 		updateData(data.device_infor[InforIndex].value);
+		
 	});
 }
 function updateDevice()
@@ -118,8 +119,96 @@ function updateDeviceProperties(infors)
 		if( i === infors.length)
 			break;
 	}
+	if(device.action_status ==='1' ||device.action_status ==='2')
+	{
+		updateRailwayInfor(infors);
+	}
+	else
+		clearRailwayInfor();
 }
-
+function updateRailwayInfor(infors)
+{
+	var infor = infors[1];
+	for(var i=0;i<infors.length;i++)
+	{
+		infor = infors[i];
+		alert(infor.properties.code);
+		if(infor.properties.code === "I1")
+		{
+			$('#RED1').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I4")
+		{
+			$('#RED2').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I2")
+		{
+			$('#RED3').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I3")
+		{
+			$('#RED4').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I5")
+		{
+			$('#YEL1').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I6")
+		{
+			$('#YEL2').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I7")
+		{
+			$('#RING1').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "I8")
+		{
+			$('#RING2').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X1")
+		{
+			$('#CB1').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X2")
+		{
+			$('#CB2').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X3")
+		{
+			$('#CB3').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X4")
+		{
+			$('#CB4').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X5")
+		{
+			$('#CB5').html("" + infor.value + " " +infor.properties.symbol);
+		}
+		else if(infor.properties.code === "X6")
+		{
+			$('#CB6').html("" + infor.value + " " +infor.properties.symbol);
+		}
+	}
+	
+}
+function clearRailwayInfor()
+{
+	$("#RED1").html("");
+	$("#RED2").html("");
+	$("#RED3").html("");
+	$("#RED4").html("");
+	$("#CB1").html("");
+	$("#CB2").html("");
+	$("#CB3").html("");
+	$("#CB4").html("");
+	$("#CB5").html("");
+	$("#CB6").html("");
+	$("#YEL1").html("");
+	$("#YEL2").html("");
+	$("#RING1").html("");
+	$("#RING2").html("");
+}
 function addProperty(device,row, infor,parent)
 {
 	var column = $('<div>');

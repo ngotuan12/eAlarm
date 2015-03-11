@@ -36,6 +36,11 @@ function log(strLog)
 	// logFile.write(dt.toString()+": "+strLog+"\n");
 	console.log(strLog);
 }
+
+function updateActionStatus(device_id)
+{
+}
+
 /**
  * @author TuanNA
  * @since 03/03/2014
@@ -145,11 +150,12 @@ function insertDeviceTransaction(socket, current_transaction_id, device_id,
  * @since 15/09/2014
  */
 function updateDevice(socket, device_id, status, strServerIP, strDescription,
-		transaction_detail)
+		transaction_detail,strActionStatus)
 {
 	var param = [];
-	var strSQL = "UPDATE device " + " SET status = ? ";
+	var strSQL = "UPDATE device " + " SET status = ?,action_status = ? ";
 	param.push(status);
+	param.push(strActionStatus);
 	if (strServerIP !== null)
 	{
 		strSQL += ",connected_server = ? ";
@@ -222,8 +228,14 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
  * @since 03/03/2014
  * @version 1.0
  */
-function updateDeviceInfor(socket, device_id, infors)
+function updateDeviceInfor(socket, device_id, infors,type)
 {
+	var objReturn = {};
+	objReturn.device_id = device_id;
+	objReturn.on_status_change = false;
+	objReturn.on_railway_change = false;
+	
+	var strActionStatus = socket.gatewayinfo.action_status;
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
 	strSQL += "AND a.`status` = '1' ";
@@ -251,6 +263,26 @@ function updateDeviceInfor(socket, device_id, infors)
 							{
 								var value = infors[key];
 								log(key + ":" + value);
+								if(key === 'X1'&& type==='on_change'&& value >0)
+								{
+									if(socket.gatewayinfo.action_status==='0')
+									{
+										objReturn.on__railway_change = '1';
+										strActionStatus = '1';
+										objReturn.on_railway_change = true;
+										objReturn.action_status = strActionStatus;
+									}
+								}
+								else if(key === 'X6'&& type==='on_change'&& value >0)
+								{
+									if(socket.gatewayinfo.action_status==='0')
+									{
+										objReturn.on__railway_change = '2';
+										strActionStatus = '2';
+										objReturn.on_railway_change = true;
+										objReturn.action_status = strActionStatus;
+									}
+								}	
 								connDB.query(strSQL, [ value, device_id, key ]);
 								// check alarm
 								for (i = 0; i < properties.length; i++)
@@ -313,13 +345,28 @@ function updateDeviceInfor(socket, device_id, infors)
 						{
 							strStatus = "2";
 						}
+						updateDevice(socket, device_id, strStatus,
+								server_ip, strDescription,
+								transaction_detail,strActionStatus);
+						
 						if (socket.device_status !== strStatus)
 						{
-							updateDevice(socket, device_id, strStatus,
-									server_ip, strDescription,
-									transaction_detail);
+							objReturn.on_status_change = true;
+							objReturn.status = strStatus;
 						}
-							
+						
+						if(objReturn.on_railway_change)
+						{
+							objReturn.action = "on_change";
+							for(var k=0;i<clients.length;k++)
+							{
+								if(clients[k].monitor)
+								{
+									clients[k].send(JSON.stringify(objReturn));
+								}
+							}	
+						}
+						
 						/*// send to websocket connect
 						var response = {};
 						response.infors = infors;
@@ -618,6 +665,9 @@ wss.on('connection', function(conn)
 				case "send_cmd":
 					send_cmd(conn,request.device_id,request.body);
 					break;
+				case "monitor":
+					conn.monitor = true;
+					break;
 				default:
 					break;
 			}
@@ -789,7 +839,7 @@ var socketServer = net.createServer(function(socket)
 					log("--------------------");
 					log("----process-data----");
 					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body);
+							request.body,"on_change");
 					log("----end-process-data----");
 					break;
 			}
@@ -799,11 +849,7 @@ var socketServer = net.createServer(function(socket)
 			}
 			for(var i=0;i<clients.length;i++)
 			{
-				if(clients[i].device_id === "ALL")
-				{
-					clients[i].send(JSON.stringify(request));
-				}
-				else if(clients[i].device_id === socket.gatewayinfo.id)
+				if(clients[i].device_id === socket.gatewayinfo.id)
 				{
 					clients[i].send(JSON.stringify(request));
 				}

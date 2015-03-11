@@ -28,6 +28,7 @@ class Device(models.Model):
     owner_name=models.CharField(max_length=100)
     owner_phone=models.CharField(max_length=25)
     route = models.ForeignKey(Route,db_column='route_id',null=True)
+    action_status = models.CharField(db_column='action_status',max_length=25)
     class Meta:
         db_table = 'device'
         app_label = 'myapp'
