@@ -132,7 +132,6 @@ function updateRailwayInfor(infors)
 	for(var i=0;i<infors.length;i++)
 	{
 		infor = infors[i];
-		alert(infor.properties.code);
 		if(infor.properties.code === "I1")
 		{
 			$('#RED1').html("" + infor.value + " " +infor.properties.symbol);
