@@ -228,25 +228,25 @@ function addProperty(device,row, infor,parent)
 		}
 		else
 		{
-			if(device.type=='4' && device.action_status == '0' && $.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
+			if(device.action_status == '0' && $.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
 			{
 				column.html("<p>" + infor.properties.name
 						+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 			}
-			else if (infor.properties.type == '2')
+			else if (infor.properties.type == '1')
 			{
 				if (infor.value == 1)
 					column.html("<p>" + infor.properties.name
 							+ "</p> <h4 style=\"color: green\">" + "ON " + "</h4>");
 				else if (infor.value == 0)
-					column.html("<p>" + infor.properties.name
-							+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
-			}
-			else if (infor.value == 0)
-			{
 				column.html("<p>" + infor.properties.name
-						+ "</p> <h5 style=\"color: red\">" + "Mất " + infor.properties.name + "</h5>");
+						+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
 			}
+//			else if (infor.value == 0)
+//			{
+//				column.html("<p>" + infor.properties.name
+//						+ "</p> <h5 style=\"color: red\">" + "Mất " + infor.properties.name + "</h5>");
+//			}
 			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 			{
 				column.html("<p>" + infor.properties.name
