@@ -7,6 +7,7 @@ var InforIndex = 0;
 var device_infor;
 var device;
 var tid;
+var codes = ["X1","X2","X3","X4","X5","X6","I1","I2","I3","I4","I5","I6","I7","I8"];
 function onGetDeviceInfor(device_id) {
 	currentDeviceID = device_id;
 	var csrftoken = $.cookie('csrftoken');
@@ -227,7 +228,21 @@ function addProperty(device,row, infor,parent)
 		}
 		else
 		{
-			if (infor.value == 0)
+			if(device.type=='4' && device.action_status == '0' && $.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
+			{
+				column.html("<p>" + infor.properties.name
+						+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
+			}
+			else if (infor.properties.type == '2')
+			{
+				if (infor.value == 1)
+					column.html("<p>" + infor.properties.name
+							+ "</p> <h4 style=\"color: green\">" + "ON " + "</h4>");
+				else if (infor.value == 0)
+					column.html("<p>" + infor.properties.name
+							+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
+			}
+			else if (infor.value == 0)
 			{
 				column.html("<p>" + infor.properties.name
 						+ "</p> <h5 style=\"color: red\">" + "Mất " + infor.properties.name + "</h5>");
