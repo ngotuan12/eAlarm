@@ -611,6 +611,18 @@ wss.on('connection', function(conn)
 {
 	log('connected');
 	clients.push(conn);
+	conn.on("timeout", function()
+	{
+		conn.close();
+		log("timeout");
+	});
+
+	conn.on("error", function(excep)
+	{
+		conn.close();
+		log(excep);
+	});
+	
 	conn.on('close', function()
 	{
 		log('disconnected');
