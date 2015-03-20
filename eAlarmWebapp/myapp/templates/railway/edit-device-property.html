@@ -40,9 +40,9 @@
 										<option value=""></option>
 										{% for mtype in mtypes %}
 											{% if mtype.id|truncatechars:100 == "3" %}
-												<option value="{{ mtype.id }}" selected>{{ mtype.name }}</option>
+												<option value="{{ mtype.value }}" selected>{{ mtype.name }}</option>
 											{% else %}
-												<option value="{{ mtype.id }}">{{ mtype.name }}</option>
+												<option value="{{ mtype.value }}">{{ mtype.name }}</option>
 											{% endif %}											
 
 										{% endfor %}

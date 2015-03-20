@@ -40,14 +40,14 @@
 					<tbody id="tbd_device">
 						{% for device in devices %}
 						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" 
-						symbol ="{{ device.symbol }}" mtype="{{ device.m_type.name }}" min ="{{ device.min }}" max ="{{ device.max }}" 
+						symbol ="{{ device.symbol }}" mtype="{{ device.m_type_name }}" min ="{{ device.min }}" max ="{{ device.max }}" 
 						require="{{ device.require }}" parent_id="{{ device.parent_id }}"
 						min_alarm ="{{ device.min_alarm }}" max_alarm ="{{ device.max_alarm }}" 
-						description="{{ device.description }}" type = "{{ device.type }}" mtypeid="{{ device.m_type.id }}" 
+						description="{{ device.description }}" type = "{{ device.type }}" mtypeid="{{ device.m_type_id }}" 
 						onclick="clickTR('{{ device.id }}');">
 							<td>{{ device.name }}</td>
 							<td>{{ device.code }}</td>
-							<td>{{ device.m_type.name }}</td>
+							<td>{{ device.m_type_name }}</td>
 							<td>{{ device.symbol }}</td>
 							<td>{{ device.min }}</td>
 							<td>{{ device.max }}</td>

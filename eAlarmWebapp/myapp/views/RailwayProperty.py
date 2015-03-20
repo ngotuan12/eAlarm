@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from django.core.context_processors import csrf
+#from django.core.context_processors import csrf
 
 from myapp.models import DeviceProperties
 from myapp.models.Device import Device
@@ -19,8 +19,10 @@ from myapp.models.ApParam import ApParam
 
 @login_required(login_url='/login')
 def index(request):
-    devices = DeviceProperties.objects.filter(p_type='2')
+    #devices = DeviceProperties.objects.filter(p_type='2')
+    devices =  DeviceProperties.objects.raw("SELECT `id`, `code`, `name`, `description`, `type`, `min`, `max`, `min_alarm`, `max_alarm`, `symbol`, `require`, `parent_id`, `p_type`, `on_railway`, `m_type` m_type_id,(select `par_name` from `ap_param` where `par_type`='M_TYPE' and `par_value`=d.`m_type`) m_type_name FROM `device_properties` d WHERE `p_type`='2' ")
     mtypes = ApParam.objects.filter(type='M_TYPE')
+    
     context={'devices':devices,'mtypes':mtypes}
     return render_to_response("railway/property.html", context, RequestContext(request))
 @login_required(login_url='/login')
@@ -47,7 +49,7 @@ def add_property(request):
                 _symbol = ''
             _parent_id = None
             _mtypeid = request.POST['slMType']
-            m_type = mtypes.get(id=_mtypeid)
+            m_type = mtypes.get(value=_mtypeid,type='M_TYPE')
             p_type ='2'
             dp = DeviceProperties()
             dp.code = _code
@@ -60,7 +62,7 @@ def add_property(request):
             dp.max_alarm = _maxAlarm
             dp.symbol = _symbol
             dp.p_type = p_type
-            dp.m_type = m_type
+            dp.m_type = m_type.value
             
             if request.POST.get('cbRequire') :
                 dp.require = '0'
@@ -88,9 +90,10 @@ def add_property(request):
 @login_required(login_url='/login')
 def edit_property(request,property_id):
     mtypes = ApParam.objects.filter(type='M_TYPE')
-    curr_dp = DeviceProperties.objects.filter(id=property_id)
-    context={'curr_dp':curr_dp}
+    #curr_dp = DeviceProperties.objects.filter(id=property_id)
+    #context={'curr_dp':curr_dp}
     #context={'property_id':"axxxxxxxxxxxxxxxx"}
+    context={}
     if request.method == 'POST':
         try:
             _code = request.POST['txtCodeEdit']
@@ -111,7 +114,7 @@ def edit_property(request,property_id):
                 _symbol = ''
             _parent_id = None
             _mtypeid = request.POST['slMTypeEdit']
-            m_type = mtypes.get(id=_mtypeid)            
+            #m_type = mtypes.get(value=_mtypeid,type='M_TYPE')
             p_type ='2'
             dp = DeviceProperties.objects.get(id=property_id,p_type='2')
             dp.code = _code
@@ -124,7 +127,8 @@ def edit_property(request,property_id):
             dp.max_alarm = _maxAlarm
             dp.symbol = _symbol
             dp.p_type = p_type
-            dp.m_type = m_type
+            #dp.m_type = m_type.value
+            dp.m_type = _mtypeid
             
             if request.POST.get('cbRequireEdit') :
                 dp.require = '0'

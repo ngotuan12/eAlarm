@@ -20,7 +20,8 @@ class DeviceProperties(models.Model):
     p_type = models.CharField(max_length=1,default ='1')
     parent = models.ForeignKey('self',db_column='parent_id',null=True)
     on_railway = models.CharField(max_length=1,default ='0')
-    m_type = models.ForeignKey(ApParam,db_column='m_type',null=True)
+    #m_type = models.ForeignKey(ApParam,db_column='m_type',null=True,on_delete=models.SET_NULL)
+    m_type = models.CharField(max_length=10)
     class Meta:
         db_table = 'device_properties'
         app_label = 'myapp'
