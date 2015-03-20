@@ -9,21 +9,24 @@ from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.core.context_processors import csrf
 
 from myapp.models import DeviceProperties
 from myapp.models.Device import Device
 from myapp.models.DeviceInfor import DeviceInfor
 from myapp.util.DateEncoder import DateEncoder
-
+from myapp.models.ApParam import ApParam
 
 @login_required(login_url='/login')
 def index(request):
     devices = DeviceProperties.objects.filter(p_type='2')
-    context={'devices':devices}
+    mtypes = ApParam.objects.filter(type='M_TYPE')
+    context={'devices':devices,'mtypes':mtypes}
     return render_to_response("railway/property.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def add_property(request):
     context={}
+    mtypes = ApParam.objects.filter(type='M_TYPE')
     if request.method == 'POST':
         try:
             _code = request.POST['txtCode']
@@ -43,6 +46,8 @@ def add_property(request):
                 _maxAlarm = float('0')
                 _symbol = ''
             _parent_id = None
+            _mtypeid = request.POST['slMType']
+            m_type = mtypes.get(id=_mtypeid)
             p_type ='2'
             dp = DeviceProperties()
             dp.code = _code
@@ -55,6 +60,7 @@ def add_property(request):
             dp.max_alarm = _maxAlarm
             dp.symbol = _symbol
             dp.p_type = p_type
+            dp.m_type = m_type
             
             if request.POST.get('cbRequire') :
                 dp.require = '0'
@@ -81,7 +87,10 @@ def add_property(request):
     return render_to_response("railway/add-device-property.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def edit_property(request,property_id):
-    context={}
+    mtypes = ApParam.objects.filter(type='M_TYPE')
+    curr_dp = DeviceProperties.objects.filter(id=property_id)
+    context={'curr_dp':curr_dp}
+    #context={'property_id':"axxxxxxxxxxxxxxxx"}
     if request.method == 'POST':
         try:
             _code = request.POST['txtCodeEdit']
@@ -101,8 +110,9 @@ def edit_property(request,property_id):
                 _maxAlarm = float('0')
                 _symbol = ''
             _parent_id = None
+            _mtypeid = request.POST['slMTypeEdit']
+            m_type = mtypes.get(id=_mtypeid)            
             p_type ='2'
-            
             dp = DeviceProperties.objects.get(id=property_id,p_type='2')
             dp.code = _code
             dp.name = _name
@@ -114,6 +124,7 @@ def edit_property(request,property_id):
             dp.max_alarm = _maxAlarm
             dp.symbol = _symbol
             dp.p_type = p_type
+            dp.m_type = m_type
             
             if request.POST.get('cbRequireEdit') :
                 dp.require = '0'
@@ -125,6 +136,7 @@ def edit_property(request,property_id):
             return HttpResponseRedirect('/railway/property/')
         except Exception as ex:
             print(ex)
+#    context.update(csrf(request))
     return render_to_response("railway/edit-device-property.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def delete_property(request,property_id):

@@ -35,6 +35,23 @@
 										</div>
 									</div>
 
+									<div class="col-sm-12">
+										<label class="control-label">Kiểu đo:</label>
+<!--  										<input type="text" id="txtMTypeidEdit" name="txtMTypeidEdit" class="form-control" hide>-->										
+										<select name='slMType' id="slMType" class="form-control chosen-select" data-placeholder="Chọn kiểu đo" required>
+										<option value=""></option>
+										{% for mtype in mtypes %}
+											{% if mtype.id|truncatechars:100 == "3" %}
+												<option value="{{ mtype.id }}" selected>{{ mtype.name }}</option>
+											{% else %}
+												<option value="{{ mtype.id }}">{{ mtype.name }}</option>
+											{% endif %}											
+
+										{% endfor %}
+										</select>
+										<label for="slMTypeEdit" class="error" style="display: none;">Trường không được để trống</label>
+									</div>
+									
 									<div class="form-group">
 										<div class="col-sm-5">
 											<div class="ckbox ckbox-primary" style="margin-top: 30px;">
@@ -59,20 +76,25 @@
 										<div class="col-sm-12">
 											<label class="control-label">Loại:</label>
 											<select name='slType' id="slType" class="form-control chosen-select" data-placeholder="Chọn đầu đo chính" required>
-											<option value="1">Cảm biến</option>
-											<option value="2">ON/OFF</option>
+<!--											<option value="1">Cảm biến</option>
+											<option value="2">ON/OFF</option> -->
+											<option value="1">ON/OFF</option>
+  											<option value="2">Cảm biến</option>											
 											</select>
 											<label for="slType" class="error" style="display: none;">Trường không được để trống</label>
 										</div>
 										
 									</div>
+
 									<div class="form-group">
-										<label class="col-sm-12 control-label">Ghi chú:</label>
+										<label class="col-sm-12 control-label">Đơn vị:</label>
 										<div class="col-sm-12">
-											<textarea rows="2" class="form-control"
-												placeholder="<Ghi chú>" name="txtDescription" required maxlength="100"></textarea>
+											<input type="text" name="txtSymbol" id="txtSymbol" class="form-control"
+												style="padding: 8px;"
+												placeholder="<Đơn vị>" required>
 										</div>
 									</div>
+
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -114,21 +136,21 @@
 									</div>
 									
 									<div class="form-group">
-										<label class="col-sm-12 control-label">Đơn vị:</label>
+										<label class="col-sm-12 control-label">Ghi chú:</label>
 										<div class="col-sm-12">
-											<input type="text" name="txtSymbol" id="txtSymbol" class="form-control"
-												style="padding: 8px;"
-												placeholder="<Đơn vị>" required>
+											<textarea rows="2" class="form-control"
+												placeholder="<Ghi chú>" name="txtDescription" required maxlength="100"></textarea>
 										</div>
 									</div>
+
 								</div>
 							</div>
 						</div>
 						<input type="hidden" name="type" value="addDeviceProperty">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
 						<button type="button" class="btn btn-primary" onclick="return onAddDevicePropertyFromSubmit();">Lưu</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
 					</div>
 				</form>
 			</div>

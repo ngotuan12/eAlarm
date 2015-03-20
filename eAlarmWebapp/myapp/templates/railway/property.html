@@ -26,26 +26,28 @@
 				<table class="table table-hover" id="tb_device">
 					<thead>
 						<tr>
-							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tên đầu đo</th>
-							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Mã</th>
-							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đơn vị</th>
-							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Min value</th>
-							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Max value</th>
-							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng dưới</th>
-							<th style="width: 12%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng trên</th>
-							<th style="width: 17%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
+							<th style="width: 15%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Tên đầu đọc</th>
+							<th style="width: 8%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Mã</th>
+							<th style="width: 9%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Kiểu đo</th>
+							<th style="width: 8%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Đơn vị</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Min value</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Max value</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng dưới</th>
+							<th style="width: 10%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ngưỡng trên</th>
+							<th style="width: 20%;text-align:left;font-family: Arial,Helvetica,sans-serif;">Ghi chú</th>
 						</tr>
 					</thead>
 					<tbody id="tbd_device">
 						{% for device in devices %}
 						<tr class="odd gradeX" id="{{ device.id }}" name="{{ device.name }}" code="{{ device.code }}" 
-						symbol ="{{ device.symbol }}" min ="{{ device.min }}" max ="{{ device.max }}" 
+						symbol ="{{ device.symbol }}" mtype="{{ device.m_type.name }}" min ="{{ device.min }}" max ="{{ device.max }}" 
 						require="{{ device.require }}" parent_id="{{ device.parent_id }}"
 						min_alarm ="{{ device.min_alarm }}" max_alarm ="{{ device.max_alarm }}" 
-						description="{{ device.description }}" type = "{{ device.type }}" 
+						description="{{ device.description }}" type = "{{ device.type }}" mtypeid="{{ device.m_type.id }}" 
 						onclick="clickTR('{{ device.id }}');">
 							<td>{{ device.name }}</td>
 							<td>{{ device.code }}</td>
+							<td>{{ device.m_type.name }}</td>
 							<td>{{ device.symbol }}</td>
 							<td>{{ device.min }}</td>
 							<td>{{ device.max }}</td>
@@ -79,21 +81,21 @@
 						</div>
 						<div class="col-lg-3">
 							<label>Mã đầu đo</label> <input type="text"
-								id="v_code" name=""v_code"" value="{{ goal.code }}" placeholder="Mã đầu đo"
+								id="v_code" name="v_code" value="{{ goal.code }}" placeholder="Mã đầu đo"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
 						</div>
+						<div class="col-lg-3">
+							<label>Kiểu đo</label> <input type="text"
+								id="v_mtype" name="v_mtype" value="{{ goal.code }}" placeholder="Kiểu đo"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>						
 						<div class="col-lg-3">
 							<label>Đơn vị</label> <input type="text"
 								id="v_symbol" name="v_symbol" value="{{ goal.code }}" placeholder="Đơn vị"
-								style="padding: 6px;"
-								disabled
-								class="form-control" required maxlength="10">
-						</div>
-						<div class="col-lg-3">
-							<label>Ghi chú</label> <input type="text"
-								id="v_des" name="v_des" value="{{ goal.code }}" placeholder="Ghi chú"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -124,6 +126,15 @@
 						<div class="col-lg-3">
 							<label>Ngưỡng dưới</label> <input type="text"
 								id="v_max_alarm" name="v_max_alarm" value="" placeholder="Ngưỡng dưới"
+								style="padding: 6px;"
+								disabled
+								class="form-control" required maxlength="10">
+						</div>
+					</div>
+					<div class="row row-pad-5">
+						<div class="col-lg-3">
+							<label>Ghi chú</label> <input type="text"
+								id="v_des" name="v_des" value="{{ goal.code }}" placeholder="Ghi chú"
 								style="padding: 6px;"
 								disabled
 								class="form-control" required maxlength="10">
@@ -273,6 +284,8 @@ function onEditDeviceProperty()
 	var name = $("tr[id][id='"+ device_id +"']").attr('name');
 	var code = $("tr[id][id='"+ device_id +"']").attr('code');
 	var symbol = $("tr[id][id='"+ device_id +"']").attr('symbol');
+	var mtype = $("tr[id][id='"+ device_id +"']").attr('mtype');
+	var mtypeid = $("tr[id][id='"+ device_id +"']").attr('mtypeid');
 	var min = $("tr[id][id='"+ device_id +"']").attr('min');
 	var max = $("tr[id][id='"+ device_id +"']").attr('max');
 	var min_alarm = $("tr[id][id='"+ device_id +"']").attr('min_alarm');
@@ -285,6 +298,8 @@ function onEditDeviceProperty()
 	$("#txtNameEdit").val(name);
 	$("#txtDescriptionEdit").val(description);
 	
+	$("#slMTypeEdit").val(mtypeid);
+	$("#slMTypeEdit").trigger("chosen:updated");
 	
 	$('#slParentEdit').prop("selectedIndex", -1);
 	$("#slParentEdit").trigger("chosen:updated");
@@ -302,7 +317,6 @@ function onEditDeviceProperty()
 		$("#slParentEdit").attr('disabled', true);
 		$("#slParentEdit").trigger("chosen:updated");
 	}
-	
 	
 	$("#txtMinEdit").val(min);
 	$("#txtMaxEdit").val(max);
@@ -342,6 +356,7 @@ function onEditDeviceProperty()
 	
 	//hide device_property self
 	$("#slParentEdit option[value=" + device_id + "]").hide();
+	//$("#slParentEdit option[value=" + device_id + "]");
 	$("#slParentEdit").trigger("chosen:updated");
 	//set action form action
 	$("#editDeviceProperty").attr('action','/railway/property/edit/'+ device_id.toString() +'/')
@@ -351,6 +366,8 @@ function clickTR(device_id){
 	var name = $("tr[id][id='"+ device_id +"']").attr('name');
 	var code = $("tr[id][id='"+ device_id +"']").attr('code');
 	var symbol = $("tr[id][id='"+ device_id +"']").attr('symbol');
+	var mtype = $("tr[id][id='"+ device_id +"']").attr('mtype');
+	var mtypeid = $("tr[id][id='"+ device_id +"']").attr('mtypeid');	
 	var min = $("tr[id][id='"+ device_id +"']").attr('min');
 	var max = $("tr[id][id='"+ device_id +"']").attr('max');
 	var min_alarm = $("tr[id][id='"+ device_id +"']").attr('min_alarm');
@@ -358,7 +375,7 @@ function clickTR(device_id){
 	var description = $("tr[id][id='"+ device_id +"']").attr('description');
 	$("tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 	$("tr[id][id!='"+ device_id +"']").css('background-color','#fff');
-	onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description);
+	onShowDetail(device_id,name,code,mtype,mtypeid,symbol,min,max,min_alarm,max_alarm,description);
 };
 function removeDevice(){
 	var device_id=$("#hd_device_id").val();
@@ -368,10 +385,12 @@ function removeDevice(){
 		$.message.destroy();
 	});
 }
-function onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description){
+function onShowDetail(device_id,name,code,mtype,mtypeid,symbol,min,max,min_alarm,max_alarm,description){
 	$("#v_code").val(code);
 	$("#v_name").val(name);
 	$("#v_symbol").val(symbol);
+	$("#v_mtype").val(mtype);
+	$("#v_mtypeid").val(mtypeid);
 	$("#v_des").val(description);
 	$("#v_min").val(min);
 	$("#v_max").val(max);
@@ -385,6 +404,8 @@ jQuery(window).load(function()
 	var name = $("#tbd_device tr[id]").first().attr('name');
 	var code = $("#tbd_device tr[id]").first().attr('code');
 	var symbol = $("#tbd_device tr[id]").first().attr('symbol');
+	var mtype = $("#tbd_device tr[id]").first().attr('mtype');
+	var mtypeid = $("#tbd_device tr[id]").first().attr('mtypeid');	
 	var min = $("#tbd_device tr[id]").first().attr('min');
 	var max = $("#tbd_device tr[id]").first().attr('max');
 	var min_alarm = $("#tbd_device tr[id]").first().attr('min_alarm');
@@ -395,7 +416,7 @@ jQuery(window).load(function()
 	$("#tbd_device tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 	$("#tbd_device tr[id][id!='"+ device_id +"']").css('background-color','#fff');
 	//
-	onShowDetail(device_id,name,code,symbol,min,max,min_alarm,max_alarm,description);
+	onShowDetail(device_id,name,code,mtype,mtypeid,symbol,min,max,min_alarm,max_alarm,description);
 	$(".numberic").numeric();
 });
 </script>
