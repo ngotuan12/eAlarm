@@ -228,7 +228,7 @@ function addProperty(device,row, infor,parent)
 		}
 		else
 		{
-			if(device.action_status == '0' && $.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
+			if($.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
 			{
 				column.html("<p>" + infor.properties.name
 						+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
@@ -239,8 +239,8 @@ function addProperty(device,row, infor,parent)
 					column.html("<p>" + infor.properties.name
 							+ "</p> <h4 style=\"color: green\">" + "ON " + "</h4>");
 				else if (infor.value == 0)
-				column.html("<p>" + infor.properties.name
-						+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
+					column.html("<p>" + infor.properties.name
+							+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
 			}
 //			else if (infor.value == 0)
 //			{
