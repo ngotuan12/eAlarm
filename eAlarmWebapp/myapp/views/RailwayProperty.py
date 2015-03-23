@@ -100,7 +100,7 @@ def edit_property(request,property_id):
             _name = request.POST['txtNameEdit']
             _description = request.POST['txtDescriptionEdit']
             _type = request.POST['slTypeEdit']
-            if str(_type) =='1':
+            if str(_type) =='2':
                 _min = float(request.POST['txtMinEdit'])
                 _max = float(request.POST['txtMaxEdit'])
                 _minAlarm = float(request.POST['txtMinAlarmEdit'])
