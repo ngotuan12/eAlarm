@@ -242,7 +242,7 @@ jQuery(document).ready(function() {
 	});
 	$("#slTypeEdit").change(function() {
 		var type =$(this).val();
-		if(type ==='2')
+		if(type ==='1')
 		{
 			
 			$("#txtMinEdit").val('');
@@ -327,7 +327,7 @@ function onEditDeviceProperty()
 	$("#slTypeEdit").val(type);
 	$("#slTypeEdit").trigger("chosen:updated");
 	
-	if(type ==='2')
+	if(type ==='1')
 	{
 		$("#txtMinEdit").val('');
 		$("#txtMaxEdit").val('');

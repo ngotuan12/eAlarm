@@ -150,12 +150,11 @@ function insertDeviceTransaction(socket, current_transaction_id, device_id,
  * @since 15/09/2014
  */
 function updateDevice(socket, device_id, status, strServerIP, strDescription,
-		transaction_detail,strActionStatus)
+		transaction_detail)
 {
 	var param = [];
-	var strSQL = "UPDATE device " + " SET status = ?,action_status = ? ";
+	var strSQL = "UPDATE device " + " SET status = ? ";
 	param.push(status);
-	param.push(strActionStatus);
 	if (strServerIP !== null)
 	{
 		strSQL += ",connected_server = ? ";
@@ -229,12 +228,7 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
  * @version 1.0
  */
 function updateDeviceInfor(socket, device_id, infors,type)
-{
-	var objReturn = {};
-	objReturn.device_id = device_id;
-	objReturn.on_status_change = false;
-	objReturn.on_railway_change = false;
-	
+{	
 	var strActionStatus = socket.gatewayinfo.action_status;
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
@@ -263,26 +257,6 @@ function updateDeviceInfor(socket, device_id, infors,type)
 							{
 								var value = infors[key];
 								log(key + ":" + value);
-								if(key === 'X1'&& type==='on_change'&& value >0)
-								{
-									if(socket.gatewayinfo.action_status==='0')
-									{
-										objReturn.on__railway_change = '1';
-										strActionStatus = '1';
-										objReturn.on_railway_change = true;
-										objReturn.action_status = strActionStatus;
-									}
-								}
-								else if(key === 'X6'&& type==='on_change'&& value >0)
-								{
-									if(socket.gatewayinfo.action_status==='0')
-									{
-										objReturn.on__railway_change = '2';
-										strActionStatus = '2';
-										objReturn.on_railway_change = true;
-										objReturn.action_status = strActionStatus;
-									}
-								}	
 								connDB.query(strSQL, [ value, device_id, key ]);
 								// check alarm
 								for (i = 0; i < properties.length; i++)
@@ -345,42 +319,12 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						{
 							strStatus = "2";
 						}
-						updateDevice(socket, device_id, strStatus,
-								server_ip, strDescription,
-								transaction_detail,strActionStatus);
-						
 						if (socket.device_status !== strStatus)
 						{
-							objReturn.on_status_change = true;
-							objReturn.status = strStatus;
+							updateDevice(socket, device_id, strStatus,
+									server_ip, strDescription,
+									transaction_detail);
 						}
-						
-						if(objReturn.on_railway_change)
-						{
-							objReturn.action = "on_change";
-							for(var k=0;i<clients.length;k++)
-							{
-								if(clients[k].monitor)
-								{
-									clients[k].send(JSON.stringify(objReturn));
-								}
-							}	
-						}
-						
-						/*// send to websocket connect
-						var response = {};
-						response.infors = infors;
-						response.device_status = strStatus;
-						response.device_id = device_id;
-						for (i = 0; i < clients.length; i++)
-						{
-							if (clients[i] !== null && clients[i].device_id === response.device_id)
-							{
-								util.log("Send mesage to client " + i);
-								sendWebsocketMessage(clients[i],
-										"update_device_properties", response);
-							}
-						}*/
 					});
 }
 
@@ -590,7 +534,34 @@ function onClose(socket)
 	socket.end();
 }
 
-
+function updateOnchangeAction(socket,infors)
+{
+	var action_status = socket.gatewayinfo.action_status;
+	log("Action status: " + socket.gatewayinfo.action_status);
+	
+	if((infors.X1 > 0 || infors.X2 >0) && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
+	{
+		action_status = "1";
+	}
+	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && (infors.X5 > 0 || infors.X6 > 0))
+	{
+		action_status = "2";
+	}
+	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
+	{
+		action_status = "0";
+	}
+	//update action status
+	var strSQL = "UPDATE device SET action_status = ? WHERE id = ? "; 
+	connDB.query(strSQL, [action_status,socket.gatewayinfo.id], function(err)
+	{
+		if (err)
+		{
+			log(err);
+			return;
+		}
+	});
+}
 
 //-----------------------------------------
 //END FUNCTION
@@ -853,6 +824,8 @@ var socketServer = net.createServer(function(socket)
 					updateDeviceInfor(socket, socket.gatewayinfo.id,
 							request.body,"on_change");
 					log("----end-process-data----");
+					//check sensor
+					updateOnchangeAction(socket,request.body);
 					break;
 			}
 			if(typeof socket.gatewayinfo !== 'undefined')
