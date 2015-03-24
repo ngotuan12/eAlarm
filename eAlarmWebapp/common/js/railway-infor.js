@@ -284,7 +284,7 @@ function addProperty(device,row, infor,parent)
 							+ "</p> <p style=\"color: green\">" + "ON " + "</p>");
 				else if (infor.value == 0)
 					column.html("<p>" + infor.properties.name
-							+ "</p> <p style=\"color: green\">" + "OFF " + "</p>");
+							+ "</p> <p style=\"color: red\">" + "OFF " + "</p>");
 			}
 //			else if (infor.value == 0)
 //			{
