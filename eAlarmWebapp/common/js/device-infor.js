@@ -1,6 +1,6 @@
 var plot;
 var data = [], totalPoints = 100;
-var updateInterval = 2000000;
+var updateInterval = 2000;
 var currentDeviceID;
 var currentDeviceInforID;
 var InforIndex = 0;
@@ -81,14 +81,11 @@ function updateDevice()
 		deviceStatusTable.attr("src","/images/ic_blue.png");
 	}
 }
-function updateDeviceProperties(data)
+function updateDeviceProperties(infors)
 {
 	//update device information
-	var deviceInfor = $('#device-infor-1');
+	var deviceInfor = $('#device-infor');
 	deviceInfor.empty();
-	var infors = data.filter(function (el){
-		return el.properties.m_type === '1';
-	});
 	var infor = [];
 	var i = 0;
 	while( i < infors.length) 
@@ -123,47 +120,6 @@ function updateDeviceProperties(data)
 		if( i === infors.length)
 			break;
 	}
-	
-	deviceInfor = $('#device-infor-2');
-	deviceInfor.empty();
-	infors = data.filter(function (el){
-		return el.properties.m_type === '3'||el.properties.m_type === '4';
-	});
-	infor = [];
-	i = 0;
-	while( i < infors.length) 
-	{
-		var count = 0; //dem so column da insert vao row
-		var row = $('<div>');
-		row.attr("class", "row");
-		while(count <4)
-		{
-			if( i === infors.length)
-				break;
-			infor = infors[i];
-			//neu la cam bien phu
-			if(infor.properties.require === '0')
-			{
-				//tim cha
-				parent = infors.filter(function (el) 
-				{
-					return el.properties.id === infor.properties.parent
-				})[0];
-				addProperty(device,row,infor, parent);
-			}
-			else 
-			{
-				//add infor
-				addProperty(device,row, infor);
-			}
-			count ++;
-			i++;
-		}
-		row.appendTo(deviceInfor);
-		if( i === infors.length)
-			break;
-	}
-	
 	if(device.action_status ==='1' ||device.action_status ==='2')
 	{
 		updateRailwayInfor(infors);
@@ -261,30 +217,30 @@ function addProperty(device,row, infor,parent)
 	if(device.status =="0")
 	{
 		column.html("<p>" + infor.properties.name
-				+ "</p> <p style=\"color: gray\">" + "__ " + "</p>");
+				+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 	}
 	else
 	{
 		if(infor.properties.require === '0' && parent.value !== 0)
 		{
 			column.html("<p>" + infor.properties.name
-			+ "</p> <p style=\"color: gray\">" + "__ " + "</p>");
+			+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 		}
 		else
 		{
 			if($.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
 			{
 				column.html("<p>" + infor.properties.name
-						+ "</p> <p style=\"color: gray\">" + "__ " + "</p>");
+						+ "</p> <h4 style=\"color: gray\">" + "__ " + "</h4>");
 			}
 			else if (infor.properties.type == '1')
 			{
 				if (infor.value == 1)
 					column.html("<p>" + infor.properties.name
-							+ "</p> <p style=\"color: green\">" + "ON " + "</p>");
+							+ "</p> <h4 style=\"color: green\">" + "ON " + "</h4>");
 				else if (infor.value == 0)
 					column.html("<p>" + infor.properties.name
-							+ "</p> <p style=\"color: green\">" + "OFF " + "</p>");
+							+ "</p> <h4 style=\"color: green\">" + "OFF " + "</h4>");
 			}
 //			else if (infor.value == 0)
 //			{
@@ -294,12 +250,12 @@ function addProperty(device,row, infor,parent)
 			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 			{
 				column.html("<p>" + infor.properties.name
-						+ "</p> <p style=\"color: red\">" + infor.value + infor.properties.symbol +"</p>");
+						+ "</p> <h4 style=\"color: red\">" + infor.value + infor.properties.symbol +"</h4>");
 			}
 			else
 			{
 				column.html("<p>" + infor.properties.name
-						+ "</p> <p style=\"color: green\">" + infor.value + infor.properties.symbol +"</p>");
+						+ "</p> <h4 style=\"color: green\">" + infor.value + infor.properties.symbol +"</h4>");
 			}
 		}
 	}
