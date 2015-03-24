@@ -2,6 +2,12 @@
 {% block styles %}
 	<link href="/css/chart.css" rel="stylesheet">
 	<style>
+		.col-sm{
+			padding-left: 10px;
+		}
+		h3,h5{
+			font-family: tahoma;
+		}
 		#railway-infor .col-sm-2, .col-sm-3 {
 			display: inline-block; 
 			white-space: nowrap;
@@ -18,10 +24,13 @@
 			word-break: break-word;
 			white-space: pre-line;
 		}
+		.col-sm-3 p{
+			margin: 0;
+		}
 	</style>
 {% endblock %}
 {% block content-header %}
-<div class="pageheader">
+<div class="pageheader" style="display: none;">
 	<h2>
 		<i class="fa fa-align-justify"></i> Giám sát đường ngang <span>Theo dõi sự cố
 			hệ thống</span>
@@ -106,8 +115,11 @@
 				<div class="tab-pane" id="railway-history"> </div>
 				<div class="tab-pane active" id="railway-status">
 					<div class="row"
-						style=" border-color: gray;">
-						<div class="col-sm-6"><h3 id="device-name"></h3></div>
+						style=" border-bottom: 1px solid; border-color: gray;margin-top: 10px;">
+						<div class="col-sm-6"><h3 id="device-name"></h3>
+								Trạng thái: <img id="device-status" width="15px" height="15px"
+									src="/images/ic_blue.png" alt="" />
+						</div>
 						<div class="col-sm-6" style="padding: 10px;left: 10%">
 							<a id="btnNhanCong" class="btn btn-danger" style="width: 100px;margin-right: 5px;"> Nhân công</a> 
 							<a id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</a> 
@@ -116,51 +128,50 @@
 					</div>
 				
 					<div class="row"
-						style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;">
-						<div class="col-sm-6">
+						style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;" >
+						<div class="col-sm-6" style="display: none;">
 							<p id="device-mac" style="display: none"></p>
 							<p id="device-server" style="display: none"></p>
-							<p>
-								Trạng thái: <img id="device-status" width="15px" height="15px"
-									src="/images/ic_blue.png" alt="" />
-							</p>
-							<p id="device-issue"></p>
+							<p id="device-issue" style="display: none;"></p>
 						</div>
-						<div class="col-sm-6">
-							<div class="row" id="railway-infor">
-								<div class="row">
-									<div class="col-sm-2">CB1 &nbsp; ------ <p id="CB1"></p></div>
-									<div class="col-sm-2">CB2 &nbsp; ------ <p id="CB2"></p></div>
-									<div class="col-sm-2">CB3 &nbsp; ------ <p id="CB3"></p></div>
-									<div class="col-sm-2">CB4 &nbsp; ------ <p id="CB4"></p></div>
-									<div class="col-sm-2">CB5 &nbsp; ------ <p id="CB5"></p> </div>
-									<div class="col-sm-2">CB6 <p id="CB6"></p></div>
-								</div>
-								<div class="row">
-									<div class="col-sm-3">RED1: <p id="RED1"></p></div>
-									<div class="col-sm-3">RED2: <p id="RED2"></p></div>
-									<div class="col-sm-3">RED3: <p id="RED3"></p></div>
-									<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
-								</div>
-								<div class="row">
-									<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
-									<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
-									<div class="col-sm-3">RING1: <p id="RING1"></p></div>
-									<div class="col-sm-3">RING2: <p id="RING2"></p></div>
-								</div>
+						<div class="col-sm" id="railway-infor">
+							<div class="row">
+								<div class="col-sm-2">CB1 &nbsp; ------ <p id="CB1"></p></div>
+								<div class="col-sm-2">CB2 &nbsp; ------ <p id="CB2"></p></div>
+								<div class="col-sm-2">CB3 &nbsp; ------ <p id="CB3"></p></div>
+								<div class="col-sm-2">CB4 &nbsp; ------ <p id="CB4"></p></div>
+								<div class="col-sm-2">CB5 &nbsp; ------ <p id="CB5"></p> </div>
+								<div class="col-sm-2">CB6 <p id="CB6"></p></div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">RED1: <p id="RED1"></p></div>
+								<div class="col-sm-3">RED2: <p id="RED2"></p></div>
+								<div class="col-sm-3">RED3: <p id="RED3"></p></div>
+								<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
+								<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
+								<div class="col-sm-3">RING1: <p id="RING1"></p></div>
+								<div class="col-sm-3">RING2: <p id="RING2"></p></div>
 							</div>
 						</div>
 					</div>
 					
-					<div class ="row" style="margin-top: 10px;">
-						<div class="col-sm-6" id="device-infor"
-								style="white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
+					<div class ="row" >
+						<div class="col-sm" id="device-infor-1"
+								style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-6" style="display: none">
 							<p id="charTitle" style="display: none">Nhiệt độ.</p>
 							<div class="demo-container">
 								<div id="placeholder" class="demo-placeholder"></div>
 							</div>
+						</div>
+					</div>
+					<div class ="row" >
+						<div class="col-sm" id="device-infor-2"
+								style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
 						</div>
 					</div>
 					
