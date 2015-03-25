@@ -207,6 +207,9 @@ function updateDeviceProperties(data)
 	
 	if(device.action_status ==='1' ||device.action_status ==='2')
 	{
+		infors = data.filter(function (el){
+			return el.properties.m_type === '2'||el.properties.m_type === '5';
+		});
 		updateRailwayInfor(infors);
 		console.log(JSON.stringify(infors));
 	}
