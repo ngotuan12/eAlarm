@@ -818,6 +818,13 @@ var socketServer = net.createServer(function(socket)
 							request.body);
 					sendGatewayCommand(response, socket);
 					break;
+				case "get_test":
+					log("--------------------");
+					log("----process-data----");
+					updateDeviceInfor(socket, socket.gatewayinfo.id,
+							request.body);
+					log("----end-process-data----");
+					break;
 				case "on_change":
 					log("--------------------");
 					log("----process-data----");

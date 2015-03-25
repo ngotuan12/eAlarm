@@ -165,6 +165,46 @@ function updateDeviceProperties(data)
 			break;
 	}
 	
+	deviceInfor = $('#device-infor-3');
+	deviceInfor.empty();
+	infors = data.filter(function (el){
+		return el.properties.m_type === '6';
+	});
+	infor = [];
+	i = 0;
+	while( i < infors.length) 
+	{
+		var count = 0; //dem so column da insert vao row
+		var row = $('<div>');
+		row.attr("class", "row");
+		while(count <4)
+		{
+			if( i === infors.length)
+				break;
+			infor = infors[i];
+			//neu la cam bien phu
+			if(infor.properties.require === '0')
+			{
+				//tim cha
+				parent = infors.filter(function (el) 
+				{
+					return el.properties.id === infor.properties.parent
+				})[0];
+				addProperty(device,row,infor, parent);
+			}
+			else 
+			{
+				//add infor
+				addProperty(device,row, infor);
+			}
+			count ++;
+			i++;
+		}
+		row.appendTo(deviceInfor);
+		if( i === infors.length)
+			break;
+	}
+	
 	if(device.action_status ==='1' ||device.action_status ==='2')
 	{
 		updateRailwayInfor(infors);
