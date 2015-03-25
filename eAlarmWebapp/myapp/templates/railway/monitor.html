@@ -205,12 +205,14 @@
 	var device_id="ALL";
 	function initWebsocket()
 	{
-		websocket= new WebSocket(wsUri);
-		testWebSocket();
-	}
-	function testWebSocket()
-	{
-		websocket = new WebSocket(wsUri);
+		try
+		{
+			websocket = new WebSocket(wsUri);
+		}
+		catch(e)
+		{
+			setTimeout(initWebsocket,5000);
+		}
 		websocket.onopen = function(evt)
 		{
 			onOpen(evt)
