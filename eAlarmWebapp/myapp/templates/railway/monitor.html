@@ -276,8 +276,7 @@
 	}
 	function onMessage(evt)
 	{
-		var data = evt.data.toString();
-		$.parseJSON( data );
+		var data = $.parseJSON(evt.data.toString());
 		console.log("handle" + JSON.stringify(data.handle));
 		switch (data.handle)
 		{
