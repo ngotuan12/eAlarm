@@ -2,6 +2,15 @@
 {% block styles %}
 	<link href="/css/chart.css" rel="stylesheet">
 	<style>
+		.dataTables_filter{
+			float: left;
+		}
+		.dataTables_filter input {
+			padding: 7px;
+		}
+		.dataTables_length{
+		float: right;
+		}
 		.col-sm{
 			padding-left: 10px;
 		}
@@ -52,7 +61,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="table-responsive">
-					<table class="table table-hover" id="table2">
+					<table class="table cell-border" cellspacing="0" id="table2">
 						<thead>
 							<tr>
 								<th>Tuyến</th>
@@ -272,15 +281,34 @@
 		tid1 = setTimeout(mycode, 500);
 		
 		initWebsocket();
-		jQuery('#table2').dataTable({
-			"sPaginationType" : "full_numbers"
+		
+		$('#table2').dataTable(
+		{
+			//"bLengthChange": false,
+			//"bFilter" : false,
+			"bInfo":false,
+			"sPaginationType" : "full_numbers",
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
 		});
 		// Chosen Select
-		jQuery("select").chosen({
+		$("select").chosen({
 				'min-width' : '150px',
 				'white-space' : 'nowrap',
 				disable_search_threshold : 10
 			});
+		$("input").attr("placeholder","Tìm kiếm");
 		$('#table2 tbody tr').click(function(e)
 		{
 			device_id = $(this).attr('id');
