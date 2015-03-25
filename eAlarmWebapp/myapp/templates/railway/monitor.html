@@ -95,7 +95,7 @@
 								<td>{{ device.route.name }}</td>
 								<td>{{ device.name }}</td>
 								<td class="center">
-									<p id ="device-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
+									<p id ="railway-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
 										{% if  device.action_status == '1' %}
 											>>>>>
 										{% elif device.action_status == '2' %}
@@ -275,6 +275,27 @@
 	}
 	function onMessage(evt)
 	{
+		var data = JSON.parse(evt.data.toString());
+		switch data.handle:
+			case "on_railway_change":
+				var device_id = data.device_id;
+				var action_status = data.action_status;
+				var railway_action = $("#railway-"+device_id);
+				if(action_status==="1")
+				{
+					railway_action.html(">>>>>");
+				}
+				else if(action_status==="2")
+				{
+					railway_action.html("<<<<<");
+				}
+				else if(action_status==="0")
+				{
+					railway_action.html("");
+				}
+				break;
+			default:
+				break;
 	}
 	function onError(evt)
 	{

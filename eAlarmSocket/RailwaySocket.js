@@ -564,6 +564,17 @@ function updateOnchangeAction(socket,infors)
 			return;
 		}
 	});
+	//send change rail way status to monitors
+	if(action_status !== socket.gatewayinfo.action_status)
+	{
+		var monitors = clients.filter(function (el){
+			return el.monitor === true;
+		});
+		for(var i=0;i<monitors.length;i++)
+		{
+			monitors[i].send({"handle":"on_railway_change","device_id":socket.gatewayinfo.id,"action_status":action_status});
+		}
+	}
 }
 
 //-----------------------------------------
