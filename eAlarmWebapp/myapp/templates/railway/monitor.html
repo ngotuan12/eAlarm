@@ -2,6 +2,18 @@
 {% block styles %}
 	<link href="/css/chart.css" rel="stylesheet">
 	<style>
+		.profile-header{
+			margin-bottom: 10px;
+		}
+		#railway-infor .row{
+			margin-bottom: 15px;
+		}
+		#device-infor-1 .row{
+			margin-top: 15px;
+		}
+		#device-infor-2 .row{
+		margin-top: 15px;
+		}
 		.dataTables_filter{
 			float: left;
 		}
@@ -61,7 +73,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="table-responsive">
-					<table class="table cell-border" cellspacing="0" id="table2">
+					<table class="table" id="table2">
 						<thead>
 							<tr>
 								<th>Tuyến</th>
@@ -109,7 +121,6 @@
 				<div class="profile-location" id="device-address"></div>
 				<div class="profile-position" >Trạng thái: <img id="device-status" width="15px" height="15px"
 										src="/images/ic_blue.png" alt="" /></div>
-				<div class="mb20"></div>
 				<button id="btnNhanCong" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Nhân công</button> 
 				<button id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</button> 
 				<button id="btnPhucHoi" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Phục hồi </button>
@@ -161,7 +172,7 @@
 						
 						<div class ="row" >
 							<div class="col-sm" id="device-infor-1"
-									style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
+									style="border-bottom: 1px solid; border-color: gray;word-wrap: break-word;">
 							</div>
 							<div class="col-sm-6" style="display: none">
 								<p id="charTitle" style="display: none">Nhiệt độ.</p>
@@ -172,7 +183,7 @@
 						</div>
 						<div class ="row" >
 							<div class="col-sm" id="device-infor-2"
-									style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
+									style="border-bottom: 1px solid; border-color: gray;word-wrap: break-word;">
 							</div>
 						</div>
 						
