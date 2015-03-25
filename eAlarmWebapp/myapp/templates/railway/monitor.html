@@ -2,6 +2,9 @@
 {% block styles %}
 	<link href="/css/chart.css" rel="stylesheet">
 	<style>
+		.tab-pane{
+			min-height: 450px;
+		}
 		.profile-header{
 			margin-bottom: 10px;
 		}
@@ -32,9 +35,6 @@
 		#railway-infor .col-sm-2, .col-sm-3 {
 			display: inline-block; 
 			white-space: nowrap;
-		}
-		.tab-pane{
-		min-height: 600px;
 		}
 		.col-sm-6 p 
 		{ 
@@ -117,7 +117,7 @@
 	
 		<div class="col-sm-7">
 			<div class="profile-header">
-				<h2 class="profile-name" id="device-name"></h2>
+				<h4 class="profile-name" id="device-name"></h4>
 				<div class="profile-location" id="device-address"></div>
 				<div class="profile-position" >Trạng thái: <img id="device-status" width="15px" height="15px"
 										src="/images/ic_blue.png" alt="" /></div>
