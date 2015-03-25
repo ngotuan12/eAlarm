@@ -665,6 +665,7 @@ wss.on('connection', function(conn)
 					break;
 				case "monitor":
 					conn.monitor = true;
+					conn.send('Monitor ok!');
 					break;
 				default:
 					break;
