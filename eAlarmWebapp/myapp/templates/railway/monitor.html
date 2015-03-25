@@ -276,9 +276,9 @@
 	}
 	function onMessage(evt)
 	{
-		var data = evt.data;
-		console.log(JSON.stringify(evt.data));
-		console.log("handle" + JSON.stringify(evt.data.handle));
+		var data = evt.data.toString();
+		$.parseJSON( data );
+		console.log("handle" + JSON.stringify(data.handle));
 		switch (data.handle)
 		{
 			case "on_railway_change":
