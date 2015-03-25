@@ -278,6 +278,7 @@
 	{
 		var data = evt.data;
 		console.log(JSON.stringify(evt.data));
+		console.log("handle" + JSON.stringify(evt.data.handle));
 		switch (data.handle)
 		{
 			case "on_railway_change":
