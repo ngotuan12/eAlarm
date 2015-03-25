@@ -567,6 +567,7 @@ function updateOnchangeAction(socket,infors)
 	//send change rail way status to monitors
 	if(action_status !== socket.gatewayinfo.action_status)
 	{
+		socket.gatewayinfo.action_status = action_status;
 		var monitors = clients.filter(function (el){
 			return el.monitor === true;
 		});
