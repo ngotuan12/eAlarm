@@ -281,6 +281,7 @@
 				var device_id = data.device_id;
 				var action_status = data.action_status;
 				var railway_action = $("#railway-"+device_id);
+				device.action_status = action_status;
 				if(action_status==="1")
 				{
 					railway_action.html(">>>>>");
