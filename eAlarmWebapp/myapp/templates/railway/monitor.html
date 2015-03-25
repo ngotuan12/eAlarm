@@ -276,12 +276,14 @@
 	function onMessage(evt)
 	{
 		var data = evt.data;
+		console.log(JSON.stringify(evt.data));
 		switch (data.handle)
 		{
 			case "on_railway_change":
 				var device_id = data.device_id;
 				var action_status = data.action_status;
 				var railway_action = $("#railway-"+device_id);
+				console.log("#railway-"+device_id);
 				if(device.id === device_id)
 					device.action_status = action_status;
 				if(action_status==="1")
