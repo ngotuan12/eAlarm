@@ -573,7 +573,7 @@ function updateOnchangeAction(socket,infors)
 		});
 		for(var i=0;i<monitors.length;i++)
 		{
-			monitors[i].send({"handle":"on_railway_change","device_id":socket.gatewayinfo.id,"action_status":action_status});
+			monitors[i].send('{"handle":"on_railway_change","device_id":socket.gatewayinfo.id,"action_status":action_status}');
 		}
 	}
 }
