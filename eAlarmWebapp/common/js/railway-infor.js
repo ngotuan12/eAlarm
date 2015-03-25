@@ -208,7 +208,7 @@ function updateDeviceProperties(data)
 	if(device.action_status ==='1' ||device.action_status ==='2')
 	{
 		updateRailwayInfor(infors);
-		log(JSON.stringify(infors));
+		console.log(JSON.stringify(infors));
 	}
 	else
 		clearRailwayInfor();
