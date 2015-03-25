@@ -46,145 +46,138 @@
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
-	{% if devices %}
 	<div class="row">
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="table-responsive">
-				<table class="table table-hover" id="table2">
-					<thead>
-						<tr>
-							<th>Lý Trình</th>
-							<th>Tuyến</th>
-							<th>Địa chỉ</th>
-							
-							<th>MAC</th>
-							<th>Server</th>
-							<th>Trạng thái</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for device in devices %}
-						<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}">
-							<td>{{ device.name }}</td>
-							<td>{{ device.route.name }}</td>
-							<td><a href="#">{{ device.address }}</a></td>
-							<td>{{ device.mac_add }}</td>
-							<td class="center">{{ device.connected_server }}</td>
-							<td class="center">
-								<p id ="device-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
-									{% if  device.action_status == '1' %}
-										>>>>>
-									{% elif device.action_status == '2' %}
-										<<<<<
+		{% if devices %}
+		<div class="col-sm-5">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-hover" id="table2">
+						<thead>
+							<tr>
+								<th>Tuyến</th>
+								<th>Lý Trình</th>
+								<th>Trạng thái</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for device in devices %}
+							<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}">
+								<td>{{ device.route.name }}</td>
+								<td>{{ device.name }}</td>
+								<td class="center">
+									<p id ="device-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
+										{% if  device.action_status == '1' %}
+											>>>>>
+										{% elif device.action_status == '2' %}
+											<<<<<
+										{% endif %}
+									</p>
+									{% if  device.status == '0' %}
+										<p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
+									{% elif device.status == '1' %}
+										<p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" />
+									{% elif device.status == '2' %}
+										<p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" />
 									{% endif %}
-								</p>
-								{% if  device.status == '0' %}
-									<p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
-								{% elif device.status == '1' %}
-									<p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" />
-								{% elif device.status == '2' %}
-									<p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" />
-								{% endif %}
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-			<!-- table-responsive -->
-
-		</div>
-		<!-- panel-body -->
-	</div>
-	<!-- panel -->
-	</div>
-
-	<div class="row">
-		<!-- <div class="panel-heading">
-			
-		</div> -->
-		<!-- panel-heading -->
-			<ul class="nav nav-tabs" id="myTab">
-				<li class="active"><a href="#railway-status" data-toggle="tab">Trạng thái</a></li>
-				<li><a href="#railway-history" data-toggle="tab">Lịch sử</a></li>
-				<!-- <li><a href="#messages">Messages</a></li>
-				<li><a href="#settings">Settings</a></li> -->
-			</ul>
-			<div class="tab-content" style="padding: 10px">
-				<div class="tab-pane" id="railway-history"> </div>
-				<div class="tab-pane active" id="railway-status">
-					<div class="row"
-						style=" border-bottom: 1px solid; border-color: gray;margin-top: 10px;">
-						<div class="col-sm-6"><h3 id="device-name"></h3>
-								Trạng thái: <img id="device-status" width="15px" height="15px"
-									src="/images/ic_blue.png" alt="" />
-						</div>
-						<div class="col-sm-6" style="padding: 10px;left: 10%">
-							<a id="btnNhanCong" class="btn btn-danger" style="width: 100px;margin-right: 5px;"> Nhân công</a> 
-							<a id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</a> 
-							<a id="btnPhucHoi" class="btn btn-success" style="width: 100px"> Phục hồi </a>
-						</div>
-					</div>
-				
-					<div class="row"
-						style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;" >
-						<div class="col-sm-6" style="display: none;">
-							<p id="device-mac" style="display: none"></p>
-							<p id="device-server" style="display: none"></p>
-							<p id="device-issue" style="display: none;"></p>
-						</div>
-						<div class="col-sm" id="railway-infor">
-							<div class="row">
-								<div class="col-sm-2">CB1 &nbsp; ------ <p id="CB1"></p></div>
-								<div class="col-sm-2">CB2 &nbsp; ------ <p id="CB2"></p></div>
-								<div class="col-sm-2">CB3 &nbsp; ------ <p id="CB3"></p></div>
-								<div class="col-sm-2">CB4 &nbsp; ------ <p id="CB4"></p></div>
-								<div class="col-sm-2">CB5 &nbsp; ------ <p id="CB5"></p> </div>
-								<div class="col-sm-2">CB6 <p id="CB6"></p></div>
-							</div>
-							<div class="row">
-								<div class="col-sm-3">RED1: <p id="RED1"></p></div>
-								<div class="col-sm-3">RED2: <p id="RED2"></p></div>
-								<div class="col-sm-3">RED3: <p id="RED3"></p></div>
-								<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
-							</div>
-							<div class="row">
-								<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
-								<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
-								<div class="col-sm-3">RING1: <p id="RING1"></p></div>
-								<div class="col-sm-3">RING2: <p id="RING2"></p></div>
-							</div>
-						</div>
-					</div>
-					
-					<div class ="row" >
-						<div class="col-sm" id="device-infor-1"
-								style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
-						</div>
-						<div class="col-sm-6" style="display: none">
-							<p id="charTitle" style="display: none">Nhiệt độ.</p>
-							<div class="demo-container">
-								<div id="placeholder" class="demo-placeholder"></div>
-							</div>
-						</div>
-					</div>
-					<div class ="row" >
-						<div class="col-sm" id="device-infor-2"
-								style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
-						</div>
-					</div>
-					
-					<div style="display: none;">
-						
-					</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
-			</div>	
-			<!-- tab-content -->
-			
-		<!-- panel-body -->
+				<!-- table-responsive -->
+	
+			</div>
+			<!-- panel-body -->
+		</div>
+		<!-- panel -->
+		</div>
+	
+		<div class="col-sm-7">
+			<div class="profile-header">
+				<h2 class="profile-name" id="device-name"></h2>
+				<div class="profile-location" id="device-address"></div>
+				<div class="profile-position" >Trạng thái: <img id="device-status" width="15px" height="15px"
+										src="/images/ic_blue.png" alt="" /></div>
+				<div class="mb20"></div>
+				<button id="btnNhanCong" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Nhân công</button> 
+				<button id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</button> 
+				<button id="btnPhucHoi" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Phục hồi </button>
+				<button id="btnCuongBuc" class="btn btn-warning" style="width: 100px"> Cưỡng bức </button>
+			</div>
+			<!-- <div class="panel-heading">
+				
+			</div> -->
+			<!-- panel-heading -->
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#railway-status" data-toggle="tab">Trạng thái</a></li>
+					<li><a href="#railway-history" data-toggle="tab">Lịch sử</a></li>
+					<!-- <li><a href="#messages">Messages</a></li>
+					<li><a href="#settings">Settings</a></li> -->
+				</ul>
+				<div class="tab-content" style="padding: 10px">
+					<div class="tab-pane" id="railway-history"> </div>
+					<div class="tab-pane active" id="railway-status">
+						<div class="row"
+							style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;" >
+							<div class="col-sm-6" style="display: none;">
+								<p id="device-mac" style="display: none"></p>
+								<p id="device-server" style="display: none"></p>
+								<p id="device-issue" style="display: none;"></p>
+							</div>
+							<div class="col-sm" id="railway-infor">
+								<div class="row">
+									<div class="col-sm-2">CB1 &nbsp; ------ <p id="CB1"></p></div>
+									<div class="col-sm-2">CB2 &nbsp; ------ <p id="CB2"></p></div>
+									<div class="col-sm-2">CB3 &nbsp; ------ <p id="CB3"></p></div>
+									<div class="col-sm-2">CB4 &nbsp; ------ <p id="CB4"></p></div>
+									<div class="col-sm-2">CB5 &nbsp; ------ <p id="CB5"></p> </div>
+									<div class="col-sm-2">CB6 <p id="CB6"></p></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3">RED1: <p id="RED1"></p></div>
+									<div class="col-sm-3">RED2: <p id="RED2"></p></div>
+									<div class="col-sm-3">RED3: <p id="RED3"></p></div>
+									<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
+									<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
+									<div class="col-sm-3">RING1: <p id="RING1"></p></div>
+									<div class="col-sm-3">RING2: <p id="RING2"></p></div>
+								</div>
+							</div>
+						</div>
+						
+						<div class ="row" >
+							<div class="col-sm" id="device-infor-1"
+									style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
+							</div>
+							<div class="col-sm-6" style="display: none">
+								<p id="charTitle" style="display: none">Nhiệt độ.</p>
+								<div class="demo-container">
+									<div id="placeholder" class="demo-placeholder"></div>
+								</div>
+							</div>
+						</div>
+						<div class ="row" >
+							<div class="col-sm" id="device-infor-2"
+									style="border-bottom: 1px solid; border-color: gray;white-space: pre-wrap; /* CSS3 */ white-space: -moz-pre-wrap; /* Firefox */ white-space: -pre-wrap; /* Opera &lt;7 */ white-space: -o-pre-wrap; /* Opera 7 */ word-wrap: break-word;">
+							</div>
+						</div>
+						
+						<div style="display: none;">
+							
+						</div>
+					</div>
+				</div>	
+				<!-- tab-content -->
+				
+			<!-- panel-body -->
+		</div>
+		{% endif %}
 	</div>
-	{% endif %}
 </div>
 <!-- contentpanel -->
 {% endblock %} 

@@ -6,6 +6,7 @@ var currentDeviceInforID;
 var InforIndex = 0;
 var device_infor;
 var device;
+var route;
 var tid;
 var codes = ["X1","X2","X3","X4","X5","X6","I1","I2","I3","I4","I5","I6","I7","I8"];
 function onGetDeviceInfor(device_id) {
@@ -20,6 +21,7 @@ function onGetDeviceInfor(device_id) {
 		InforIndex = 0;
 		device_infor = data.device_infor;
 		device = data.device;
+		route = data.route;
 		resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
 		updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
@@ -52,12 +54,11 @@ function updateDevice()
 {
 	//update device name
 	var deviceName = $('#device-name');
+	deviceName.html("<a href=\"#\">"+route.name+" </a> - "+device.name);
 	
-	deviceName.html("<a href=\"#\">"+device.code+" </a> - "+device.address);
-	var deviceMac = $('#device-mac');
-	deviceMac.html("MAC: "+device.mac_add);
-	var deviceServer = $('#device-server');
-	deviceServer.html("Connected server: "+nvl(device.connected_server,"Chưa kết nối"));
+	var deviceAddress = $('#device-address');
+	deviceAddress.html(" "+device.address);
+	
 	var deviceStatus = $('#device-status');
 	//device status on table
 	var deviceStatusTable = $('#device-status-'+device.id);
