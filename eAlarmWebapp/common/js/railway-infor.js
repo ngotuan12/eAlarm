@@ -211,7 +211,6 @@ function updateDeviceProperties(data)
 			return el.properties.m_type === '2'||el.properties.m_type === '5';
 		});
 		updateRailwayInfor(infors);
-		console.log(JSON.stringify(infors));
 	}
 	else
 		clearRailwayInfor();
