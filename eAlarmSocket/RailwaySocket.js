@@ -355,7 +355,7 @@ function findGatewayByGMac(gmac)
 function checkMac(request, socket)
 {
 	log(request.body.G_MAC);
-	var strSQL = "SELECT id,mac_add,connected_server,`status`,`type` FROM device WHERE mac_add = ? ";
+	var strSQL = "SELECT id,mac_add,connected_server,`status`,`type`,`action_status` FROM device WHERE mac_add = ? ";
 	connDB
 			.query(
 					strSQL,
@@ -538,7 +538,9 @@ function updateOnchangeAction(socket,infors)
 {
 	var action_status = socket.gatewayinfo.action_status;
 	log("Action status: " + socket.gatewayinfo.action_status);
-	
+	log("Info:"+ JSON.stringify(infors));
+	log("X1: " + infors.X1);
+	log("X6: " + infors.X6);
 	if((infors.X1 > 0 || infors.X2 >0) && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
 		action_status = "1";
@@ -551,6 +553,7 @@ function updateOnchangeAction(socket,infors)
 	{
 		action_status = "0";
 	}
+	log("Current action status: " + action_status);
 	//update action status
 	var strSQL = "UPDATE device SET action_status = ? WHERE id = ? "; 
 	connDB.query(strSQL, [action_status,socket.gatewayinfo.id], function(err)
