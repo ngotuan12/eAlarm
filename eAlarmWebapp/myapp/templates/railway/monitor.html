@@ -275,7 +275,7 @@
 	}
 	function onMessage(evt)
 	{
-		var data = JSON.parse(evt.data.toString());
+		var data = evt.data;
 		switch (data.handle)
 		{
 			case "on_railway_change":
