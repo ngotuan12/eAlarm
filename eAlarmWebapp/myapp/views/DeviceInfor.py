@@ -19,11 +19,14 @@ def index(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor= DeviceInfor.objects.filter(device_id=device,status='1',device_pro__on_railway='0').order_by('device_pro__id')
+		device_infor= DeviceInfor.objects.filter(device_id=device,status='1').order_by('device_pro__id')
 # 		print(device_infor.query)
 		infors =[]
 		for infor in device_infor:
 			infors.append({'id':infor.id,'value':infor.value,'status':infor.status,'properties':model_to_dict(infor.device_pro)})
-		return HttpResponse(json.dumps({'device_infor':infors,'device':model_to_dict(device),'route':model_to_dict(device.route)}) ,content_type="application/json")
+		route = None
+		if device.route is not None:
+			route = model_to_dict(device.route)
+		return HttpResponse(json.dumps({'device_infor':infors,'device':model_to_dict(device),'route':route}) ,content_type="application/json")
 	except Exception as ex:
 		return HttpResponse(json.dumps({"error": str(ex)}),content_type="application/json")
