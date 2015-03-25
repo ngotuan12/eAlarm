@@ -276,7 +276,8 @@
 	function onMessage(evt)
 	{
 		var data = JSON.parse(evt.data.toString());
-		switch (data.handle):
+		switch (data.handle)
+		{
 			case "on_railway_change":
 				var device_id = data.device_id;
 				var action_status = data.action_status;
@@ -298,6 +299,7 @@
 				break;
 			default:
 				break;
+		}
 	}
 	function onError(evt)
 	{
