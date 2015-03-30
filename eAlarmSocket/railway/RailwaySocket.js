@@ -9,7 +9,7 @@ var delay_time = 30000;
 
 var net = require('net'), fs = require('fs');
 var util = require("util");
-var gjson = require("./json_sans_eval.js");
+var gjson = require("../json_sans_eval.js");
 var gateways = {};
 var dispatchers = [];
 var monitors = [];
@@ -20,9 +20,9 @@ var server_ip = '10.10.0.17:6666';
 var ip = '10.10.0.17';
 //var ip = '0.0.0.0';
 var clients = [];
-var connDB = require("./RailwayAppServer.js").connDB;
+var connDB = require("../util/RailwayAppServer.js").connDB;
 
-var logFile = fs.createWriteStream('./log/RailwayErrorLog.txt');
+var logFile = fs.createWriteStream('../log/RailwayErrorLog.txt');
 //-----------------------------------------
 //FUNCTION
 //-----------------------------------------
