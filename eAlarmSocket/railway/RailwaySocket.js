@@ -520,8 +520,8 @@ function onClose(socket)
 		if (socket.gatewayinfo !== null)
 		{
 			log('gateway_id' + socket.gatewayinfo.id);
-			var tid = setTimeout(timeOutFromServer(socket.gatewayinfo.id),
-					delay_time);
+			var tid = setTimeout(timeOutFromServer,
+					delay_time,socket.gatewayinfo.id);
 			gateways[socket.gatewayinfo.id] = {
 				last_connect : new Date(),
 				tid : tid,
