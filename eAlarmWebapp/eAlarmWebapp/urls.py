@@ -79,6 +79,9 @@ urlpatterns = patterns('',
     url(r'^group$', Group.view_group,name='user'),
     url(r'^permission-error$', Error.permission_error,name='permission-error'),
     url(r'^notfound-error$', Error.notfound_error,name='notfound-error'),
+    # Ajax
+    url(r'^ajax-railway-history$', DeviceInfor.getRaiwayHistory,name='ajax-railway-history'),
+    # System
     url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
     url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : True, }),
 )

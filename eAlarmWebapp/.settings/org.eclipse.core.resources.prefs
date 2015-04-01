@@ -4,3 +4,5 @@ encoding//myapp/views/AddArea.py=utf8
 encoding//myapp/views/AddDevice.py=utf8
 encoding//myapp/views/EditDevice.py=utf8
 encoding//myapp/views/Error.py=utf-8
+encoding/<project>=UTF-8
+separateDerivedEncodings=true

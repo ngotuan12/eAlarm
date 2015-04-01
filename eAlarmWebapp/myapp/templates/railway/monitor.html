@@ -139,13 +139,48 @@
 			</div> -->
 			<!-- panel-heading -->
 				<ul class="nav nav-tabs" id="myTab">
-					<li class="active"><a href="#railway-status" data-toggle="tab">Trạng thái</a></li>
-					<li><a href="#railway-history" data-toggle="tab">Lịch sử</a></li>
+					<li class="active" ><a href="#railway-status"  id='tab-railway-status' data-toggle="tab">Trạng thái</a></li>
+					<li ><a href="#railway-history"  id='tab-railway-history' data-toggle="tab">Lịch sử</a></li>
 					<!-- <li><a href="#messages">Messages</a></li>
 					<li><a href="#settings">Settings</a></li> -->
 				</ul>
 				<div class="tab-content" style="padding: 10px">
-					<div class="tab-pane" id="railway-history"> </div>
+					<div class="tab-pane" id="railway-history">
+						<div class="row"> 
+							<div class="col-sm-5"> 
+								<div class="table-responsive">
+									<table class="table" id="table3">
+										<thead>
+											<tr>
+												<th>STT</th>
+												<th>Phiên làm việc</th>
+												<th>Băt đầu</th>
+												<th>Kết thúc</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div> 
+							
+							<div class="col-sm-7">
+								<div class="table-responsive">
+									<table class="table" id="table4">
+										<thead>
+											<tr>
+												<th>Cảm biến</th>
+												<th>Giá trị</th>
+												<th>Trạng thái</th>
+											</tr>
+										</thead>
+										<tbody id="sessiondetail_table">
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="tab-pane active" id="railway-status">
 						<div class="row"
 							style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;" >
@@ -364,6 +399,7 @@
 				disable_search_threshold : 10
 			});
 		$("input").attr("placeholder","Tìm kiếm");
+		
 		$('#table2 tbody tr').click(function(e)
 		{
 			device_id = $(this).attr('id');
@@ -371,7 +407,37 @@
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 			onGetDeviceInfor(device_id);
+			$('#tab-railway-history').parent().hasClass('active')
+			{
+				$('#tab-railway-history').parent().removeClass('active');
+			}
+			$('#railway-history').hasClass('active')
+			{
+				$('#railway-history').removeClass('active');
+			}
+			
+			!$('#tab-railway-status').parent().hasClass('active')
+			{
+				$('#tab-railway-status').parent().addClass('active');
+			}
+			
+			!$('#railway-status').hasClass('active')
+			{
+				$('#railway-status').addClass('active');
+			}
 		});
+		$('#tab-railway-history').click(function(e)
+		{
+			showRailwayHistory();
+		});
+		
+		$('#table3 tbody tr').click(function(e)
+		{
+			session_id = $(this).attr('id');
+			$("#table3 tbody tr[session_id][session_id='"+ session_id +"']").css('background-color','#8EE2BC');
+			$("#table3 tbody tr[session_id][session_id!='"+ session_id +"']").css('background-color','#fff');			
+			onShowDetailSessionHistory(session_id);
+		});					
 		//onGetDeviceInfor({{ devices.0.id }});
 		$('#btnNhanCong').click(function(e)
 		{

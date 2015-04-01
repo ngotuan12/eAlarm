@@ -11,3 +11,8 @@ class DateEncoder(JSONEncoder):
         if isinstance(obj, datetime.date):
             return obj.strftime('%d/%m/%Y')
         return JSONEncoder.default(self, obj)
+class DateTimeEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.date):
+            return obj.strftime('%d/%m/%Y %H:%M:%S')
+        return JSONEncoder.default(self, obj)
