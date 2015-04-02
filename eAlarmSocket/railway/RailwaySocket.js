@@ -505,7 +505,8 @@ function timeOutFromServer(gateway_id)
 			"value" : null,
 			"device_pro_id" : null
 		} ]);
-		gateways[gateway_id] = null;
+		//gateways[gateway_id] = null;
+		delete gateways[gateway_id];
 	}
 
 }
