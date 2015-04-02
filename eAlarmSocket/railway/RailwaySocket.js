@@ -500,7 +500,7 @@ function timeOutFromServer(gateway_id)
 	if (typeof gateways[gateway_id].tid !=='undefined')
 	{
 		clearTimeout(gateways[gateway_id].tid);
-		updateDevice(null, gateway_id, '0', '', "Mất kết nối với server.", [ {
+		updateDevice({"current_transaction_id":gateways[gateway_id].current_transaction_id}, gateway_id, '0', '', "Mất kết nối với server.", [ {
 			"description" : "Mất kết nỗi với server",
 			"value" : null,
 			"device_pro_id" : null
