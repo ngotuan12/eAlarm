@@ -145,20 +145,20 @@
 					<li><a href="#settings">Settings</a></li> -->
 				</ul>
 				<div class="tab-content" style="padding: 10px">
-					<div class="tab-pane" id="railway-history">
+					<div class="tab-pane" id="railway-history">					
 						<div class="row"> 
 							<div class="col-sm-5"> 
 								<div class="table-responsive">
 									<table class="table" id="table3">
 										<thead>
 											<tr>
-												<th>STT</th>
-												<th>Phiên làm việc</th>
+												<th>Phiên </th>
 												<th>Băt đầu</th>
 												<th>Kết thúc</th>
 											</tr>
 										</thead>
 										<tbody>
+											<tr></tr>
 										</tbody>
 									</table>
 								</div>
@@ -171,10 +171,11 @@
 											<tr>
 												<th>Cảm biến</th>
 												<th>Giá trị</th>
+												<th>Thời gian</th>
 												<th>Trạng thái</th>
 											</tr>
 										</thead>
-										<tbody id="sessiondetail_table">
+										<tbody>
 										</tbody>
 									</table>
 								</div>
@@ -347,6 +348,12 @@
 	{
 		websocket.send(message);
 	}
+	function clickTR(railway_session_id)
+	{		
+		$("#table3 tbody tr[railway_session_id][railway_session_id ='"+ railway_session_id +"']").css('background-color','#8EE2BC');
+		$("#table3 tbody tr[railway_session_id][railway_session_id !='"+ railway_session_id +"']").css('background-color','#fff');			
+		showRailwayDetailHistory(railway_session_id);
+	}
 	jQuery(document).ready(function() {
 		var tid1;
 		var temp = true;
@@ -429,15 +436,9 @@
 		$('#tab-railway-history').click(function(e)
 		{
 			showRailwayHistory();
+			$('#table3').addClass('active');
 		});
 		
-		$('#table3 tbody tr').click(function(e)
-		{
-			session_id = $(this).attr('id');
-			$("#table3 tbody tr[session_id][session_id='"+ session_id +"']").css('background-color','#8EE2BC');
-			$("#table3 tbody tr[session_id][session_id!='"+ session_id +"']").css('background-color','#fff');			
-			onShowDetailSessionHistory(session_id);
-		});					
 		//onGetDeviceInfor({{ devices.0.id }});
 		$('#btnNhanCong').click(function(e)
 		{

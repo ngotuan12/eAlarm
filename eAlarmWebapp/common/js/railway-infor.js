@@ -43,22 +43,75 @@ function showRailwayHistory()
 	{
 		var tbody = $('#table3 tbody');
 		tbody.empty();
+		sessions = data.railway_sessions;
 		//alert(JSON.stringify(data.railway_session));
-		for(var i=0;i<data.railway_session.length;i++)
+		for(var i=0;i<sessions.length;i++)
 		{
+			railway_session = sessions[i];
+			//var row = $('<tr class="odd gradeX" id="'+ railway_session.id +'"></tr>');
+			var row = $('<tr class="odd gradeX" id="'+ railway_session.id + '"></tr>');
+			
+			//STT
+			//row.append($('<td>'+ (i+1).toString() +'</td>'));
+			//Phien 
+			row.append($('<td>' + railway_session.id + '</td>'));
+			//start date
+			row.append($('<td>' + railway_session.start_date + '</td>'));
+			//start date
+			row.append($('<td>' + railway_session.end_date + '</td>'));
+			//append to body
+			tbody.append(row);
+		}
+		$('#table3 tbody tr').click(function(e)
+		{
+//			alert('adasdasd');
+			railway_session_id = $(this).attr('id');
+			$("#table3 tbody tr[id][id='"+ railway_session_id +"']").css('background-color','#8EE2BC');
+			$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
+//			alert(railway_session_id);
+			showRailwayDetailHistory(railway_session_id);
+		});
+		$('#table3 tbody tr').first().click();
+	});
+	//hide loading
+	//$.fn.loading.hide();
+}
+function showRailwayDetailHistory(railway_session_id)
+{
+	var csrftoken = $.cookie('csrftoken');
+	var posting = $.post("/ajax-railway-detail-history", {
+		'csrfmiddlewaretoken' : csrftoken,
+		'railway_session_id' : railway_session_id,
+	});
+	
+	posting.done(function(data) 
+	{
+		var tbody = $('#table4 tbody');
+		tbody.empty();
+		railway_detail_sessions = data.railway_detail_sessions;
+		//alert(JSON.stringify(data.railway_session));
+		for(var i=0;i<railway_detail_sessions.length;i++)
+		{
+			railway_detail_session = railway_detail_sessions[i];
 			var row = $('<tr></tr>');
 			//STT
-			row.append($('<td>'+ (i+1).toString() +'</td>'));
-			//Phien 
-			row.append($('<td></td>'));
+			//row.append($('<td>'+ (i+1).toString() +'</td>'));
+			//infor_device 
+			row.append($('<td>' + railway_detail_session.property.name + '</td>'));
+			//value
+			row.append($('<td>' + railway_detail_session.detail.value + '</td>'));
 			//start date
-			row.append($('<td></td>'));
-			//start date
-			row.append($('<td></td>'));
+			row.append($('<td>' + railway_detail_session.detail.start_date + '</td>'));
+			//end date
+			//row.append($('<td>' + railway_detail_session.end_date + '</td>'));
+			//status
+			row.append($('<td>' + railway_detail_session.detail.status + '</td>'));			
 			//append to body
 			tbody.append(row);
 		}
 	});
+	//hide loading
+	//$.fn.loading.hide();
 }
 function getCurrentDeviceInfor()
 {
