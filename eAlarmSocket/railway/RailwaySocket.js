@@ -500,7 +500,7 @@ function timeOutFromServer(gateway_id)
 	if (typeof gateways[gateway_id].tid !=='undefined')
 	{
 		clearTimeout(gateways[gateway_id].tid);
-		updateDevice(null, gateway_id, '0', '', "Mất kết nối với server.", [ {
+		updateDevice({"current_transaction_id":gateways[gateway_id].current_transaction_id}, gateway_id, '0', '', "Mất kết nối với server.", [ {
 			"description" : "Mất kết nỗi với server",
 			"value" : null,
 			"device_pro_id" : null
@@ -604,62 +604,65 @@ function updateOnchangeAction(socket,infors)
 		action_status = "0";
 	}
 	
-	if(infors.X1 > 0)
+	if(typeof railway_session!=='undefined')
 	{
-		railway_session.infors.X1 = infors.X1;
-	}
-	if(infors.X2 > 0)
-	{
-		railway_session.infors.X2 = infors.X2;
-	}
-	if(infors.X3 > 0)
-	{
-		railway_session.infors.X3 = infors.X3;
-	}
-	if(infors.X4 > 0)
-	{
-		railway_session.infors.X4 = infors.X4;
-	}
-	if(infors.X5 > 0)
-	{
-		railway_session.infors.X5 = infors.X5;
-	}
-	if(infors.X6 > 0)
-	{
-		railway_session.infors.X6 = infors.X6;
-	}
-	
-	if(infors.I1 > 0)
-	{
-		railway_session.infors.I1 = infors.I1;
-	}
-	if(infors.I2 > 0)
-	{
-		railway_session.infors.I2 = infors.I2;
-	}
-	if(infors.I3 > 0)
-	{
-		railway_session.infors.I3 = infors.I3;
-	}
-	if(infors.I4 > 0)
-	{
-		railway_session.infors.I4 = infors.I4;
-	}
-	if(infors.I5 > 0)
-	{
-		railway_session.infors.I5 = infors.I5;
-	}
-	if(infors.I6 > 0)
-	{
-		railway_session.infors.I6 = infors.I6;
-	}
-	if(infors.I7 > 0)
-	{
-		railway_session.infors.I7 = infors.I7;
-	}
-	if(infors.I8 > 0)
-	{
-		railway_session.infors.I8 = infors.I8;
+		if(infors.X1 > 0)
+		{
+			railway_session.infors.X1 = infors.X1;
+		}
+		if(infors.X2 > 0)
+		{
+			railway_session.infors.X2 = infors.X2;
+		}
+		if(infors.X3 > 0)
+		{
+			railway_session.infors.X3 = infors.X3;
+		}
+		if(infors.X4 > 0)
+		{
+			railway_session.infors.X4 = infors.X4;
+		}
+		if(infors.X5 > 0)
+		{
+			railway_session.infors.X5 = infors.X5;
+		}
+		if(infors.X6 > 0)
+		{
+			railway_session.infors.X6 = infors.X6;
+		}
+		
+		if(infors.I1 > 0)
+		{
+			railway_session.infors.I1 = infors.I1;
+		}
+		if(infors.I2 > 0)
+		{
+			railway_session.infors.I2 = infors.I2;
+		}
+		if(infors.I3 > 0)
+		{
+			railway_session.infors.I3 = infors.I3;
+		}
+		if(infors.I4 > 0)
+		{
+			railway_session.infors.I4 = infors.I4;
+		}
+		if(infors.I5 > 0)
+		{
+			railway_session.infors.I5 = infors.I5;
+		}
+		if(infors.I6 > 0)
+		{
+			railway_session.infors.I6 = infors.I6;
+		}
+		if(infors.I7 > 0)
+		{
+			railway_session.infors.I7 = infors.I7;
+		}
+		if(infors.I8 > 0)
+		{
+			railway_session.infors.I8 = infors.I8;
+		}
 	}
 //	//kiem tra chuong den
 //	if(action_status === "1")
