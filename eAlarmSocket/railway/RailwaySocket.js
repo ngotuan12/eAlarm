@@ -998,18 +998,25 @@ var socketServer = net.createServer(function(socket)
 		}
 	});
 });
+function alive()
+{
+	log("ALIVE");
+	connDB.query("SELECT NOW() ");
+}
 /**
  * @author TuanNA
  * @since: 15/09/2014
  */
 function start()
 {
+	setInterval(alive,300000);
 	// listen socket
 	socketServer.listen(6666, ip);
 	// listen websocket
 	log('socket server start on port 6666');
 	log('websocket server start on port 8080');
 }
+
 
 //-----------------------------------------
 //EXPORT
