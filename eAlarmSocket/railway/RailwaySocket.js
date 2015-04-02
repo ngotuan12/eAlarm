@@ -23,6 +23,7 @@ var clients = [];
 var connDB = require("../util/RailwayAppServer.js").connDB;
 
 var logFile = fs.createWriteStream('./log/RailwayErrorLog.txt');
+var railway_session;
 //-----------------------------------------
 //FUNCTION
 //-----------------------------------------
@@ -534,6 +535,43 @@ function onClose(socket)
 	socket.end();
 }
 
+/**
+ * @param device_id
+ * @param railway_session
+ */
+function createRailwaySession(device_id,railway_session)
+{
+	var strSQL = "INSERT INTO railway_session(`device_id`,`start_date`,`end_date`,`status`) " +
+			" VALUES(?,?,?,?)";
+	var infors = railway_session.infors;
+	connDB.query(strSQL, [ device_id,railway_session.start_date,railway_session.end_date,railway_session.action_status ], function(err, rows, fields)
+	{
+		if (err)
+		{
+			log(err);
+			return;
+		}
+		var railway_session_id = rows.insertId;
+		//update device
+		for (var key in infors)
+		{
+			if (infors.hasOwnProperty(key))
+			{
+				strSQL = "INSERT INTO railway_session_detail(`r_id`,`infor_id`,`value`,`issue_date`,`status`) " +
+						" VALUES( ?,(SELECT a.id FROM device_infor a,device_properties b WHERE "+ 
+						"a.device_id = ? "+
+						"AND a.device_pro_id = b.id "+
+						"AND b.code = ? ),? ,now() , ? ) ";
+				connDB.query(strSQL, [ railway_session_id,device_id ,key , infors[key],railway_session.action_status ]);
+			}
+		}
+	});
+}
+
+/**
+ * @param socket
+ * @param infors
+ */
 function updateOnchangeAction(socket,infors)
 {
 	var action_status = socket.gatewayinfo.action_status;
@@ -544,36 +582,123 @@ function updateOnchangeAction(socket,infors)
 	if((infors.X1 > 0 || infors.X2 >0) && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
 		action_status = "1";
+		railway_session = {};
+		railway_session.action_status = action_status;
+		railway_session.start_date = new Date();
+		railway_session.infors = {};
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && (infors.X5 > 0 || infors.X6 > 0))
 	{
 		action_status = "2";
+		railway_session = {};
+		railway_session.action_status = action_status;
+		railway_session.start_date = new Date();
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
+		if(typeof railway_session!=='undefined')
+		{
+			railway_session.end_date = new Date();
+			createRailwaySession(socket.gatewayinfo.id,railway_session);
+		}
 		action_status = "0";
 	}
-	log("Current action status: " + action_status);
-	//update action status
-	var strSQL = "UPDATE device SET action_status = ? WHERE id = ? "; 
-	connDB.query(strSQL, [action_status,socket.gatewayinfo.id], function(err)
+	
+	if(infors.X1 > 0)
 	{
-		if (err)
-		{
-			log(err);
-			return;
-		}
-	});
+		railway_session.infors.X1 = infors.X1;
+	}
+	if(infors.X2 > 0)
+	{
+		railway_session.infors.X2 = infors.X2;
+	}
+	if(infors.X3 > 0)
+	{
+		railway_session.infors.X3 = infors.X3;
+	}
+	if(infors.X4 > 0)
+	{
+		railway_session.infors.X4 = infors.X4;
+	}
+	if(infors.X5 > 0)
+	{
+		railway_session.infors.X5 = infors.X5;
+	}
+	if(infors.X6 > 0)
+	{
+		railway_session.infors.X6 = infors.X6;
+	}
+	
+	if(infors.I1 > 0)
+	{
+		railway_session.infors.I1 = infors.I1;
+	}
+	if(infors.I2 > 0)
+	{
+		railway_session.infors.I2 = infors.I2;
+	}
+	if(infors.I3 > 0)
+	{
+		railway_session.infors.I3 = infors.I3;
+	}
+	if(infors.I4 > 0)
+	{
+		railway_session.infors.I4 = infors.I4;
+	}
+	if(infors.I5 > 0)
+	{
+		railway_session.infors.I5 = infors.I5;
+	}
+	if(infors.I6 > 0)
+	{
+		railway_session.infors.I6 = infors.I6;
+	}
+	if(infors.I7 > 0)
+	{
+		railway_session.infors.I7 = infors.I7;
+	}
+	if(infors.I8 > 0)
+	{
+		railway_session.infors.I8 = infors.I8;
+	}
+//	//kiem tra chuong den
+//	if(action_status === "1")
+//	{
+//		if((infors.X1 > 0 || infors.X2 >0 || infors.X3 > 0 && infors.X4 > 0)&& infors.X5 === 0 && infors.X6 === 0)
+//		{
+//			railway_session
+//		}
+//	}
+//	else if(action_status === "2")
+//	{
+//		if(infors.X1 === 0 && infors.X2 === 0 && (infors.X3 > 0 || infors.X4 > 0 || infors.X5 > 0 || infors.X6 > 0))
+//		{
+//			
+//		}
+//	}
+	log("Current action status: " + action_status);
 	//send change rail way status to monitors
 	if(action_status !== socket.gatewayinfo.action_status)
 	{
-		socket.gatewayinfo.action_status = action_status;
-		var monitors = clients.filter(function (el){
-			return el.monitor === true;
-		});
-		for(var i=0;i<monitors.length;i++)
+		//update action status
+		var strSQL = "UPDATE device SET action_status = ? WHERE id = ? "; 
+		connDB.query(strSQL, [action_status,socket.gatewayinfo.id], function(err)
 		{
-			monitors[i].send('{"handle":"on_railway_change","device_id":socket.gatewayinfo.id,"action_status":action_status}');
+			if (err)
+			{
+				log(err);
+				return;
+			}
+		});
+		socket.gatewayinfo.action_status = action_status;
+		
+		for(var i=0;i<clients.length;i++)
+		{
+			if(clients[i].monitor)
+			{
+				clients[i].send('{"handle":"on_railway_change","device_id":"'+socket.gatewayinfo.id+'","action_status":"'+action_status+'"}');
+			}
+			
 		}
 	}
 }
@@ -857,7 +982,7 @@ var socketServer = net.createServer(function(socket)
 			}
 			for(var i=0;i<clients.length;i++)
 			{
-				if(clients[i].device_id === socket.gatewayinfo.id)
+				if(typeof clients[i] !== 'undefined'&& typeof socket.gatewayinfo !== 'undefined'  && clients[i].device_id === socket.gatewayinfo.id)
 				{
 					clients[i].send(JSON.stringify(request));
 				}
