@@ -596,8 +596,11 @@ function updateOnchangeAction(socket,infors)
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		railway_session.end_date = new Date();
-		createRailwaySession(socket.gatewayinfo.id,railway_session);
+		if(typeof railway_session!=='undefined')
+		{
+			railway_session.end_date = new Date();
+			createRailwaySession(socket.gatewayinfo.id,railway_session);
+		}
 		action_status = "0";
 	}
 	
