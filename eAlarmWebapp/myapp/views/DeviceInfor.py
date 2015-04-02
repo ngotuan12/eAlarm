@@ -13,6 +13,8 @@ from django.views.decorators.http import require_http_methods
 from myapp.models.Device import Device
 from myapp.models.DeviceInfor import DeviceInfor
 from myapp.models.RailwaySession import RailwaySession
+from myapp.models.RailwaySessionDetail import RailwaySessionDetail
+
 from myapp.util import DateEncoder
 
 
@@ -40,9 +42,21 @@ def getRaiwayHistory(request):
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
 		histories= RailwaySession.objects.filter(device = device)
-		railway_session = []
+		railway_sessions = []
 		for history in histories:
-			railway_session.append(model_to_dict(history))
-		return HttpResponse(json.dumps({'railway_session':railway_session},cls = DateEncoder.DateTimeEncoder) ,content_type="application/json")
+			railway_sessions.append(model_to_dict(history))
+		return HttpResponse(json.dumps({'railway_sessions':railway_sessions},cls = DateEncoder.DateTimeEncoder) ,content_type="application/json")
+	except Exception as ex:
+		return HttpResponse(json.dumps({"error": str(ex)}),content_type="application/json")
+def getRaiwayDetailHistory(request):
+	try:
+		session_id=request.POST['railway_session_id']
+		session = RailwaySession.objects.get(id=session_id)
+		details= RailwaySessionDetail.objects.filter(railway_session = session)
+		railway_detail_sessions = []
+		for detail in details:
+			railway_detail_sessions.append({'detail':model_to_dict(detail),'property':model_to_dict(detail.infor.device_pro)})
+# 			railway_detail_sessions.append({'infor':detail.infor,'value':detail.value,'status':detail.status,'start_date':detail.start_date})			
+		return HttpResponse(json.dumps({'railway_detail_sessions':railway_detail_sessions},cls = DateEncoder.DateTimeEncoder) ,content_type="application/json")
 	except Exception as ex:
 		return HttpResponse(json.dumps({"error": str(ex)}),content_type="application/json")

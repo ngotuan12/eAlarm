@@ -75,6 +75,7 @@
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
+	<div id="loading"></div>
 	<div class="row">
 		{% if devices %}
 		<div class="col-sm-5">
@@ -145,36 +146,38 @@
 					<li><a href="#settings">Settings</a></li> -->
 				</ul>
 				<div class="tab-content" style="padding: 10px">
-					<div class="tab-pane" id="railway-history">
+					<div class="tab-pane" id="railway-history">					
 						<div class="row"> 
-							<div class="col-sm-5"> 
+							<div class="col-sm-6"> 
 								<div class="table-responsive">
 									<table class="table" id="table3">
 										<thead>
 											<tr>
-												<th>STT</th>
-												<th>Phiên làm việc</th>
+												<th>Phiên </th>
 												<th>Băt đầu</th>
 												<th>Kết thúc</th>
 											</tr>
 										</thead>
 										<tbody>
+											<tr></tr>
 										</tbody>
 									</table>
 								</div>
 							</div> 
 							
-							<div class="col-sm-7">
+							<div class="col-sm-6">
 								<div class="table-responsive">
 									<table class="table" id="table4">
 										<thead>
 											<tr>
 												<th>Cảm biến</th>
 												<th>Giá trị</th>
-												<th>Trạng thái</th>
+<!--												<th>Thời gian</th>
+												<th>Trạng thái</th> 
+-->
 											</tr>
 										</thead>
-										<tbody id="sessiondetail_table">
+										<tbody>
 										</tbody>
 									</table>
 								</div>
@@ -378,6 +381,7 @@
 			//"bFilter" : false,
 			"bInfo":false,
 			"sPaginationType" : "full_numbers",
+			"iDisplayLength":25,
 			"oLanguage":
 			{
 				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
@@ -406,7 +410,9 @@
 			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
+			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			onGetDeviceInfor(device_id);
+			//$('#loading').fadeOut('fast');
 			$('#tab-railway-history').parent().hasClass('active')
 			{
 				$('#tab-railway-history').parent().removeClass('active');
@@ -427,17 +433,13 @@
 			}
 		});
 		$('#tab-railway-history').click(function(e)
-		{
+		{			
+			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			showRailwayHistory();
+			//$('#loading').fadeOut('fast');			
+			$('#table3').addClass('active');
 		});
 		
-		$('#table3 tbody tr').click(function(e)
-		{
-			session_id = $(this).attr('id');
-			$("#table3 tbody tr[session_id][session_id='"+ session_id +"']").css('background-color','#8EE2BC');
-			$("#table3 tbody tr[session_id][session_id!='"+ session_id +"']").css('background-color','#fff');			
-			onShowDetailSessionHistory(session_id);
-		});					
 		//onGetDeviceInfor({{ devices.0.id }});
 		$('#btnNhanCong').click(function(e)
 		{
@@ -451,6 +453,8 @@
 		{
 			doSend('{"handle":"send_cmd","device_id":43,"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
+		//loading
+		
 	});
 	jQuery(window).load(function()
 	{ 
