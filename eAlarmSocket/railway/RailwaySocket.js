@@ -979,7 +979,7 @@ var socketServer = net.createServer(function(socket)
 			}
 			for(var i=0;i<clients.length;i++)
 			{
-				if(typeof clients[i] !== 'undefined' && clients[i].device_id === socket.gatewayinfo.id)
+				if(typeof clients[i] !== 'undefined'&& typeof socket.gatewayinfo !== 'undefined'  && clients[i].device_id === socket.gatewayinfo.id)
 				{
 					clients[i].send(JSON.stringify(request));
 				}
