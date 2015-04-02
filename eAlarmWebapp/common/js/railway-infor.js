@@ -52,9 +52,9 @@ function showRailwayHistory()
 			var row = $('<tr class="odd gradeX" id="'+ railway_session.id + '"></tr>');
 			
 			//STT
-			//row.append($('<td>'+ (i+1).toString() +'</td>'));
+			row.append($('<td>'+ (i+1).toString() +'</td>'));
 			//Phien 
-			row.append($('<td>' + railway_session.id + '</td>'));
+			//row.append($('<td>' + railway_session.id + '</td>'));
 			//start date
 			row.append($('<td>' + railway_session.start_date + '</td>'));
 			//start date
@@ -69,7 +69,10 @@ function showRailwayHistory()
 			$("#table3 tbody tr[id][id='"+ railway_session_id +"']").css('background-color','#8EE2BC');
 			$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
 //			alert(railway_session_id);
+			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			showRailwayDetailHistory(railway_session_id);
+			//$('#loading').fadeOut('fast');
+			
 		});
 		$('#table3 tbody tr').first().click();
 	});
@@ -101,11 +104,17 @@ function showRailwayDetailHistory(railway_session_id)
 			//value
 			row.append($('<td>' + railway_detail_session.detail.value + '</td>'));
 			//start date
-			row.append($('<td>' + railway_detail_session.detail.start_date + '</td>'));
+			//row.append($('<td>' + railway_detail_session.detail.start_date + '</td>'));
 			//end date
 			//row.append($('<td>' + railway_detail_session.end_date + '</td>'));
 			//status
-			row.append($('<td>' + railway_detail_session.detail.status + '</td>'));			
+			//row.append($('<td>' + railway_detail_session.detail.status + '</td>'));	
+			if( railway_detail_session.detail.value > railway_detail_session.property.max_alarm || 
+					railway_detail_session.detail.value < railway_detail_session.property.min_alarm)
+			{
+				//alert(railway_detail_session.property.max_alarm);
+				row.css("color","red");
+			}
 			//append to body
 			tbody.append(row);
 		}

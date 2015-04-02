@@ -75,6 +75,7 @@
 {% endblock %}
 {% block content %}
 <div class="contentpanel">
+	<div id="loading"></div>
 	<div class="row">
 		{% if devices %}
 		<div class="col-sm-5">
@@ -147,7 +148,7 @@
 				<div class="tab-content" style="padding: 10px">
 					<div class="tab-pane" id="railway-history">					
 						<div class="row"> 
-							<div class="col-sm-5"> 
+							<div class="col-sm-6"> 
 								<div class="table-responsive">
 									<table class="table" id="table3">
 										<thead>
@@ -164,15 +165,16 @@
 								</div>
 							</div> 
 							
-							<div class="col-sm-7">
+							<div class="col-sm-6">
 								<div class="table-responsive">
 									<table class="table" id="table4">
 										<thead>
 											<tr>
 												<th>Cảm biến</th>
 												<th>Giá trị</th>
-												<th>Thời gian</th>
-												<th>Trạng thái</th>
+<!--												<th>Thời gian</th>
+												<th>Trạng thái</th> 
+-->
 											</tr>
 										</thead>
 										<tbody>
@@ -348,12 +350,6 @@
 	{
 		websocket.send(message);
 	}
-	function clickTR(railway_session_id)
-	{		
-		$("#table3 tbody tr[railway_session_id][railway_session_id ='"+ railway_session_id +"']").css('background-color','#8EE2BC');
-		$("#table3 tbody tr[railway_session_id][railway_session_id !='"+ railway_session_id +"']").css('background-color','#fff');			
-		showRailwayDetailHistory(railway_session_id);
-	}
 	jQuery(document).ready(function() {
 		var tid1;
 		var temp = true;
@@ -413,7 +409,9 @@
 			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
+			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			onGetDeviceInfor(device_id);
+			//$('#loading').fadeOut('fast');
 			$('#tab-railway-history').parent().hasClass('active')
 			{
 				$('#tab-railway-history').parent().removeClass('active');
@@ -434,8 +432,10 @@
 			}
 		});
 		$('#tab-railway-history').click(function(e)
-		{
+		{			
+			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			showRailwayHistory();
+			//$('#loading').fadeOut('fast');			
 			$('#table3').addClass('active');
 		});
 		
@@ -452,6 +452,8 @@
 		{
 			doSend('{"handle":"send_cmd","device_id":43,"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
+		//loading
+		
 	});
 	jQuery(window).load(function()
 	{ 
