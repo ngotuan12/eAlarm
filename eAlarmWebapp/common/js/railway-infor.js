@@ -45,6 +45,11 @@ function showRailwayHistory()
 		tbody.empty();
 		sessions = data.railway_sessions;
 		//alert(JSON.stringify(data.railway_session));
+		if (sessions.length==0)
+		{
+			var tbody_table4 = $('#table4 tbody');
+			tbody_table4.empty();
+		}
 		for(var i=0;i<sessions.length;i++)
 		{
 			railway_session = sessions[i];
@@ -70,8 +75,11 @@ function showRailwayHistory()
 			$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
 //			alert(railway_session_id);
 			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
+			$(this).css({'cursor' : 'wait'});
+//			$(this).addClass('load').wait(10).addClass('done');
 			showRailwayDetailHistory(railway_session_id);
 			//$('#loading').fadeOut('fast');
+			$(this).css({'cursor' : 'default'});
 			
 		});
 		$('#table3 tbody tr').first().click();
@@ -157,7 +165,7 @@ function updateDevice()
 	{
 		deviceIssue.html("");
 		deviceStatus.attr("src","/images/ic_green.png");
-		deviceStatusTable.attr("src","images/ic_green.png");
+		deviceStatusTable.attr("src","/images/ic_green.png");
 	}
 	else if(device.status==="2")
 	{

@@ -92,7 +92,7 @@
 						</thead>
 						<tbody>
 							{% for device in devices %}
-							<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}">
+							<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}" device_status = "{{ device.status }}">
 								<td>{{ device.route.name }}</td>
 								<td>{{ device.name }}</td>
 								<td class="center">
@@ -407,12 +407,35 @@
 		$('#table2 tbody tr').click(function(e)
 		{
 			device_id = $(this).attr('id');
+			device_status = $(this).attr('device_status');
 			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
+			//$(this).css({"cursor" :"progress"});
+			$(this).css('cursor','progress');
+			//setTimeout( "jQuery('#loading_mask').hide();", 3000 );
+			//$(this).slideUp(200).delay(2000).fadeIn(400);
 			onGetDeviceInfor(device_id);
+			//$(this).css({"cursor" , 'default'});
+			$(this).css('cursor','default');
 			//$('#loading').fadeOut('fast');
+
+			if (device_status == '1')
+			{
+				$('#btnNhanCong').removeAttr("disabled");
+				$('#btnDuyTu').removeAttr("disabled");
+				$('#btnPhucHoi').removeAttr("disabled");
+				$('#btnCuongBuc').removeAttr("disabled");
+			}
+			else
+			{
+				$('#btnNhanCong').attr("disabled", true);
+				$('#btnDuyTu').attr("disabled", true);
+				$('#btnPhucHoi').attr("disabled", true);
+				$('#btnCuongBuc').attr("disabled", true);
+			}
+						
 			$('#tab-railway-history').parent().hasClass('active')
 			{
 				$('#tab-railway-history').parent().removeClass('active');
@@ -437,7 +460,7 @@
 			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			showRailwayHistory();
 			//$('#loading').fadeOut('fast');			
-			$('#table3').addClass('active');
+			//$('#table3').addClass('active');
 		});
 		
 		//onGetDeviceInfor({{ devices.0.id }});
