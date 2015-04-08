@@ -91,7 +91,6 @@ function showRailwayHistory()
 }
 function showRailwayDetailHistory(railway_session_id)
 {
-	$.fn.loading.show();
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-detail-history", {
 		'csrfmiddlewaretoken' : csrftoken,
