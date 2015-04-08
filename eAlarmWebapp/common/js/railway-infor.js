@@ -33,7 +33,6 @@ function onGetDeviceInfor(device_id) {
 }
 function showRailwayHistory()
 {
-	$.fn.loading.show();
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-history", {
 		'csrfmiddlewaretoken' : csrftoken,
@@ -60,6 +59,14 @@ function showRailwayHistory()
 			//STT
 			row.append($('<td>'+ (i+1).toString() +'</td>'));
 			//Phien 
+			if(railway_session.status==='1')
+			{
+				row.append($('<td> Chẵn</td>'));
+			}	
+			else if(railway_session.status==='2')
+			{
+				row.append($('<td> Lẻ</td>'));
+			}
 			//row.append($('<td>' + railway_session.id + '</td>'));
 			//start date
 			row.append($('<td>' + railway_session.start_date + '</td>'));
@@ -84,13 +91,13 @@ function showRailwayHistory()
 			
 		});
 		$('#table3 tbody tr').first().click();
-		$.fn.loading.hide();
 	});
 	//hide loading
 	//$.fn.loading.hide();
 }
 function showRailwayDetailHistory(railway_session_id)
 {
+	$.fn.loading.show();
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-detail-history", {
 		'csrfmiddlewaretoken' : csrftoken,
@@ -128,6 +135,7 @@ function showRailwayDetailHistory(railway_session_id)
 			//append to body
 			tbody.append(row);
 		}
+		$.fn.loading.hide();
 	});
 	//hide loading
 	//$.fn.loading.hide();
