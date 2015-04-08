@@ -41,18 +41,20 @@ def getRaiwayHistory(request):
 	try:
 		device_id=request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		histories= RailwaySession.objects.filter(device = device)
+		histories= RailwaySession.objects.filter(device = device).order_by('-start_date')
 		railway_sessions = []
 		for history in histories:
 			railway_sessions.append(model_to_dict(history))
 		return HttpResponse(json.dumps({'railway_sessions':railway_sessions},cls = DateEncoder.DateTimeEncoder) ,content_type="application/json")
 	except Exception as ex:
 		return HttpResponse(json.dumps({"error": str(ex)}),content_type="application/json")
+@login_required(login_url='/login')
+@require_http_methods(["POST",])
 def getRaiwayDetailHistory(request):
 	try:
 		session_id=request.POST['railway_session_id']
 		session = RailwaySession.objects.get(id=session_id)
-		details= RailwaySessionDetail.objects.filter(railway_session = session)
+		details= RailwaySessionDetail.objects.filter(railway_session = session).order_by('infor__device_pro__code')
 		railway_detail_sessions = []
 		for detail in details:
 			railway_detail_sessions.append({'detail':model_to_dict(detail),'property':model_to_dict(detail.infor.device_pro)})

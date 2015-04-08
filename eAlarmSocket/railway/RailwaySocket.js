@@ -23,7 +23,6 @@ var clients = [];
 var connDB = require("../util/RailwayAppServer.js").connDB;
 
 var logFile = fs.createWriteStream('./log/RailwayErrorLog.txt');
-var railway_session;
 //-----------------------------------------
 //FUNCTION
 //-----------------------------------------
@@ -540,7 +539,7 @@ function onClose(socket)
  * @param device_id
  * @param railway_session
  */
-function createRailwaySession(device_id,railway_session)
+function createRailwaySession(socket,device_id,railway_session)
 {
 	var strSQL = "INSERT INTO railway_session(`device_id`,`start_date`,`end_date`,`status`) " +
 			" VALUES(?,?,?,?)";
@@ -566,6 +565,7 @@ function createRailwaySession(device_id,railway_session)
 				connDB.query(strSQL, [ railway_session_id,device_id ,key , infors[key],railway_session.action_status ]);
 			}
 		}
+		socket.railway_session = null;
 	});
 }
 
@@ -582,87 +582,87 @@ function updateOnchangeAction(socket,infors)
 	log("X6: " + infors.X6);
 	if((infors.X1 > 0 || infors.X2 >0) && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		action_status = "1";
-		railway_session = {};
-		railway_session.action_status = action_status;
-		railway_session.start_date = new Date();
-		railway_session.infors = {};
+		socket.action_status = "1";
+		socket.railway_session = {};
+		socket.socket.railway_session.action_status = action_status;
+		socket.railway_session.start_date = new Date();
+		socket.railway_session.infors = {};
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && (infors.X5 > 0 || infors.X6 > 0))
 	{
 		action_status = "2";
-		railway_session = {};
-		railway_session.action_status = action_status;
-		railway_session.start_date = new Date();
+		socket.railway_session = {};
+		socket.railway_session.action_status = action_status;
+		socket.railway_session.start_date = new Date();
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		if(typeof railway_session!=='undefined')
+		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null)
 		{
-			railway_session.end_date = new Date();
-			createRailwaySession(socket.gatewayinfo.id,railway_session);
+			socket.railway_session.end_date = new Date();
+			createRailwaySession(socket,socket.gatewayinfo.id,socket.railway_session);
 		}
 		action_status = "0";
 	}
 	
-	if(typeof railway_session!=='undefined')
+	if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null)
 	{
 		if(infors.X1 > 0)
 		{
-			railway_session.infors.X1 = infors.X1;
+			socket.railway_session.infors.X1 = infors.X1;
 		}
 		if(infors.X2 > 0)
 		{
-			railway_session.infors.X2 = infors.X2;
+			socket.railway_session.infors.X2 = infors.X2;
 		}
 		if(infors.X3 > 0)
 		{
-			railway_session.infors.X3 = infors.X3;
+			socket.railway_session.infors.X3 = infors.X3;
 		}
 		if(infors.X4 > 0)
 		{
-			railway_session.infors.X4 = infors.X4;
+			socket.railway_session.infors.X4 = infors.X4;
 		}
 		if(infors.X5 > 0)
 		{
-			railway_session.infors.X5 = infors.X5;
+			socket.railway_session.infors.X5 = infors.X5;
 		}
 		if(infors.X6 > 0)
 		{
-			railway_session.infors.X6 = infors.X6;
+			socket.railway_session.infors.X6 = infors.X6;
 		}
 		
 		if(infors.I1 > 0)
 		{
-			railway_session.infors.I1 = infors.I1;
+			socket.railway_session.infors.I1 = infors.I1;
 		}
 		if(infors.I2 > 0)
 		{
-			railway_session.infors.I2 = infors.I2;
+			socket.railway_session.infors.I2 = infors.I2;
 		}
 		if(infors.I3 > 0)
 		{
-			railway_session.infors.I3 = infors.I3;
+			socket.railway_session.infors.I3 = infors.I3;
 		}
 		if(infors.I4 > 0)
 		{
-			railway_session.infors.I4 = infors.I4;
+			socket.railway_session.infors.I4 = infors.I4;
 		}
 		if(infors.I5 > 0)
 		{
-			railway_session.infors.I5 = infors.I5;
+			socket.railway_session.infors.I5 = infors.I5;
 		}
 		if(infors.I6 > 0)
 		{
-			railway_session.infors.I6 = infors.I6;
+			socket.railway_session.infors.I6 = infors.I6;
 		}
 		if(infors.I7 > 0)
 		{
-			railway_session.infors.I7 = infors.I7;
+			socket.railway_session.infors.I7 = infors.I7;
 		}
 		if(infors.I8 > 0)
 		{
-			railway_session.infors.I8 = infors.I8;
+			socket.railway_session.infors.I8 = infors.I8;
 		}
 	}
 //	//kiem tra chuong den

@@ -1,6 +1,6 @@
 var plot;
 var data = [], totalPoints = 100;
-var updateInterval = 2000000;
+var updateInterval = 2000;
 var currentDeviceID;
 var currentDeviceInforID;
 var InforIndex = 0;
@@ -33,6 +33,7 @@ function onGetDeviceInfor(device_id) {
 }
 function showRailwayHistory()
 {
+	$.fn.loading.show();
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-history", {
 		'csrfmiddlewaretoken' : csrftoken,
@@ -83,12 +84,14 @@ function showRailwayHistory()
 			
 		});
 		$('#table3 tbody tr').first().click();
+		$.fn.loading.hide();
 	});
 	//hide loading
 	//$.fn.loading.hide();
 }
 function showRailwayDetailHistory(railway_session_id)
 {
+	$.fn.loading.show();
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-detail-history", {
 		'csrfmiddlewaretoken' : csrftoken,
