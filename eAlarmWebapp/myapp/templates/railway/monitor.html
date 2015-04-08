@@ -316,7 +316,9 @@
 	}
 	function onMessage(evt)
 	{
+		console.log(evt.data.toString());
 		var data = $.parseJSON(evt.data.toString());
+		
 		switch (data.handle)
 		{
 			case "on_status_change":
