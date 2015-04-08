@@ -829,7 +829,7 @@ wss.on('connection', function(conn)
 	{
 		log("connect device: " + device_id);
 		conn.device_id = device_id;
-		conn.send('{"handle":"connect_device","msg":"Connected to "' + MAC+'}');
+		conn.send('{"handle":"connect_device","msg":"Connected to ' + MAC +'"}');
 	}
 	
 	function send_cmd(conn,device_id,body)
