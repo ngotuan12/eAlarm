@@ -324,6 +324,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 							updateDevice(socket, device_id, strStatus,
 									server_ip, strDescription,
 									transaction_detail);
+							log('status change '+ '{"handle":"on_status_change","device_id":"'+socket.gatewayinfo.id+'","status":"'+strStatus+'"}');
 							for(var m=0;i<clients.length;m++)
 							{
 								if(clients[m].monitor)
