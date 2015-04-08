@@ -320,6 +320,23 @@
 		console.log("handle" + JSON.stringify(data.handle));
 		switch (data.handle)
 		{
+			case "on_status_change":
+				var device_id = data.device_id;
+				var status = data.status;
+				var img_status = $("#device-status-"+device_id);
+				if(status==="1")
+				{
+					img_status.attr("src","/images/ic_green.png");
+				}
+				else if(status==="2")
+				{
+					img_status.attr("src","/images/ic_red.png");
+				}
+				else if(status==="0")
+				{
+					img_status.attr("src","/images/ic_blue.png");
+				}
+				break;
 			case "on_railway_change":
 				var device_id = data.device_id;
 				var action_status = data.action_status;
