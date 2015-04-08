@@ -317,7 +317,6 @@
 	function onMessage(evt)
 	{
 		var data = $.parseJSON(evt.data.toString());
-		console.log("handle" + JSON.stringify(data.handle));
 		switch (data.handle)
 		{
 			case "on_status_change":
@@ -336,6 +335,7 @@
 				{
 					img_status.attr("src","/images/ic_blue.png");
 				}
+				console.log("Status change " + "device_id: "+ device_id + "status: "+status);
 				break;
 			case "on_railway_change":
 				var device_id = data.device_id;
