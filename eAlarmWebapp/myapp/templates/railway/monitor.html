@@ -415,15 +415,13 @@
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
 			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			//$(this).css({"cursor" :"progress"});
-			$(this).css('cursor','progress');
 			//setTimeout( "jQuery('#loading_mask').hide();", 3000 );
 			//$(this).slideUp(200).delay(2000).fadeIn(400);
 			onGetDeviceInfor(device_id);
 			//$(this).css({"cursor" , 'default'});
-			$(this).css('cursor','default');
 			//$('#loading').fadeOut('fast');
 
-			if (device_status == '1')
+			if (device_status == '1' || device_status == '2')
 			{
 				$('#btnNhanCong').removeAttr("disabled");
 				$('#btnDuyTu').removeAttr("disabled");
