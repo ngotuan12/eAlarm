@@ -608,7 +608,7 @@ function updateOnchangeAction(socket,infors)
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress)
+		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress === true)
 		{
 			socket.railway_session.end_date = new Date();
 			createRailwaySession(socket,socket.gatewayinfo.id,socket.railway_session);
@@ -616,7 +616,7 @@ function updateOnchangeAction(socket,infors)
 		action_status = "0";
 	}
 	
-	if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null)
+	if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress === true)
 	{
 		if(infors.X1 > 0)
 		{
