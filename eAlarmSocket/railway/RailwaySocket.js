@@ -574,7 +574,7 @@ function createRailwaySession(socket,device_id,railway_session)
 				connDB.query(strSQL, [ railway_session_id,device_id ,key , infors[key],railway_session.action_status ]);
 			}
 		}
-		socket.railway_session = null;
+		socket.is_inprogress = false;
 	});
 }
 
@@ -596,6 +596,7 @@ function updateOnchangeAction(socket,infors)
 		socket.socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
 		socket.railway_session.infors = {};
+		socket.is_inprogress = true;
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && (infors.X5 > 0 || infors.X6 > 0))
 	{
@@ -603,10 +604,11 @@ function updateOnchangeAction(socket,infors)
 		socket.railway_session = {};
 		socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
+		socket.is_inprogress = true;
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null)
+		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.is_inprogress)
 		{
 			socket.railway_session.end_date = new Date();
 			createRailwaySession(socket,socket.gatewayinfo.id,socket.railway_session);
@@ -942,7 +944,7 @@ var socketServer = net.createServer(function(socket)
 					log("--------------------");
 					log("----process-data----");
 					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body);
+							request.body,"send_data");
 					log("----end-process-data----");
 					break;
 				case "send_gw_request":
@@ -969,14 +971,14 @@ var socketServer = net.createServer(function(socket)
 						}
 					};
 					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body);
+							request.body,"alarm");
 					sendGatewayCommand(response, socket);
 					break;
 				case "get_test":
 					log("--------------------");
 					log("----process-data----");
 					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body);
+							request.body,"get_test");
 					log("----end-process-data----");
 					break;
 				case "on_change":
