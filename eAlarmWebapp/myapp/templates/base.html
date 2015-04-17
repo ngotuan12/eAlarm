@@ -1,3 +1,4 @@
+{% load i18n %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -35,9 +36,45 @@
 		<div class="mainpanel">
 			<div class="headerbar">
 				<a class="menutoggle"><i class="fa fa-bars"></i></a>
-				{% block tool-bar-header %}
-					{% include 'tool-bar-header.tpl.html' %}
-				{% endblock %}
+				<div class="header-right">
+					<ul class="headermenu">
+					{% block tool-bar-right %}
+						<li>
+							<button class="btn btn-default tp-icon" data-toggle="dropdown">
+								<img alt="" src="/images/language/{{ LANGUAGE_CODE }}.png" width="25px">
+							</button>
+							<ul class="dropdown-menu">
+								{% for language in LANGUAGES %}
+									{% ifnotequal language.0 LANGUAGE_CODE %}
+										<li style="padding: 0"><a href="{% url 'switch-language' language_code=language.0 %}?next={{ request.get_full_path }}"> <img alt="" src="/images/language/{{ language.0 }}.png" width="25px">  {{language.1}}</a></li>
+									{% endifnotequal %}
+								{% endfor%}
+							</ul>
+						</li>
+
+						<li>
+							
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle"
+									data-toggle="dropdown">
+									<i class="glyphicon glyphicon-cog"></i> {{ user.username }}<span
+										class="caret"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+									<li><a href="/password/change/"><i
+											class="glyphicon glyphicon-cog"></i> {% trans 'Đổi mật khẩu'%}</a></li>
+									<li><a href="#"><i
+											class="glyphicon glyphicon-question-sign"></i> {% trans 'Trợ giúp'%}</a></li>
+									<li><a href="/logout/"><i
+											class="glyphicon glyphicon-log-out"></i> {% trans 'Thoát'%}</a></li>
+								</ul>
+							</div>
+						</li>
+						
+						
+					{% endblock %}
+					</ul>
+				</div>
 			</div>
 			{% block content-header %} 
 				{% include 'main-panel-header.tpl.html' %}

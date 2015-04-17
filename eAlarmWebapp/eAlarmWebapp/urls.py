@@ -4,7 +4,7 @@ from django.contrib import admin
 from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
-    RailwayList, RailwayProperty,Log,Route, RailwayAssign
+    RailwayList, RailwayProperty, Log, Route, RailwayAssign, Language
 
 
 admin.autodiscover()
@@ -82,7 +82,7 @@ urlpatterns = patterns('',
     # Ajax
     url(r'^ajax-railway-history$', DeviceInfor.getRaiwayHistory,name='ajax-railway-history'),
     url(r'^ajax-railway-detail-history$', DeviceInfor.getRaiwayDetailHistory,name='ajax-railway-detail-history'),
-    
+    url(r'^language/(?P<language_code>\w+)/$', Language.switch_language, name='switch-language'),
     # System
     url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
     url(regex=r'^(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.STATIC_ROOT, 'show_indexes' : True, }),

@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'eAlarmWebapp.urls'
@@ -111,8 +112,19 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.csrf',
     'myapp.util.context_processors.deviceSummary',
+    'django.core.context_processors.request',
 )
 
 ALARM_SERVER = 'http://localhost/AlarmServer/'
 REPORT_SERVICE = 'ReportService'
 PERMISSION_SERVICE = 'AuthorizationService'
+
+LOCALE_PATHS = (
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + "/locale", # replace with correct path here
+)
+LANGUAGES = (
+    ('en', 'English'),
+    ('vi', 'VietNamese'),
+    ('de', 'Germany'),
+    ('ja','Japanese')
+)
