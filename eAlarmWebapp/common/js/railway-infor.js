@@ -448,11 +448,11 @@ function addProperty(device,row, infor,parent)
 				var strValue = infor.value + infor.properties.symbol;
 				if (infor.properties.type === '1')
 				{
-					if (infor.value == 1)
+					if (infor.value === 1)
 					{
 						strValue = "ON";
 					}
-					else if (infor.value == 0)
+					else if (infor.value === 0)
 					{
 						strValue = "OFF";
 					}
