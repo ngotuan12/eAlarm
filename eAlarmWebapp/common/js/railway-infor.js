@@ -424,6 +424,20 @@ function addProperty(device,row, infor,parent)
 		}
 		else
 		{
+			var strValue = infor.value + infor.properties.symbol;
+			if (infor.properties.type == '1')
+			{
+				
+				if (infor.value == 1)
+				{
+					strValue = "ON";
+				}
+				else if (infor.value == 0)
+				{
+					strValue = "OFF";
+				}
+					
+			}
 			if($.inArray(infor.properties.code, codes) > -1 && infor.value == 0)
 			{
 				column.html("<p>" + infor.properties.name
@@ -445,26 +459,13 @@ function addProperty(device,row, infor,parent)
 //			}
 			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 			{
-				var strValue = infor.value + infor.properties.symbol;
-				if (infor.properties.type === '1')
-				{
-					if (infor.value === 1)
-					{
-						strValue = "ON";
-					}
-					else if (infor.value === 0)
-					{
-						strValue = "OFF";
-					}
-						
-				}
 				column.html("<p>" + infor.properties.name
 						+ "</p> <p style=\"color: red\">" + strValue +"</p>");
 			}
 			else
 			{
 				column.html("<p>" + infor.properties.name
-						+ "</p> <p style=\"color: green\">" + infor.value + infor.properties.symbol +"</p>");
+						+ "</p> <p style=\"color: green\">" + strValue +"</p>");
 			}
 		}
 	}
