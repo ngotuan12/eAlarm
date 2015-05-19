@@ -429,15 +429,15 @@ function addProperty(device,row, infor,parent)
 				column.html("<p>" + infor.properties.name
 						+ "</p> <p style=\"color: gray\">" + "__ " + "</p>");
 			}
-			else if (infor.properties.type == '1')
-			{
-				if (infor.value == 1)
-					column.html("<p>" + infor.properties.name
-							+ "</p> <p style=\"color: green\">" + "ON " + "</p>");
-				else if (infor.value == 0)
-					column.html("<p>" + infor.properties.name
-							+ "</p> <p style=\"color: red\">" + "OFF " + "</p>");
-			}
+//			else if (infor.properties.type == '1')
+//			{
+//				if (infor.value == 1)
+//					column.html("<p>" + infor.properties.name
+//							+ "</p> <p style=\"color: green\">" + "ON " + "</p>");
+//				else if (infor.value == 0)
+//					column.html("<p>" + infor.properties.name
+//							+ "</p> <p style=\"color: red\">" + "OFF " + "</p>");
+//			}
 //			else if (infor.value == 0)
 //			{
 //				column.html("<p>" + infor.properties.name
@@ -445,8 +445,16 @@ function addProperty(device,row, infor,parent)
 //			}
 			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 			{
+				String strValue = infor.value + infor.properties.symbol;
+				if (infor.properties.type == '1')
+				{
+					if (infor.value == 1)
+						strValue = "ON";
+					else
+						strValue = "OFF";
+				}
 				column.html("<p>" + infor.properties.name
-						+ "</p> <p style=\"color: red\">" + infor.value + infor.properties.symbol +"</p>");
+						+ "</p> <p style=\"color: red\">" + strValue +"</p>");
 			}
 			else
 			{
