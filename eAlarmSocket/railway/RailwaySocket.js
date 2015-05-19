@@ -262,6 +262,14 @@ function updateDeviceInfor(socket, device_id, infors,type)
 								for (i = 0; i < properties.length; i++)
 								{
 									var property = properties[i];
+									if(property.m_type === "3")
+									{
+										continue;
+									}
+									if(property.m_type === "4")
+									{
+										continue;
+									}
 									if (property.code === key)
 									{
 										//neu la cam bien chinh
@@ -591,9 +599,9 @@ function updateOnchangeAction(socket,infors)
 	log("X6: " + infors.X6);
 	if((infors.X1 > 0 || infors.X2 >0) && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
 	{
-		socket.action_status = "1";
+		action_status = "1";
 		socket.railway_session = {};
-		socket.socket.railway_session.action_status = action_status;
+		socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
 		socket.railway_session.infors = {};
 		socket.railway_session.is_inprogress = true;
