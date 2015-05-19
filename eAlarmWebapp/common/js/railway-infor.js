@@ -452,7 +452,7 @@ function addProperty(device,row, infor,parent)
 					{
 						strValue = "ON";
 					}
-					else
+					else if (infor.value === 0)
 					{
 						strValue = "OFF";
 					}
