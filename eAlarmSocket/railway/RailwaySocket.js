@@ -1022,6 +1022,7 @@ var socketServer = net.createServer(function(socket)
 		catch (e)
 		{
 			log(e.stack);
+			socket.end();
 			// socket.write(e.stack);
 		}
 	});
