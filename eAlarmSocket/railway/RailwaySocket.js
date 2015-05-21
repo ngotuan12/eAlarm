@@ -246,7 +246,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
 	strSQL += "AND a.`status` = '1' ";
-	strSQL += "AND m_type in( ";
+	strSQL += "AND b.m_type in( ";
 	for(var i=0;i < m_types.length;i++)
 	{
 		strSQL += "?,";
