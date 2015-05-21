@@ -252,6 +252,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 		strSQL += "?,";
 	}
 	strSQL += " '3','4') ";
+	log(strSQL);
 	var transaction_detail = [];
 	log("Device id: " + device_id);
 	connDB
@@ -282,6 +283,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 							{
 								value = infors[key];
 							}
+							
 							log(key + ":" + value);
 							
 							connDB.query(strSQL, [ value, device_id, key ]);
