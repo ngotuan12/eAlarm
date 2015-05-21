@@ -235,6 +235,9 @@ function updateDeviceInfor(socket, device_id, infors,type)
 		case "on_change":
 			m_types.push('2');
 			m_types.push('5');
+			m_types.push('1');
+			m_types.push('3');
+			m_types.push('4');
 			break;
 		case "send_data":
 			m_types.push('1');
