@@ -270,7 +270,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' )";
 						var properties = rows;
 						var i;
-						.
+						
 								for (i = 0; i < properties.length; i++)
 								{
 									var property = properties[i];
