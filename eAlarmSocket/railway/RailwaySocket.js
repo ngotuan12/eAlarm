@@ -228,7 +228,8 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
  * @version 1.0
  */
 function updateDeviceInfor(socket, device_id, infors,type)
-{	var m_types = [];
+{	
+	var m_types = [];
 	switch(type)
 	{
 		case "on_change":
@@ -252,6 +253,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 		strSQL += "?,";
 	}
 	strSQL += "'3','4') ";
+	log(strSQL);
 	var transaction_detail = [];
 	log("Device id: " + device_id);
 	connDB
