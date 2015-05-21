@@ -238,9 +238,13 @@ function updateDeviceInfor(socket, device_id, infors,type)
 			break;
 		case "send_data":
 			m_types.push('1');
+			m_types.push('3');
+			m_types.push('4');
 			break;
 		case "get_test":
 			m_types.push('6');
+			m_types.push('3');
+			m_types.push('4');
 			break;
 	}
 	var strActionStatus = socket.gatewayinfo.action_status;
@@ -252,8 +256,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 	{
 		strSQL += "?,";
 	}
-	strSQL += "'3','4') ";
-	log(strSQL);
+	strSQL += "'0') ";
 	var transaction_detail = [];
 	log("Device id: " + device_id);
 	connDB
