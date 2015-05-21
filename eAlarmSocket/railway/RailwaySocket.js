@@ -245,6 +245,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 			m_types.push('6');
 			m_types.push('3');
 			m_types.push('4');
+			m_types.push('1');
 			break;
 	}
 	var strActionStatus = socket.gatewayinfo.action_status;
@@ -648,60 +649,60 @@ function updateOnchangeAction(socket,infors)
 	
 	if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress === true)
 	{
-		if(infors.X1 > 0)
+		if(infors.X1 > socket.railway_session.infors.X1 )
 		{
 			socket.railway_session.infors.X1 = infors.X1;
 		}
-		if(infors.X2 > 0)
+		if(infors.X2 > socket.railway_session.infors.X2)
 		{
 			socket.railway_session.infors.X2 = infors.X2;
 		}
-		if(infors.X3 > 0)
+		if(infors.X3 > socket.railway_session.infors.X3)
 		{
 			socket.railway_session.infors.X3 = infors.X3;
 		}
-		if(infors.X4 > 0)
+		if(infors.X4 > socket.railway_session.infors.X4)
 		{
 			socket.railway_session.infors.X4 = infors.X4;
 		}
-		if(infors.X5 > 0)
+		if(infors.X5 > socket.railway_session.infors.X5)
 		{
 			socket.railway_session.infors.X5 = infors.X5;
 		}
-		if(infors.X6 > 0)
+		if(infors.X6 > socket.railway_session.infors.X6)
 		{
 			socket.railway_session.infors.X6 = infors.X6;
 		}
 		
-		if(infors.I1 > 0)
+		if(infors.I1 > socket.railway_session.infors.I1)
 		{
 			socket.railway_session.infors.I1 = infors.I1;
 		}
-		if(infors.I2 > 0)
+		if(infors.I2 > socket.railway_session.infors.I2)
 		{
 			socket.railway_session.infors.I2 = infors.I2;
 		}
-		if(infors.I3 > 0)
+		if(infors.I3 > socket.railway_session.infors.I3)
 		{
 			socket.railway_session.infors.I3 = infors.I3;
 		}
-		if(infors.I4 > 0)
+		if(infors.I4 > socket.railway_session.infors.I4)
 		{
 			socket.railway_session.infors.I4 = infors.I4;
 		}
-		if(infors.I5 > 0)
+		if(infors.I5 > socket.railway_session.infors.I5)
 		{
 			socket.railway_session.infors.I5 = infors.I5;
 		}
-		if(infors.I6 > 0)
+		if(infors.I6 > socket.railway_session.infors.I6)
 		{
 			socket.railway_session.infors.I6 = infors.I6;
 		}
-		if(infors.I7 > 0)
+		if(infors.I7 > socket.railway_session.infors.I7)
 		{
 			socket.railway_session.infors.I7 = infors.I7;
 		}
-		if(infors.I8 > 0)
+		if(infors.I8 > socket.railway_session.infors.I8)
 		{
 			socket.railway_session.infors.I8 = infors.I8;
 		}
