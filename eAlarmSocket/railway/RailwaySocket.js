@@ -628,9 +628,11 @@ function updateOnchangeAction(socket,infors)
 		socket.railway_session = {};
 		socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
-		socket.railway_session.infors = {};
-		infors.X1 = infors.X2 = infors.X3 = infors.X4 = infors.X5 = infors.X6 = 0;
-		infors.I1 = infors.I2 = infors.I3 = infors.I4 = infors.I5 = infors.I6 = infors.I7 = infors.I8 = 0;
+		socket.railway_session.infors = 
+			{
+				"X1":0,"X2":0,"X3":0,"X4":0,"X5":0,"X6":0,
+				"I1":0,"I2":0,"I3":0,"I4":0,"I5":0,"I6":0, "I7":0,"I8":0
+			};
 		socket.railway_session.is_inprogress = true;
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && (infors.X5 > 0 || infors.X6 > 0))
@@ -639,9 +641,11 @@ function updateOnchangeAction(socket,infors)
 		socket.railway_session = {};
 		socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
-		socket.railway_session.infors = {};
-		infors.X1 = infors.X2 = infors.X3 = infors.X4 = infors.X5 = infors.X6 = 0;
-		infors.I1 = infors.I2 = infors.I3 = infors.I4 = infors.I5 = infors.I6 = infors.I7 = infors.I8 = 0;
+		socket.railway_session.infors = 
+			{
+				"X1":0,"X2":0,"X3":0,"X4":0,"X5":0,"X6":0,
+				"I1":0,"I2":0,"I3":0,"I4":0,"I5":0,"I6":0, "I7":0,"I8":0
+			};
 		socket.railway_session.is_inprogress = true;
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
