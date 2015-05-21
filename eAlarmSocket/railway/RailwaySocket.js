@@ -228,17 +228,36 @@ function checkMirrorSensor(infor_id,device_id,parent_code,parent_value,mirror_co
  * @version 1.0
  */
 function updateDeviceInfor(socket, device_id, infors,type)
-{	
+{	var m_types = [];
+	switch(type)
+	{
+		case "on_change":
+			m_types.push('2');
+			m_types.push('5');
+			break;
+		case "send_data":
+			m_types.push('1');
+			break;
+		case "get_test":
+			m_types.push('6');
+			break;
+	}
 	var strActionStatus = socket.gatewayinfo.action_status;
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
 	strSQL += "AND a.`status` = '1' ";
+	strSQL += "AND m_type in( ";
+	for(var i=0;i < m_types.length;i++)
+	{
+		strSQL += "?,";
+	}
+	strSQL += " '3','4') ";
 	var transaction_detail = [];
 	log("Device id: " + device_id);
 	connDB
 			.query(
 					strSQL,
-					[ device_id ],
+					[ device_id ].concat(m_types),
 					function(err, rows)
 					{
 						if (err)
