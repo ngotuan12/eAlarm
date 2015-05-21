@@ -271,17 +271,18 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						var properties = rows;
 						var i;
 						
+								// check alarm
 								for (i = 0; i < properties.length; i++)
 								{
 									var property = properties[i];
-									var key1 = property.code;
-									var value1 = 0;
-									if (infors.hasOwnProperty(key1))
+									var key = property.code;
+									var value = 0;
+									if (infors.hasOwnProperty(key))
 									{
-										value1 = infors[key1];
+										value = infors[key];
 									}
 									
-									log(key1 + ":" + key1);
+									log(key + ":" + value);
 									//connDB.query(strSQL, [ value, device_id, key ]);
 									if(property.m_type === "2")
 									{
