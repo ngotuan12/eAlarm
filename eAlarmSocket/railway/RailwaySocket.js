@@ -270,17 +270,19 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' )";
 						var properties = rows;
 						var i;
-						for (var key in infors)
-						{
-							if (infors.hasOwnProperty(key))
-							{
-								var value = infors[key];
-								log(key + ":" + value);
-								connDB.query(strSQL, [ value, device_id, key ]);
-								// check alarm
+						.
 								for (i = 0; i < properties.length; i++)
 								{
 									var property = properties[i];
+									var key1 = property.code;
+									var value1 = 0;
+									if (infors.hasOwnProperty(key1))
+									{
+										value1 = infors[key1];
+									}
+									
+									log(key1 + ":" + key1);
+									//connDB.query(strSQL, [ value, device_id, key ]);
 									if(property.m_type === "2")
 									{
 										continue;
@@ -347,8 +349,6 @@ function updateDeviceInfor(socket, device_id, infors,type)
 										break;
 									}
 								}
-							}
-						}
 						// update device status
 						if (strDescription !== "")
 						{
