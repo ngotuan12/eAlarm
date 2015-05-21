@@ -284,7 +284,7 @@ function updateDeviceInfor(socket, device_id, infors,type)
 							}
 							
 							log(key + ":" + value);
-							//connDB.query(strSQL, [ value, device_id, key ]);
+							connDB.query(strSQL, [ value, device_id, key ]);
 							// check alarm
 							if(property.m_type === "3")
 							{
