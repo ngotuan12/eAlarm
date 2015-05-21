@@ -246,13 +246,12 @@ function updateDeviceInfor(socket, device_id, infors,type)
 	var strSQL = "SELECT a.id infor_id,b.* FROM device_infor a,device_properties b ";
 	strSQL += "WHERE a.device_pro_id = b.id " + "AND a.device_id = ? AND b.p_type = '2' ";
 	strSQL += "AND a.`status` = '1' ";
-	strSQL += "AND b.m_type in( ";
+	strSQL += "AND m_type in( ";
 	for(var i=0;i < m_types.length;i++)
 	{
 		strSQL += "?,";
 	}
-	strSQL += " '3','4') ";
-	log(strSQL);
+	strSQL += "'3','4') ";
 	var transaction_detail = [];
 	log("Device id: " + device_id);
 	connDB
@@ -268,83 +267,86 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						}
 						var strDescription = "";
 						var strStatus = "1";
-						strSQL = "UPDATE device_infor SET value = ? " +
-								" WHERE device_id = ? " +
-								" AND device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' ) ";
+						strSQL = "UPDATE device_infor SET value = ? WHERE device_id = ? and device_pro_id = (SELECT id FROM device_properties WHERE code = ? AND p_type = '2' )";
 						var properties = rows;
 						var i;
-						// update infors
-						for (i = 0; i < properties.length; i++)
+						for (var key in infors)
 						{
-							var property = properties[i];
-							var key = property.code;
-							var value = 0;
-							if(infors.hasOwnProperty(key))
+							if (infors.hasOwnProperty(key))
 							{
-								value = infors[key];
-							}
-							
-							log(key + ":" + value);
-							
-							connDB.query(strSQL, [ value, device_id, key ]);
-							
-							if(property.m_type === "3")
-							{
-								continue;
-							}
-							if(property.m_type === "4")
-							{
-								continue;
-							}
-							
-							if (property.code === key)
-							{
-								//neu la cam bien chinh
-								if(property.require === "1")
+								var value = infors[key];
+								log(key + ":" + value);
+								connDB.query(strSQL, [ value, device_id, key ]);
+								// check alarm
+								for (i = 0; i < properties.length; i++)
 								{
-									var issue_description = "";
-									if (value >= property.max_alarm)
+									var property = properties[i];
+									if(property.m_type === "2")
 									{
-										strDescription += property.name + " cao(" +value +"); ";
-										transaction_detail.push({
-											"description" : property.name + " cao",
-											"value" : value,
-											"device_pro_id" : property.id
-										});
-									} else if (value <= property.min_alarm)
-									{
-										strDescription += property.name + " thấp(" +value +"); ";
-										transaction_detail.push({
-											"description" : property.name + " thấp",
-											"value" : value,
-											"device_pro_id" : property.id
-										});
+										continue;
 									}
-								}
-								//neu la cam bien phu
-								else if(property.require === "0")
-								{
-									log("check parent");
-									var parent_property;
-									//parent property
-									for(var j=0;j<properties.length;j++)
+									if(property.m_type === "3")
 									{
-										if(properties[j].id === property.parent_id)
+										continue;
+									}
+									if(property.m_type === "4")
+									{
+										continue;
+									}
+									if(property.m_type === "5")
+									{
+										continue;
+									}
+									if (property.code === key)
+									{
+										//neu la cam bien chinh
+										if(property.require === "1")
 										{
-											parent_property = properties[j];
-											break;
+											var issue_description = "";
+											if (value >= property.max_alarm)
+											{
+												strDescription += property.name + " cao(" +value +"); ";
+												transaction_detail.push({
+													"description" : property.name + " cao",
+													"value" : value,
+													"device_pro_id" : property.id
+												});
+											} else if (value <= property.min_alarm)
+											{
+												strDescription += property.name + " thấp(" +value +"); ";
+												transaction_detail.push({
+													"description" : property.name + " thấp",
+													"value" : value,
+													"device_pro_id" : property.id
+												});
+											}
 										}
-									}
-									//check sensor
-									if(typeof parent_property !=='undefined')
-									{
-										log("check cam bien phu");
-										var parent_value = infors[parent_property.code];
-										var parent_code = parent_property.code;
-										checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
+										//neu la cam bien phu
+										else if(property.require === "0")
+										{
+											log("check parent");
+											var parent_property;
+											//parent property
+											for(var j=0;j<properties.length;j++)
+											{
+												if(properties[j].id === property.parent_id)
+												{
+													parent_property = properties[j];
+													break;
+												}
+											}
+											//check sensor
+											if(typeof parent_property !=='undefined')
+											{
+												log("check cam bien phu");
+												var parent_value = infors[parent_property.code];
+												var parent_code = parent_property.code;
+												checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
+											}
+										}
+										break;
 									}
 								}
-								break;
 							}
 						}
 						// update device status
