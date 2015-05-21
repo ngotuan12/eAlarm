@@ -273,85 +273,73 @@ function updateDeviceInfor(socket, device_id, infors,type)
 						var properties = rows;
 						var i;
 						
-								// check alarm
-								for (i = 0; i < properties.length; i++)
+						for (i = 0; i < properties.length; i++)
+						{
+							var property = properties[i];
+							var key = property.code;
+							var value = 0;
+							if (infors.hasOwnProperty(key))
+							{
+								value = infors[key];
+							}
+							
+							log(key + ":" + value);
+							//connDB.query(strSQL, [ value, device_id, key ]);
+							// check alarm
+							if(property.m_type === "3")
+							{
+								continue;
+							}
+							if(property.m_type === "4")
+							{
+								continue;
+							}
+							//neu la cam bien chinh
+							if(property.require === "1")
+							{
+								var issue_description = "";
+								if (value >= property.max_alarm)
 								{
-									var property = properties[i];
-									var key = property.code;
-									var value = 0;
-									if (infors.hasOwnProperty(key))
+									strDescription += property.name + " cao(" +value +"); ";
+									transaction_detail.push({
+										"description" : property.name + " cao",
+										"value" : value,
+										"device_pro_id" : property.id
+									});
+								} else if (value <= property.min_alarm)
+								{
+									strDescription += property.name + " thấp(" +value +"); ";
+									transaction_detail.push({
+										"description" : property.name + " thấp",
+										"value" : value,
+										"device_pro_id" : property.id
+									});
+								}
+							}
+							//neu la cam bien phu
+							else if(property.require === "0")
+							{
+								log("check parent");
+								var parent_property;
+								//parent property
+								for(var j=0;j<properties.length;j++)
+								{
+									if(properties[j].id === property.parent_id)
 									{
-										value = infors[key];
-									}
-									
-									log(key + ":" + value);
-									//connDB.query(strSQL, [ value, device_id, key ]);
-									if(property.m_type === "2")
-									{
-										continue;
-									}
-									if(property.m_type === "3")
-									{
-										continue;
-									}
-									if(property.m_type === "4")
-									{
-										continue;
-									}
-									if(property.m_type === "5")
-									{
-										continue;
-									}
-									if (property.code === key)
-									{
-										//neu la cam bien chinh
-										if(property.require === "1")
-										{
-											var issue_description = "";
-											if (value >= property.max_alarm)
-											{
-												strDescription += property.name + " cao(" +value +"); ";
-												transaction_detail.push({
-													"description" : property.name + " cao",
-													"value" : value,
-													"device_pro_id" : property.id
-												});
-											} else if (value <= property.min_alarm)
-											{
-												strDescription += property.name + " thấp(" +value +"); ";
-												transaction_detail.push({
-													"description" : property.name + " thấp",
-													"value" : value,
-													"device_pro_id" : property.id
-												});
-											}
-										}
-										//neu la cam bien phu
-										else if(property.require === "0")
-										{
-											log("check parent");
-											var parent_property;
-											//parent property
-											for(var j=0;j<properties.length;j++)
-											{
-												if(properties[j].id === property.parent_id)
-												{
-													parent_property = properties[j];
-													break;
-												}
-											}
-											//check sensor
-											if(typeof parent_property !=='undefined')
-											{
-												log("check cam bien phu");
-												var parent_value = infors[parent_property.code];
-												var parent_code = parent_property.code;
-												checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
-											}
-										}
+										parent_property = properties[j];
 										break;
 									}
 								}
+								//check sensor
+								if(typeof parent_property !=='undefined')
+								{
+									log("check cam bien phu");
+									var parent_value = infors[parent_property.code];
+									var parent_code = parent_property.code;
+									checkMirrorSensor(property.infor_id,device_id,parent_code,parent_value,key,value);
+								}
+							}
+						}
 						// update device status
 						if (strDescription !== "")
 						{
