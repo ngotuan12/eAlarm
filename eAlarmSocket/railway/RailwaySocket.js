@@ -620,6 +620,7 @@ function updateOnchangeAction(socket,infors)
 		socket.railway_session = {};
 		socket.railway_session.action_status = action_status;
 		socket.railway_session.start_date = new Date();
+		socket.railway_session.infors = {};
 		socket.railway_session.is_inprogress = true;
 	}
 	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
