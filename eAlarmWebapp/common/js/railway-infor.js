@@ -350,51 +350,51 @@ function updateRailwayInfor(infors)
 		}
 		else if(infor.properties.code === "I2")
 		{
-			$('#RED3').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RED3').html(strHtml);
 		}
 		else if(infor.properties.code === "I3")
 		{
-			$('#RED4').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RED4').html(strHtml);
 		}
 		else if(infor.properties.code === "I5")
 		{
-			$('#YEL1').html("" + infor.value + " " +infor.properties.symbol);
+			$('#YEL1').html(strHtml);
 		}
 		else if(infor.properties.code === "I6")
 		{
-			$('#YEL2').html("" + infor.value + " " +infor.properties.symbol);
+			$('#YEL2').html(strHtml);
 		}
 		else if(infor.properties.code === "I7")
 		{
-			$('#RING1').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RING1').html(strHtml);
 		}
 		else if(infor.properties.code === "I8")
 		{
-			$('#RING2').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RING2').html(strHtml);
 		}
 		else if(infor.properties.code === "X1")
 		{
-			$('#CB1').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB1').html(strHtml);
 		}
 		else if(infor.properties.code === "X2")
 		{
-			$('#CB2').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB2').html(strHtml);
 		}
 		else if(infor.properties.code === "X3")
 		{
-			$('#CB3').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB3').html(strHtml);
 		}
 		else if(infor.properties.code === "X4")
 		{
-			$('#CB4').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB4').html(strHtml);
 		}
 		else if(infor.properties.code === "X5")
 		{
-			$('#CB5').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB5').html(strHtml);
 		}
 		else if(infor.properties.code === "X6")
 		{
-			$('#CB6').html("" + infor.value + " " +infor.properties.symbol);
+			$('#CB6').html(strHtml);
 		}
 	}
 	
