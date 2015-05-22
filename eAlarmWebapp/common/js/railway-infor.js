@@ -316,19 +316,26 @@ function updateDeviceProperties(response)
 	
 //	if(device.action_status ==='1' ||device.action_status ==='2')
 //	{
-	if(device.action_status ==='1' ||device.action_status ==='2')
+	if(device.status!=='0')
 	{
-		infors = data.filter(function (el){
-			return el.properties.m_type === '2'||el.properties.m_type === '5';
-		});
-		updateRailwayInfor(infors);
-		$("#last-raiway").html("--");
+		if(device.action_status ==='1' ||device.action_status ==='2')
+		{
+			infors = data.filter(function (el){
+				return el.properties.m_type === '2'||el.properties.m_type === '5';
+			});
+			updateRailwayInfor(infors);
+			$("#last-raiway").html("--");
+		}
+		else if(device.action_status === '0')
+		{
+			$("#last-raiway").html(response.last_railway.end_date);
+			//alert(JSON.stringify(response.last_railway))
+		}	
 	}
-	else if(device.action_status === '0')
+	else
 	{
-		$("#last-raiway").html(response.last_railway.end_date);
-		//alert(JSON.stringify(response.last_railway))
-	}	
+		clearRailwayInfor();
+	}
 //	}
 //	else
 //		clearRailwayInfor();
