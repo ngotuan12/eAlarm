@@ -394,7 +394,7 @@ function findGatewayByGMac(gmac)
  * @param request
  * @param socket
  */
-function checkMac(request, socket)
+function announce(request, socket)
 {
 	log(request.body.G_MAC);
 	var strSQL = "SELECT id,mac_add,connected_server,`status`,`type`,`action_status` FROM device WHERE mac_add = ? ";
@@ -430,6 +430,7 @@ function checkMac(request, socket)
 								}
 								socket.device_status = gateways[gatewaydata.id].device_status;
 								socket.current_transaction_id = gateways[gatewaydata.id].current_transaction_id;
+								socket.railway_session = gateways[gatewaydata.id].railway_session;
 							}
 //							else
 //							{
@@ -569,7 +570,8 @@ function onClose(socket)
 				last_connect : new Date(),
 				tid : tid,
 				current_transaction_id : socket.current_transaction_id,
-				device_status : socket.device_status
+				device_status : socket.device_status,
+				railway_session: socket.railway_session
 			};
 		}
 	}
@@ -960,7 +962,7 @@ var socketServer = net.createServer(function(socket)
 			{
 				case "announce":
 					log('-------------announce--------------');
-					checkMac(request, socket);
+					announce(request, socket);
 					break;
 				case "get_time":
 					log("--------------------");

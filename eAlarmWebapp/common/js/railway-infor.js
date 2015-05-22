@@ -26,7 +26,7 @@ function onGetDeviceInfor(device_id) {
 		updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
 		updateDevice();
-		updateDeviceProperties(data.device_infor);
+		updateDeviceProperties(data);
 		abortTimer();
 		tid = setTimeout(mycode, updateInterval);
 	});
@@ -153,7 +153,7 @@ function getCurrentDeviceInfor()
 			device = data.device;
 			updateDevice();
 		}
-		updateDeviceProperties(data.device_infor);
+		updateDeviceProperties(data);
 		updateData(data.device_infor[InforIndex].value);
 		
 	});
@@ -190,8 +190,9 @@ function updateDevice()
 		deviceStatusTable.attr("src","/images/ic_blue.png");
 	}
 }
-function updateDeviceProperties(data)
+function updateDeviceProperties(response)
 {
+	data = response.device_infor
 	//update device information
 	var deviceInfor = $('#device-infor-1');
 	deviceInfor.empty();
@@ -315,13 +316,19 @@ function updateDeviceProperties(data)
 	
 //	if(device.action_status ==='1' ||device.action_status ==='2')
 //	{
-	if(device.status !== '0')
+	if(device.action_status ==='1' ||device.action_status ==='2')
 	{
 		infors = data.filter(function (el){
 			return el.properties.m_type === '2'||el.properties.m_type === '5';
 		});
 		updateRailwayInfor(infors);
+		$("#last-raiway").html("--");
 	}
+	else if(device.action_status === '0')
+	{
+		$("#last-raiway").html(response.last_railway.end_date);
+		//alert(JSON.stringify(response.last_railway))
+	}	
 //	}
 //	else
 //		clearRailwayInfor();
