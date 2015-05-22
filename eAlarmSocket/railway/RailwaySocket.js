@@ -178,6 +178,17 @@ function updateDevice(socket, device_id, status, strServerIP, strDescription,
 				device_id, status, strDescription, transaction_detail);
 	});
 }
+
+/**
+ * @author TuanNA
+ * @param device_id
+ * @param action_status
+ */
+function updateDeviceActionStatus(device_id,action_status)
+{
+	var strSQL = "UPDATE device " + " SET action_status = ? " + " WHERE id = ? ";
+	connDB.query(strSQL, [action_status,device_id]);
+}
 /**
  * @author TuanNA
  * @since 19/09/2014
@@ -521,7 +532,7 @@ function init_properties()
 				return;
 			}
 			//update device
-			strSQL = "UPDATE device SET status = '0' WHERE connected_server = ? ";
+			strSQL = "UPDATE device SET status = '0',action_status = '0' WHERE connected_server = ? ";
 			connDB.query(strSQL, [ server_ip ], function(err, rows, fields)
 			{
 				if (err)
@@ -547,6 +558,16 @@ function timeOutFromServer(gateway_id)
 			"value" : null,
 			"device_pro_id" : null
 		} ]);
+		updateDeviceActionStatus(gateway_id,'0');
+		for(var m=0;m<clients.length;m++)
+		{
+			if(clients[m].monitor)
+			{
+				clients[m].send('{"handle":"on_status_change","device_id":"'+gateway_id+'","status":"0"}');
+				clients[m].send('{"handle":"on_railway_change","device_id":"'+gateway_id+'","action_status":"0"}');
+			}
+			
+		}
 		//gateways[gateway_id] = null;
 		delete gateways[gateway_id];
 	}

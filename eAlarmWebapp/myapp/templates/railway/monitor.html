@@ -97,10 +97,12 @@
 								<td>{{ device.name }}</td>
 								<td class="center">
 									<p id ="railway-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
-										{% if  device.action_status == '1' %}
-											>>>>>
-										{% elif device.action_status == '2' %}
-											<<<<<
+										{% if  device.status != '0' %}
+											{% if  device.action_status == '1' %}
+												>>>>>
+											{% elif device.action_status == '2' %}
+												<<<<<
+											{% endif %}
 										{% endif %}
 									</p>
 									{% if  device.status == '0' %}
