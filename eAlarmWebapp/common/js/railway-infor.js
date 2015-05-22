@@ -23,7 +23,7 @@ function onGetDeviceInfor(device_id) {
 		device = data.device;
 		route = data.route;
 		resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
-		updateData(data.device_infor[InforIndex].value);
+		//updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
 		updateDevice();
 		updateDeviceProperties(data);
@@ -147,15 +147,15 @@ function getCurrentDeviceInfor()
 		'csrfmiddlewaretoken' : csrftoken,
 		'device_id' : currentDeviceID,
 	});
-	posting.done(function(data) {
+	posting.done(function(data) 
+	{
+		device = data.device;
 		if(data.device.status!==device.status)
 		{
-			device = data.device;
 			updateDevice();
 		}
 		updateDeviceProperties(data);
-		updateData(data.device_infor[InforIndex].value);
-		
+		//updateData(data.device_infor[InforIndex].value);
 	});
 }
 function updateDevice()
@@ -506,8 +506,8 @@ function addProperty(device,row, infor,parent)
 
 function mycode() {
 	getCurrentDeviceInfor();
-	if(device.status !=="0")
-		updateChart();
+	//if(device.status !=="0")
+		//updateChart();
 	// do some stuff...
 	tid = setTimeout(mycode, updateInterval); // repeat myself
 }
