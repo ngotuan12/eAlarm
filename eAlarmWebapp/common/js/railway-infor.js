@@ -333,6 +333,7 @@ function updateRailwayInfor(infors)
 	{
 		infor = infors[i];
 		var strHtml = "";
+		var strValue = infor.value + " " +infor.properties.symbol;
 		if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 		{
 			strHtml = "<p style=\"color: red\">" + strValue +"</p>";
