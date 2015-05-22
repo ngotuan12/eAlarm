@@ -315,10 +315,13 @@ function updateDeviceProperties(data)
 	
 //	if(device.action_status ==='1' ||device.action_status ==='2')
 //	{
+	if(device.status !== '0')
+	{
 		infors = data.filter(function (el){
 			return el.properties.m_type === '2'||el.properties.m_type === '5';
 		});
 		updateRailwayInfor(infors);
+	}
 //	}
 //	else
 //		clearRailwayInfor();
@@ -329,13 +332,20 @@ function updateRailwayInfor(infors)
 	for(var i=0;i<infors.length;i++)
 	{
 		infor = infors[i];
+		String strHtml = "";
+		if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
+		{
+			strHtml = "<p style=\"color: red\">" + strValue +"</p>";
+		}
+		else 
+			strHtml = "<p style=\"color: green\">" + strValue +"</p>";
 		if(infor.properties.code === "I1")
 		{
-			$('#RED1').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RED1').html(strHtml);
 		}
 		else if(infor.properties.code === "I4")
 		{
-			$('#RED2').html("" + infor.value + " " +infor.properties.symbol);
+			$('#RED2').html(strHtml);
 		}
 		else if(infor.properties.code === "I2")
 		{
