@@ -332,7 +332,7 @@ function updateRailwayInfor(infors)
 	for(var i=0;i<infors.length;i++)
 	{
 		infor = infors[i];
-		String strHtml = "";
+		var strHtml = "";
 		if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
 		{
 			strHtml = "<p style=\"color: red\">" + strValue +"</p>";
