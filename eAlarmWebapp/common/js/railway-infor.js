@@ -8,6 +8,7 @@ var device_infor;
 var device;
 var route;
 var tid;
+var table3;
 var codes = ["X1","X2","X3","X4","X5","X6","I1","I2","I3","I4","I5","I6","I7","I8"];
 function onGetDeviceInfor(device_id) {
 	currentDeviceID = device_id;
@@ -33,6 +34,7 @@ function onGetDeviceInfor(device_id) {
 }
 function showRailwayHistory()
 {
+	
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/ajax-railway-history", {
 		'csrfmiddlewaretoken' : csrftoken,
@@ -41,6 +43,9 @@ function showRailwayHistory()
 	
 	posting.done(function(data) 
 	{
+		if(typeof table3 !== 'undefined')
+			table3.fnDestroy();
+		
 		var tbody = $('#table3 tbody');
 		tbody.empty();
 		sessions = data.railway_sessions;
@@ -54,7 +59,7 @@ function showRailwayHistory()
 		{
 			railway_session = sessions[i];
 			//var row = $('<tr class="odd gradeX" id="'+ railway_session.id +'"></tr>');
-			var row = $('<tr class="odd gradeX" id="'+ railway_session.id + '"></tr>');
+			var row = $('<tr id="'+ railway_session.id + '"></tr>');
 			
 			//STT
 			row.append($('<td>'+ (i+1).toString() +'</td>'));
@@ -67,6 +72,8 @@ function showRailwayHistory()
 			{
 				row.append($('<td> Lẻ</td>'));
 			}
+			else
+				row.append($('<td> Unknown</td>'));
 			//row.append($('<td>' + railway_session.id + '</td>'));
 			//start date
 			row.append($('<td>' + railway_session.start_date + '</td>'));
@@ -91,6 +98,29 @@ function showRailwayHistory()
 			
 		});
 		$('#table3 tbody tr').first().click();
+		table3 = $('#table3').dataTable(
+		{
+			"bLengthChange": false,
+			//"bFilter" : false,
+			"bRetrieve": true,
+			"bInfo":false,
+			"bFilter":false,
+			"sPaginationType" : "full_numbers",
+			"iDisplayLength":10,
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
+		});
 	});
 	//hide loading
 	//$.fn.loading.hide();
