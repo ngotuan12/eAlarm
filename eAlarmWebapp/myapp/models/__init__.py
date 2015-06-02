@@ -5,6 +5,5 @@ from myapp.models.Area import Area
 from myapp.models.Report import Report
 from myapp.models.Route import Route
 from myapp.models.ApParam import ApParam
-from myapp.models.LastAction import LastAction
 from myapp.models.RailwaySession import RailwaySession
 from myapp.models.RailwaySessionDetail import RailwaySessionDetail

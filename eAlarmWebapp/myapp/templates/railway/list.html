@@ -197,7 +197,7 @@
 <script src="/js/jquery.confirm.js"></script>
 <script>
 jQuery(document).ready(function() {
-	jQuery('#tb_device').dataTable({
+	var table = jQuery('#tb_device').dataTable({
 		"sPaginationType" : "full_numbers"
 	});
 	//Chosen Select
@@ -206,9 +206,8 @@ jQuery(document).ready(function() {
 		'white-space' : 'nowrap',
 		disable_search_threshold : 10
 	});
-	$('#tbd_device tr').click(function(e)
-	{
-		var device_id = $(this).attr('id');
+	 $('#tb_device tbody').on( 'click', 'tr', function () {
+		 var device_id = $(this).attr('id');
 		var name = $(this).attr('name');
 		var code = $(this).attr('code');
 		var mac =  $(this).attr('mac');
