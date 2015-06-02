@@ -29,9 +29,11 @@ def index(request):
 		infors = []
 		last_railway = {}
 		if device.action_status == '0':
-			last_railway = RailwaySession.objects.filter(device_id=device_id).latest('end_date')
-			if last_railway is not None:
-				last_railway = model_to_dict(last_railway)
+			last_railway = RailwaySession.objects.filter(device_id=device_id)
+			if len(last_railway)>0:
+				last_railway = model_to_dict(last_railway.latest('end_date'))
+			else:
+				last_railway = []
 		for infor in device_infor:
 			infors.append({'id':infor.id, 'value':infor.value, 'status':infor.status, 'properties':model_to_dict(infor.device_pro)})
 		route = None

@@ -401,7 +401,7 @@
 		
 		initWebsocket();
 		
-		$('#table2').dataTable(
+		var table = $('#table2').dataTable(
 		{
 			//"bLengthChange": false,
 			//"bFilter" : false,
@@ -430,8 +430,7 @@
 			});
 		$("input").attr("placeholder","Tìm kiếm");
 		
-		$('#table2 tbody tr').click(function(e)
-		{
+		$('#table2 tbody').on( 'click', 'tr', function () {
 			device_id = $(this).attr('id');
 			device_status = $(this).attr('device_status');
 			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
@@ -479,6 +478,7 @@
 				$('#railway-status').addClass('active');
 			}
 		});
+		
 		$('#tab-railway-history').click(function(e)
 		{			
 			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
