@@ -22,7 +22,7 @@ function onGetDeviceInfor(device_id) {
 		device_infor = data.device_infor;
 		device = data.device;
 		route = data.route;
-		resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
+		//resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
 		//updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
 		updateDevice();
@@ -505,7 +505,7 @@ function addProperty(device,row, infor,parent)
 				break;
 			}	
 		}
-		resetChart(device_infor[InforIndex].properties.min,device_infor[InforIndex].properties.max)
+		//resetChart(device_infor[InforIndex].properties.min,device_infor[InforIndex].properties.max)
 		
 	});
 	column.appendTo(row);
