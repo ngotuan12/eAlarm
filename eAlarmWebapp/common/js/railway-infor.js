@@ -349,7 +349,7 @@ function updateDeviceProperties(response)
 //	{
 	if(device.status!=='0')
 	{
-		if(device.action_status ==='1' ||device.action_status ==='2')
+		if(device.action_status ==='1' ||device.action_status ==='2' ||device.action_status ==='3' ||device.action_status ==='4')
 		{
 			infors = data.filter(function (el){
 				return el.properties.m_type === '2'||el.properties.m_type === '5';
