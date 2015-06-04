@@ -23,7 +23,7 @@
 	<div class="breadcrumb-wrapper">
 			<span class="label">Giao diện </span>
 			<ol class="breadcrumb">
-				<li><a href="/home">Biểu đồ</a></li>
+				<li><a href="/railway/monitor/">Biểu đồ</a></li>
 			</ol>
 	</div>
 </div>
@@ -265,11 +265,11 @@
 		content: contentString,
 		});
 		if(status == "0" )
-			var image = '../images/icon/marker_gray.png'
+			var image = '/images/icon/marker_gray.png'
 		else if(status == "1")
-			var image = '../images/icon/marker_blue.png'
+			var image = '/images/icon/marker_blue.png'
 		else if(status == "2")
-			var image = '../images/icon/marker_red.png'
+			var image = '/images/icon/marker_red.png'
 		
 		var myLatlng = new google.maps.LatLng(lat, lng)
 		var mapOptions = {
@@ -351,11 +351,11 @@
 				var lng = $(this).attr('lng');
 				var name = $(this).attr('name');
 				if(status == '0' )
-					var image = '../images/icon/marker_gray.png'
+					var image = '/images/icon/marker_gray.png'
 				else if(status == '1')
-					var image = '../images/icon/marker_blue.png'
+					var image = '/images/icon/marker_blue.png'
 				else if(status == '2')
-					var image = '../images/icon/marker_red.png'
+					var image = '/images/icon/marker_red.png'
 				myLatlng = new google.maps.LatLng(lat, lng)
 				var marker = new google.maps.Marker({
 					position: myLatlng,
@@ -402,11 +402,11 @@
 						var lng = $(this).attr('lng');
 						var name = $(this).attr('name');
 						if(status == '0' )
-							var image = '../images/icon/marker_gray.png'
+							var image = '/images/icon/marker_gray.png'
 						else if(status == '1')
-							var image = '../images/icon/marker_blue.png'
+							var image = '/images/icon/marker_blue.png'
 						else if(status == '2')
-							var image = '../images/icon/marker_red.png'
+							var image = '/images/icon/marker_red.png'
 						
 						myLatlng = new google.maps.LatLng(lat, lng)
 						var marker = new google.maps.Marker({
@@ -460,11 +460,11 @@
 		content: contentString,
 		});
 		if(status == "0" )
-			var image = '../images/icon/marker_gray.png'
+			var image = '/images/icon/marker_gray.png'
 		else if(status == "1")
-			var image = '../images/icon/marker_blue.png'
+			var image = '/images/icon/marker_blue.png'
 		else if(status == "2")
-			var image = '../images/icon/marker_red.png'
+			var image = '/images/icon/marker_red.png'
 		
 		var myLatlng = new google.maps.LatLng(lat, lng)
 		var mapOptions = {

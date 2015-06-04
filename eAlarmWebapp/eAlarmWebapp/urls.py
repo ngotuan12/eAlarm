@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^home$', Home.home),
     #railway
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
+    url(r'^railway/maps/$', Railway.maps,name='railway-maps'),
     url(r'^railway/list/$', RailwayList.index,name='railway-list'),
     url(r'^railway/property/$', RailwayProperty.index,name='railway-property'),
     url(r'^railway/route/$', Route.index,name='railway-route'),
