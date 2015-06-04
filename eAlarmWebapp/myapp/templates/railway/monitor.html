@@ -491,15 +491,15 @@
 		//onGetDeviceInfor({{ devices.0.id }});
 		$('#btnNhanCong').click(function(e)
 		{
-			doSend('{"handle":"send_cmd","device_id":43,"body":{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}}');
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}}');
 		});
 		$('#btnDuyTu').click(function(e)
 		{
-			doSend('{"handle":"send_cmd","device_id":43,"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"ON","RESET":"OFF"}}}');
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"ON","RESET":"OFF"}}}');
 		});
 		$('#btnPhucHoi').click(function(e)
 		{
-			doSend('{"handle":"send_cmd","device_id":43,"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
 		//loading
 		
