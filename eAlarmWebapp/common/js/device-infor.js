@@ -120,7 +120,7 @@ function updateDeviceProperties(infors)
 		if( i === infors.length)
 			break;
 	}
-	if(device.action_status ==='1' ||device.action_status ==='2')
+	if(device.action_status ==='1' ||device.action_status ==='2' ||device.action_status ==='3' ||device.action_status ==='4')
 	{
 		updateRailwayInfor(infors);
 	}

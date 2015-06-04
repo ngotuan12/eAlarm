@@ -671,7 +671,8 @@ function updateOnchangeAction(socket,infors)
 			};
 		socket.railway_session.is_inprogress = true;
 	}
-	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0)
+	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0 && 
+			infors.I1 === 0 && infors.I2 === 0 && infors.I3 === 0 && infors.I4 === 0 && infors.I5 === 0 && infors.I6 === 0 && infors.I7 === 0 && infors.I8 === 0)
 	{
 		if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress === true)
 		{
@@ -679,6 +680,16 @@ function updateOnchangeAction(socket,infors)
 			createRailwaySession(socket,socket.gatewayinfo.id,socket.railway_session);
 		}
 		action_status = "0";
+	}
+	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0 && 
+			(infors.I1 > 0 || infors.I2 > 0 || infors.I3 > 0 || infors.I4 > 0 || infors.I7 > 0 || infors.I8 > 0))
+	{
+		action_status = "3";
+	}
+	else if(infors.X1 === 0 && infors.X2 === 0 && infors.X3 === 0 && infors.X4 === 0 && infors.X5 === 0 && infors.X6 === 0 && 
+			(infors.I5 > 0 || infors.I6 > 0))
+	{
+		action_status = "4";
 	}
 	
 	if(typeof socket.railway_session!=='undefined'&& socket.railway_session !== null && socket.railway_session.is_inprogress === true)

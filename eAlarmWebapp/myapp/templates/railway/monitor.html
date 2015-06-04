@@ -102,6 +102,10 @@
 												>>>>>
 											{% elif device.action_status == '2' %}
 												<<<<<
+											{% elif device.action_status == '3' %}
+												Kiểm tra
+											{% elif device.action_status == '4' %}
+												Duy tu
 											{% endif %}
 										{% endif %}
 									</p>
@@ -361,6 +365,14 @@
 				else if(action_status==="2")
 				{
 					railway_action.html("<<<<<");
+				}
+				else if(action_status==="3")
+				{
+					railway_action.html("Kiểm tra");
+				}
+				else if(action_status==="4")
+				{
+					railway_action.html("Duy tu");
 				}
 				else if(action_status==="0")
 				{
