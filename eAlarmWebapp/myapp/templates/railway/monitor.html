@@ -328,60 +328,67 @@
 	}
 	function onMessage(evt)
 	{
-		console.log(evt.data.toString());
-		var data = $.parseJSON(evt.data.toString());
-		
-		switch (data.handle)
+		try
 		{
-			case "on_status_change":
-				var device_id = data.device_id;
-				var status = data.status;
-				var img_status = $("#device-status-"+device_id);
-				if(status==="1")
-				{
-					img_status.attr("src","/images/ic_green.png");
-				}
-				else if(status==="2")
-				{
-					img_status.attr("src","/images/ic_red.png");
-				}
-				else if(status==="0")
-				{
-					img_status.attr("src","/images/ic_blue.png");
-				}
-				console.log("Status change " + "device_id: "+ device_id + "status: "+status);
-				break;
-			case "on_railway_change":
-				var device_id = data.device_id;
-				var action_status = data.action_status;
-				var railway_action = $("#railway-"+device_id);
-				console.log("#railway-"+device_id);
-				if(device.id === device_id)
-					device.action_status = action_status;
-				if(action_status==="1")
-				{
-					railway_action.html(">>>>>");
-				}
-				else if(action_status==="2")
-				{
-					railway_action.html("<<<<<");
-				}
-				else if(action_status==="3")
-				{
-					railway_action.html("Nhân công");
-				}
-				else if(action_status==="4")
-				{
-					railway_action.html("Duy tu");
-				}
-				else if(action_status==="0")
-				{
-					railway_action.html("");
-					clearRailwayInfor();
-				}
-				break;
-			default:
-				break;
+			//console.log(evt.data.toString());
+			var data = $.parseJSON(evt.data.toString());
+			
+			switch (data.handle)
+			{
+				case "on_status_change":
+					var device_id = data.device_id;
+					var status = data.status;
+					var img_status = $("#device-status-"+device_id);
+					if(status==="1")
+					{
+						img_status.attr("src","/images/ic_green.png");
+					}
+					else if(status==="2")
+					{
+						img_status.attr("src","/images/ic_red.png");
+					}
+					else if(status==="0")
+					{
+						img_status.attr("src","/images/ic_blue.png");
+					}
+					console.log("Status change " + "device_id: "+ device_id + "status: "+status);
+					break;
+				case "on_railway_change":
+					var device_id = data.device_id;
+					var action_status = data.action_status;
+					var railway_action = $("#railway-"+device_id);
+					console.log("#railway-"+device_id);
+					if(device.id === device_id)
+						device.action_status = action_status;
+					if(action_status==="1")
+					{
+						railway_action.html(">>>>>");
+					}
+					else if(action_status==="2")
+					{
+						railway_action.html("<<<<<");
+					}
+					else if(action_status==="3")
+					{
+						railway_action.html("Nhân công");
+					}
+					else if(action_status==="4")
+					{
+						railway_action.html("Duy tu");
+					}
+					else if(action_status==="0")
+					{
+						railway_action.html("");
+						clearRailwayInfor();
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		catch(e)
+		{
+			
 		}
 	}
 	function onError(evt)
