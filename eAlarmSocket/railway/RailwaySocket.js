@@ -312,14 +312,6 @@ function updateDeviceInfor(socket, device_id, infors,type)
 							{
 								continue;
 							}
-							if(property.m_type === "2")
-							{
-								continue;
-							}
-							if(property.m_type === "5")
-							{
-								continue;
-							}
 							//neu la cam bien chinh
 							if(property.require === "1")
 							{
