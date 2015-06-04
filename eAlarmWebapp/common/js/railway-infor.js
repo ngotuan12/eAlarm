@@ -1,6 +1,6 @@
 var plot;
 var data = [], totalPoints = 100;
-var updateInterval = 2000;
+var updateInterval = 3000;
 var currentDeviceID;
 var currentDeviceInforID;
 var InforIndex = 0;
@@ -19,6 +19,7 @@ function onGetDeviceInfor(device_id) {
 	});
 	posting.done(function(data) 
 	{
+		$("#last-raiway").html("--");
 		InforIndex = 0;
 		device_infor = data.device_infor;
 		device = data.device;
