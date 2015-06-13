@@ -513,7 +513,7 @@ function addProperty(device,row, infor,parent)
 //				column.html("<p>" + infor.properties.name
 //						+ "</p> <h5 style=\"color: red\">" + "Mất " + infor.properties.name + "</h5>");
 //			}
-			else if(infor.value < infor.properties.min_alarm ||  infor.value > infor.properties.max_alarm)
+			else if(infor.value <= infor.properties.min_alarm ||  infor.value >= infor.properties.max_alarm)
 			{
 				column.html("<p>" + infor.properties.name
 						+ "</p> <p style=\"color: red\">" + strValue +"</p>");
