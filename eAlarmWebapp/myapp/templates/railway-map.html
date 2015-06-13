@@ -251,15 +251,15 @@
 		$("ul li[area_id][area_id='"+ area_id +"']").attr('used','1');
 		if(status == "1")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		else if(status == "0")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		else if(status == "2")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		var infowindow = new google.maps.InfoWindow({
 		content: contentString,
@@ -368,15 +368,15 @@
 				
 				if(status == "1")
 				{
-					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 				}
 				else if(status == "0")
 				{
-					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 				}
 				else if(status == "2")
 				{
-					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+					contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 				}
 				var infowindow = new google.maps.InfoWindow({
 				content: contentString,
@@ -420,15 +420,15 @@
 						
 						if(status == "1")
 						{
-							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 						}
 						else if(status == "0")
 						{
-							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 						}
 						else if(status == "2")
 						{
-							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+							contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 						}
 						var infowindow = new google.maps.InfoWindow({
 						content: contentString,
@@ -446,15 +446,15 @@
 	{
 		if(status == "1")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #689c35;background:#9dce6e;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		else if(status == "0")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #a5a5a5;background:#c0c0c0;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		else if(status == "2")
 		{
-			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/home?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
+			contentString = '<div id="information" style="width:350px;padding:5px;min-height:80px;border: 1px solid #e80d15;background:#e80d15;font-family: sans-serif;color:white;overflow-y: auto;;overflow-x: hidden;"><h4 style="line-height:0px;">'+ code +'</h4><p style="margin-bottom:0px;">'+ address +'</p><a href="/railway/monitor/?device_id='+ device_id +'" style="float:right;color:white;text-decoration: none;position: inherit;">Xem chi tiết...</a></div>';
 		}
 		var infowindow = new google.maps.InfoWindow({
 		content: contentString,
