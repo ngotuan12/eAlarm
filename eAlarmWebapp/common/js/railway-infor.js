@@ -24,8 +24,6 @@ function onGetDeviceInfor(device_id) {
 		device_infor = data.device_infor;
 		device = data.device;
 		route = data.route;
-		//resetChart(data.device_infor[InforIndex].properties.min,data.device_infor[InforIndex].properties.max);
-		//updateData(data.device_infor[InforIndex].value);
 		currentDeviceInforID = data.device_infor[InforIndex].id;
 		updateDevice();
 		updateDeviceProperties(data);
@@ -85,18 +83,10 @@ function showRailwayHistory()
 		}
 		$('#table3 tbody tr').click(function(e)
 		{
-//			alert('adasdasd');
 			railway_session_id = $(this).attr('id');
 			$("#table3 tbody tr[id][id='"+ railway_session_id +"']").css('background-color','#8EE2BC');
 			$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
-//			alert(railway_session_id);
-			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
-			$(this).css({'cursor' : 'wait'});
-//			$(this).addClass('load').wait(10).addClass('done');
 			showRailwayDetailHistory(railway_session_id);
-			//$('#loading').fadeOut('fast');
-			$(this).css({'cursor' : 'default'});
-			
 		});
 		$('#table3 tbody tr').first().click();
 		table3 = $('#table3').dataTable(
@@ -123,8 +113,6 @@ function showRailwayHistory()
 			}
 		});
 	});
-	//hide loading
-	//$.fn.loading.hide();
 }
 function showRailwayDetailHistory(railway_session_id)
 {

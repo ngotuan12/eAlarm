@@ -153,6 +153,7 @@
 					<li class="active" ><a href="#railway-status"  id='tab-railway-status' data-toggle="tab">Trạng thái</a></li>
 					<li ><a href="#railway-history"  id='tab-railway-history' data-toggle="tab">Phiên tàu chạy</a></li>
 					<li style="display: none;"><a href="#device-history"  id='tab-device-history' data-toggle="tab">Lịch sử</a></li>
+					<li style="display: none;"><a href="#device-history"  id='tab-device-history' data-toggle="tab">Lịch sử</a></li>
 					<!-- <li><a href="#messages">Messages</a></li>
 					<li><a href="#settings">Settings</a></li> -->
 				</ul>
@@ -458,32 +459,10 @@
 		$('#table2 tbody').on( 'click', 'tr', function () {
 			device_id = $(this).attr('id');
 			device_status = $(this).attr('device_status');
-			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
+			//doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
 			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
 			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
-			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
-			//$(this).css({"cursor" :"progress"});
-			//setTimeout( "jQuery('#loading_mask').hide();", 3000 );
-			//$(this).slideUp(200).delay(2000).fadeIn(400);
 			onGetDeviceInfor(device_id);
-			//$(this).css({"cursor" , 'default'});
-			//$('#loading').fadeOut('fast');
-
-			if (device_status == '1' || device_status == '2')
-			{
-				$('#btnNhanCong').removeAttr("disabled");
-				$('#btnDuyTu').removeAttr("disabled");
-				$('#btnPhucHoi').removeAttr("disabled");
-				$('#btnCuongBuc').removeAttr("disabled");
-			}
-			else
-			{
-				$('#btnNhanCong').attr("disabled", true);
-				$('#btnDuyTu').attr("disabled", true);
-				$('#btnPhucHoi').attr("disabled", true);
-				$('#btnCuongBuc').attr("disabled", true);
-			}
-						
 			$('#tab-railway-history').parent().hasClass('active')
 			{
 				$('#tab-railway-history').parent().removeClass('active');
@@ -506,13 +485,9 @@
 		
 		$('#tab-railway-history').click(function(e)
 		{			
-			//$('#loading').html("<img src='/images/loaders/loader5.gif'/>").fadeIn('fast');
 			showRailwayHistory();
-			//$('#loading').fadeOut('fast');			
-			//$('#table3').addClass('active');
 		});
 		
-		//onGetDeviceInfor({{ devices.0.id }});
 		$('#btnNhanCong').click(function(e)
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}}');
@@ -526,17 +501,7 @@
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
 		//loading
-		
-	});
-	jQuery(window).load(function()
-	{ 
-		device_id = '{{ device_id|safe }}';
-		doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
-		if (!device_id)
-			device_id = $("#table2 tbody tr[device_id]").first().attr('id');
-		$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
-		$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
-		onGetDeviceInfor(device_id);
+		$('#table2 tbody tr').first().click();
 	});
 </script>
 {% endblock scripts%}
