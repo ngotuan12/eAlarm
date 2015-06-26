@@ -1,4 +1,5 @@
 from myapp.models.Device import Device
+from myapp.models.DeviceCmdLog import DeviceCmdLog
 from myapp.models.DeviceInfor import DeviceInfor
 from myapp.models.DeviceProperties import DeviceProperties
 from myapp.models.Area import Area
@@ -7,3 +8,5 @@ from myapp.models.Route import Route
 from myapp.models.ApParam import ApParam
 from myapp.models.RailwaySession import RailwaySession
 from myapp.models.RailwaySessionDetail import RailwaySessionDetail
+from myapp.models.Cmd import Cmd
+from myapp.models.CmdParam import CmdParam
