@@ -89,7 +89,7 @@ function sendGatewayCommand(cmd, socket)
 			{
 				if(clients[i].device_id === socket.gatewayinfo.id)
 				{
-					clients[i].send(cmd);
+					clients[i].send(strResponse);
 				}
 			}
 		});
@@ -115,7 +115,7 @@ function sendGatewayCommand(cmd, socket)
 		{
 			if(clients[i].device_id === socket.gatewayinfo.id)
 			{
-				clients[i].send(cmd);
+				clients[i].send(strResponse);
 			}
 		}
 	}
