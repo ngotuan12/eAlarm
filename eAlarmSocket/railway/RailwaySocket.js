@@ -53,24 +53,49 @@ function sendWebsocketMessage(conn, handle, response)
 }
 function sendGatewayCommand(cmd, socket)
 {
-	
+	var strResponse = JSON.stringify(cmd);
 	//set cmd_id
-	var strSQL = "INSERT INTO cmd(name,type,content) " + "VALUES(?,?,?)";
-	
-	connDB.query(strSQL, [ cmd.cmd,cmd.type,JSON.stringify(cmd) ], function(err, rows, fields)
+	if(cmd.type==="request")
 	{
-		if (err)
-		{
-			log(err);
-			return;
-		}
-		var cmd_id = rows.insertId;
-		if(cmd.type==="request")
-		{
-			cmd.cmd_id = cmd_id;
-		}
-		var strResponse = JSON.stringify(cmd);
+		var strSQL = "INSERT INTO cmd(name,type,content) " + "VALUES(?,?,?)";
 		
+		connDB.query(strSQL, [ cmd.cmd,cmd.type,strResponse ], function(err, rows, fields)
+		{
+			if (err)
+			{
+				log(err);
+				return;
+			}
+			cmd.cmd_id = rows.insertId;
+			
+			strResponse = JSON.stringify(cmd);
+			
+			log("type gateway:" + socket.gatewayinfo.type);
+			if (socket.gatewayinfo.type === "1"||socket.gatewayinfo.type === "4")
+			{
+				strResponse = String.fromCharCode(0x01) + strResponse + String.fromCharCode(0x0A) + String.fromCharCode(0x0D);
+				log("response:" + strResponse);
+			} else if (socket.gatewayinfo.type === "2" || socket.gatewayinfo.type === "3")
+			{
+				strResponse = strResponse + "\n";
+			}
+			if (socket !== null)
+			{
+				socket.write(strResponse);
+			}
+			
+			//send to connected device
+			for(var i=0;i<clients.length;i++)
+			{
+				if(clients[i].device_id === socket.gatewayinfo.id)
+				{
+					clients[i].send(cmd);
+				}
+			}
+		});
+	}
+	else
+	{
 		log("type gateway:" + socket.gatewayinfo.type);
 		if (socket.gatewayinfo.type === "1"||socket.gatewayinfo.type === "4")
 		{
@@ -93,9 +118,7 @@ function sendGatewayCommand(cmd, socket)
 				clients[i].send(cmd);
 			}
 		}
-	});
-	
-	
+	}
 }
 /**
  * @author: TuanNA
