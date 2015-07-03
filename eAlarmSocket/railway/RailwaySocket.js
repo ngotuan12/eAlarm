@@ -51,31 +51,51 @@ function sendWebsocketMessage(conn, handle, response)
 	response.handle = handle;
 	conn.send(JSON.stringify(response));
 }
-function sendGatewayCommand(response, socket)
+function sendGatewayCommand(cmd, socket)
 {
-	var strResponse = JSON.stringify(response);
-	log("type gateway:" + socket.gatewayinfo.type);
-	if (socket.gatewayinfo.type === "1"||socket.gatewayinfo.type === "4")
-	{
-		strResponse = String.fromCharCode(0x01) + strResponse + String.fromCharCode(0x0A) + String.fromCharCode(0x0D);
-		log("response:" + strResponse);
-	} else if (socket.gatewayinfo.type === "2" || socket.gatewayinfo.type === "3")
-	{
-		strResponse = strResponse + "\n";
-	}
-	if (socket !== null)
-	{
-		socket.write(strResponse);
-	}
 	
-	//send to connected device
-	for(var i=0;i<clients.length;i++)
+	//set cmd_id
+	var strSQL = "INSERT INTO cmd(name,type,content) " + "VALUES(?,?,?)";
+	
+	connDB.query(strSQL, [ cmd.cmd,cmd.type,JSON.stringify(cmd) ], function(err, rows, fields)
 	{
-		if(clients[i].device_id === socket.gatewayinfo.id)
+		if (err)
 		{
-			clients[i].send(response);
+			log(err);
+			return;
 		}
-	}
+		var cmd_id = rows.insertId;
+		if(cmd.type==="request")
+		{
+			cmd.cmd_id = cmd_id;
+		}
+		var strResponse = JSON.stringify(cmd);
+		
+		log("type gateway:" + socket.gatewayinfo.type);
+		if (socket.gatewayinfo.type === "1"||socket.gatewayinfo.type === "4")
+		{
+			strResponse = String.fromCharCode(0x01) + strResponse + String.fromCharCode(0x0A) + String.fromCharCode(0x0D);
+			log("response:" + strResponse);
+		} else if (socket.gatewayinfo.type === "2" || socket.gatewayinfo.type === "3")
+		{
+			strResponse = strResponse + "\n";
+		}
+		if (socket !== null)
+		{
+			socket.write(strResponse);
+		}
+		
+		//send to connected device
+		for(var i=0;i<clients.length;i++)
+		{
+			if(clients[i].device_id === socket.gatewayinfo.id)
+			{
+				clients[i].send(cmd);
+			}
+		}
+	});
+	
+	
 }
 /**
  * @author: TuanNA
