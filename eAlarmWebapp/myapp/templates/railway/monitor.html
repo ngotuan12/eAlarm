@@ -171,7 +171,7 @@
 				<div class="tab-content" style="padding: 10px">
 				
 					<!-- Device control -->
-					{% if perms.myapp.view_deviceproperties %}
+					{% if perms.myapp.control_railway %}
 					<div class="tab-pane" id="device-control">
 						<p style="font-style: italic;font-weight: bold;">Điều khiển đường ngang</p>
 						<div class="profile-header" style="margin-left: auto;margin-right: auto;width: 60%;">
@@ -326,7 +326,45 @@
 					
 					
 					<div class="tab-pane" id="device-history">
-						b
+						<div class="row"> 
+							<div class="col-sm-5"> 
+								<div class="input-group">
+									<input type="text" id="dtFromDate" class="form-control"
+										name="dtFromDate" data-provide="datepicker"
+										data-date-format="dd/mm/yy" placeholder="Từ ngày(mm/dd/yyyy)">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div class="col-sm-5"> 
+								<div class="input-group">
+									<input type="text" id="dtToDate" class="form-control"
+										name="dtToDate" data-provide="datepicker"
+										data-date-format="dd/mm/yy" placeholder="Đến ngày (mm/dd/yyyy)">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div>
+								<button class="btn btn-primary" style="padding: 3px"><i class="glyphicon glyphicon-search"></i></button>
+							</div>
+						</div>
+						<div class="row"> 
+							<div class="col-sm"> 
+								<div class="table-responsive">
+									<table class="table" id="table7">
+										<thead>
+											<tr>
+												<th>Bắt đầu </th>
+												<th>Kết thúc </th>
+												<th>Thời gian</th>
+												<th>Chi tiết</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 					
 					<div class="tab-pane" id="railway-history">					
