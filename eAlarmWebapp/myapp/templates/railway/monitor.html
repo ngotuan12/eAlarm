@@ -602,7 +602,7 @@
 						switch (data.cmd)
 						{
 							case "look_money":
-								$("#txt003").val(data.body);
+								$("#txt003").val(JSON.stringify(data.body));
 								break;
 							default:
 								break;
