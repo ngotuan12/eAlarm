@@ -690,6 +690,7 @@
 			$('#railway-detail ul li[id][id="tab-railway-status"]').addClass('active');
 			$('#railway-detail .tab-content .tab-pane').removeClass('active');
 			$('#railway-detail .tab-content .tab-pane[id][id="railway-status"]').addClass('active');
+			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+'00:00'+'"}');
 		});
 		
 		$('#tab-railway-history').click(function(e)
