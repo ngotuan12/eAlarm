@@ -596,17 +596,18 @@
 						clearRailwayInfor();
 					}
 					break;
-				case "on_response":
-					switch (data.cmd)
-					{
-						case "look_money":
-							//$('#btn003').val()
-							break;
-						default:
-							break;	
-					}
-					break;
 				default:
+					if (data.type === "response")
+					{
+						switch (data.cmd)
+						{
+							case "look_money":
+								$("#txt003").val(data.body);
+								break;
+							default:
+								break;
+						}
+					}
 					break;
 			}
 		}

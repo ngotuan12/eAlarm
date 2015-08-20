@@ -1033,83 +1033,97 @@ var socketServer = net.createServer(function(socket)
 				socket.end();
 				return;
 			}
-			switch (request.cmd)
+			if(request.type === "response")
 			{
-				case "announce":
-					log('-------------announce--------------');
-					announce(request, socket);
-					break;
-				case "get_time":
-					log("--------------------");
-					log("get_time: " + data);
-					log("--------------------");
-					var date = new Date();
-					var gwRequest = {
-						"type" : "response",
-						"cmd" : "get_time",
-						"body" : {
-							"Year" : date.getFullYear(),
-							"Month" : date.getMonth() + 1,
-							"Day" : date.getDate(),
-							"Hour" : date.getHours(),
-							"Minutes" : date.getMinutes(),
-							"Seconds" : date.getSeconds()
-						}
-					};
-					log("send response get time");
-					sendGatewayCommand(gwRequest, socket);
-					break;
-				case "send_data":
-					log("--------------------");
-					log("----process-data----");
-					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body,"send_data");
-					log("----end-process-data----");
-					break;
-				case "send_gw_request":
-					var g_mac = request.G_MAC;
-					var gateway = findGatewayByGMac(g_mac);
-					if (gateway === null)
+				for(var m=0;m<clients.length;m++)
+				{
+					if(clients[m].monitor)
 					{
-						sendGatewayCommand({
-							"message" : "gateway not found!"
-						}, socket);
-					} else
-					{
-						sendGatewayCommand(request.body, gateway);
-						socket.on_gateway = g_mac;
-						socket.on_cmd = request.body.cmd;
+						clients[m].send('{"handle":"on_response","device_id":"'+socket.gatewayinfo.id+'","content":"'+strReuest+'"}');
 					}
-					break;
-				case "alarm":
-					var response = {
-						"type" : "response",
-						"cmd" : " alarm",
-						"body" : {
-							"result" : "ok"
-						}
-					};
-					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body,"alarm");
-					sendGatewayCommand(response, socket);
-					break;
-				case "get_test":
-					log("--------------------");
-					log("----process-data----");
-					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body,"get_test");
-					log("----end-process-data----");
-					break;
-				case "on_change":
-					log("--------------------");
-					log("----process-data----");
-					updateDeviceInfor(socket, socket.gatewayinfo.id,
-							request.body,"on_change");
-					log("----end-process-data----");
-					//check sensor
-					updateOnchangeAction(socket,request.body);
-					break;
+				}
 			}
+			else
+			{
+				switch (request.cmd)
+				{
+					case "announce":
+						log('-------------announce--------------');
+						announce(request, socket);
+						break;
+					case "get_time":
+						log("--------------------");
+						log("get_time: " + data);
+						log("--------------------");
+						var date = new Date();
+						var gwRequest = {
+							"type" : "response",
+							"cmd" : "get_time",
+							"body" : {
+								"Year" : date.getFullYear(),
+								"Month" : date.getMonth() + 1,
+								"Day" : date.getDate(),
+								"Hour" : date.getHours(),
+								"Minutes" : date.getMinutes(),
+								"Seconds" : date.getSeconds()
+							}
+						};
+						log("send response get time");
+						sendGatewayCommand(gwRequest, socket);
+						break;
+					case "send_data":
+						log("--------------------");
+						log("----process-data----");
+						updateDeviceInfor(socket, socket.gatewayinfo.id,
+								request.body,"send_data");
+						log("----end-process-data----");
+						break;
+					case "send_gw_request":
+						var g_mac = request.G_MAC;
+						var gateway = findGatewayByGMac(g_mac);
+						if (gateway === null)
+						{
+							sendGatewayCommand({
+								"message" : "gateway not found!"
+							}, socket);
+						} else
+						{
+							sendGatewayCommand(request.body, gateway);
+							socket.on_gateway = g_mac;
+							socket.on_cmd = request.body.cmd;
+						}
+						break;
+					case "alarm":
+						var response = {
+							"type" : "response",
+							"cmd" : " alarm",
+							"body" : {
+								"result" : "ok"
+							}
+						};
+						updateDeviceInfor(socket, socket.gatewayinfo.id,
+								request.body,"alarm");
+						sendGatewayCommand(response, socket);
+						break;
+					case "get_test":
+						log("--------------------");
+						log("----process-data----");
+						updateDeviceInfor(socket, socket.gatewayinfo.id,
+								request.body,"get_test");
+						log("----end-process-data----");
+						break;
+					case "on_change":
+						log("--------------------");
+						log("----process-data----");
+						updateDeviceInfor(socket, socket.gatewayinfo.id,
+								request.body,"on_change");
+						log("----end-process-data----");
+						//check sensor
+						updateOnchangeAction(socket,request.body);
+						break;
+				}
+			}
+			
 			if(typeof socket.gatewayinfo !== 'undefined')
 			{
 				request.device_id = socket.gatewayinfo.id;
