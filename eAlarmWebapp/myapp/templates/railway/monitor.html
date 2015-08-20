@@ -215,9 +215,9 @@
 									
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt003" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success mr5">
+												<button id="btn003" type="button" class="btn btn-success mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -544,7 +544,7 @@
 	{
 		try
 		{
-			//console.log(evt.data.toString());
+			console.log(evt.data.toString());
 			var data = $.parseJSON(evt.data.toString());
 			
 			switch (data.handle)
@@ -594,6 +594,16 @@
 					{
 						railway_action.html("");
 						clearRailwayInfor();
+					}
+					break;
+				case "on_response":
+					switch (data.cmd)
+					{
+						case "look_money":
+							//$('#btn003').val()
+							break;
+						default:
+							break;	
 					}
 					break;
 				default:
@@ -699,6 +709,12 @@
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
+		
+		$('#btn003').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
+		});
+		
 		//loading
 		$('#table2 tbody tr').first().click();
 	});
