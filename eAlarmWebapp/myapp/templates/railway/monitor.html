@@ -244,9 +244,9 @@
 									
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt005" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success mr5">
+												<button id="btn005" type="button" class="btn btn-success mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -257,9 +257,9 @@
 									<label class="col-sm-5 control-label">Danh sách server</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt006" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success  mr5">
+												<button id="btn006" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -271,9 +271,9 @@
 									
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt007" type="text"  class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success mr5">
+												<button id="btn007" type="button" class="btn btn-success mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -284,9 +284,9 @@
 									<label class="col-sm-5 control-label">Trạng thái relay PLC</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt008" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success  mr5">
+												<button id="btn008" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -298,9 +298,9 @@
 									
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt009" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success mr5">
+												<button id="btn009" type="button" class="btn btn-success mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -311,9 +311,9 @@
 									<label class="col-sm-5 control-label">Chuyển PLC S-M</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt010" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success  mr5">
+												<button id="btn010" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -329,7 +329,7 @@
 					
 					<div class="tab-pane" id="device-history">
 						<div class="row"> 
-							<div class="col-sm-5"> 
+							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
 								<div class="input-group">
 									<input type="text" id="dtFromDate" class="form-control"
 										name="dtFromDate" data-provide="datepicker"
@@ -337,7 +337,7 @@
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								</div>
 							</div>
-							<div class="col-sm-5"> 
+							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
 								<div class="input-group">
 									<input type="text" id="dtToDate" class="form-control"
 										name="dtToDate" data-provide="datepicker"
@@ -345,8 +345,8 @@
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								</div>
 							</div>
-							<div>
-								<button class="btn btn-primary" style="padding: 3px"><i class="glyphicon glyphicon-search"></i></button>
+							<div class="col-sm-2" >
+								<button class="btn btn-primary" style="padding: 3px;width: 100%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
 							</div>
 						</div>
 						<div class="row"> 
@@ -497,8 +497,12 @@
 <script src="/js/chosen.jquery.min.js"></script>
 
 <script src="/js/flot/jquery.flot.js"></script>
-<script src="/js/loading.js"></script>
 
+<script src="/js/jquery.maskedinput.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery-ui-1.10.3.min.js"></script>
+
+<script src="/js/loading.js"></script>
 <script src="/js/message.js"></script>
 
 <script src="/js/custom.js"></script>
@@ -617,6 +621,19 @@
 							case "card number":
 								$("#txt004").val(JSON.stringify(data.body));
 								break;
+							case "get_connection_list":
+								$("#txt006").val(JSON.stringify(data.body));
+								break;
+							case "set_report_interval":
+								$("#txt007").val(JSON.stringify(data.body));
+								break;
+							case "status_relay":
+								$("#txt008").val(JSON.stringify(data.body));
+								break;
+							case "control_relay":
+								$("#txt009").val(JSON.stringify(data.body));
+								$("#txt010").val(JSON.stringify(data.body));
+								break;
 							default:
 								break;
 						}
@@ -638,6 +655,21 @@
 		websocket.send(message);
 	}
 	jQuery(document).ready(function() {
+		$("#txt007").keyup(function () { 
+			this.value = this.value.replace(/[^0-9\.]/g,'');
+		});
+		$('#dtFromDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		
+		$('#dtToDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		// Input Masks
+		$('#dtFromDate').mask("99/99/9999");
+		// Input Masks
+		$('#dtToDate').mask("99/99/9999");
+		
 		var tid1;
 		var temp = true;
 		function mycode() 
@@ -741,12 +773,46 @@
 		{
 			if($('#txt004').val().trim() === "")
 			{
-				$.message.error("Hãy điền vào mã thẻ!");
-				$('#txt004').focus();
+				var message = $.message.error("Hãy điền vào mã thẻ!");
+				message.on('message.close',function(){
+					$('#txt004').focus();
+				});
 				return;
 			}
 			
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"card_number","body":{"Serial":"'+ $('#txt004').val()+'"}}}');
+		});
+		$('#btn005').click(function(e)
+		{
+			//doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
+		});
+		$('#btn006').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_connection_list"}}');
+		});
+		$('#btn007').click(function(e)
+		{
+			if($('#txt007').val().trim() === "")
+			{
+				var message = $.message.error("Thời gian không được để trống!");
+				message.on('message.close',function(){
+					$('#txt007').focus();
+				});
+				return;
+			}
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_report_interval","body":{"interval":'+ $('#txt007').val()+'}}}');
+		});
+		$('#btn008').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"status_relay"}}');
+		});
+		$('#btn009').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"control_relay","body":{"RELAY":1}}}');
+		});
+		$('#btn010').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"control_relay","body":{"RELAY":0}}}');
 		});
 		//loading
 		$('#table2 tbody tr').first().click();
