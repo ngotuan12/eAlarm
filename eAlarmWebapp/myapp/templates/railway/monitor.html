@@ -205,7 +205,7 @@
 										<div class="input-group">
 											<input id="txt002" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button id="txt002" type="button" class="btn btn-success  mr5">
+												<button id="btn002" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -230,9 +230,9 @@
 									<label class="col-sm-5 control-label">Nạp tiền tài khoản</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt004" type="text" class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success  mr5">
+												<button id="btn004" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -499,6 +499,8 @@
 <script src="/js/flot/jquery.flot.js"></script>
 <script src="/js/loading.js"></script>
 
+<script src="/js/message.js"></script>
+
 <script src="/js/custom.js"></script>
 <script src="/js/railway-infor.js"></script>
 <script>
@@ -611,6 +613,9 @@
 								break;
 							case "look_money":
 								$("#txt003").val(JSON.stringify(data.body));
+								break;
+							case "card number":
+								$("#txt004").val(JSON.stringify(data.body));
 								break;
 							default:
 								break;
@@ -731,6 +736,17 @@
 		$('#btn003').click(function(e)
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
+		});
+		$('#btn004').click(function(e)
+		{
+			if($('#txt004').val().trim() === "")
+			{
+				$.message.error("Hãy điền vào mã thẻ!");
+				$('#txt004').focus();
+				return;
+			}
+			
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"card_number","body":{"Serial":"'+ $('#txt004').val()+'"}}}');
 		});
 		//loading
 		$('#table2 tbody tr').first().click();

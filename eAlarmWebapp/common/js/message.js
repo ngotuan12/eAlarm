@@ -25,7 +25,7 @@
 				options = {};
 			options.class_name = 'alert alert-danger';
 			if(typeof options.title !== 'string')
-				options.title = '<h4> FMS Management System </h4>';
+				options.title = '<h4> Hệ thống giám sát và cảnh báo </h4>';
 			if(typeof options.css !== 'object')
 				options.css = {
 						'position' : 'absolute',
@@ -49,7 +49,7 @@
 				options = {};
 			options.class_name = 'alert alert-warning';
 			if(typeof options.title !== 'string')
-				options.title = '<h4> FMS Management System </h4>';
+				options.title = '<h4> Hệ thống giám sát và cảnh báo </h4>';
 			if(typeof options.css !== 'object')
 				options.css = {
 						'position' : 'absolute',
@@ -73,7 +73,7 @@
 				options = {};
 			options.class_name = 'alert alert-success';
 			if(typeof options.title !== 'string')
-				options.title = '<h4> FMS Management System </h4>';
+				options.title = '<h4> Hệ thống giám sát và cảnh báo </h4>';
 			if(typeof options.css !== 'object')
 				options.css = {
 						'position' : 'absolute',
@@ -161,7 +161,7 @@
 			if (typeof options !== 'object')
 				options = {};
 			if(typeof options.title !== 'string')
-				options.title = '<h4> FMS Management System </h4>';
+				options.title = '<h4> Hệ thống giám sát và cảnh báo </h4>';
 			if(typeof options.css !== 'object')
 				options.css = {
 						'position' : 'absolute',
