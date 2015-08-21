@@ -188,9 +188,9 @@
 									
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt001" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success mr5">
+												<button id="btn001" type="button" class="btn btn-success mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -201,9 +201,9 @@
 									<label class="col-sm-5 control-label">Thông tin trạng thái hiện thời</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="text" disabled class="form-control"> <span
+											<input id="txt002" type="text" disabled class="form-control"> <span
 												class="input-group-btn" style="margin-left: 0">
-												<button type="button" class="btn btn-success  mr5">
+												<button id="txt002" type="button" class="btn btn-success  mr5">
 													<i class="glyphicon glyphicon-check"></i> Thực hiện
 												</button>
 											</span>
@@ -601,6 +601,12 @@
 					{
 						switch (data.cmd)
 						{
+							case "get_gw_info":
+								$("#txt001").val(JSON.stringify(data.body));
+								break;
+							case "get_data":
+								$("#txt002").val(JSON.stringify(data.body));
+								break;
 							case "look_money":
 								$("#txt003").val(JSON.stringify(data.body));
 								break;
@@ -712,11 +718,18 @@
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
 		});
 		
+		$('#btn001').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_gw_info"}}');
+		});
+		$('#btn002').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_data"}}');
+		});
 		$('#btn003').click(function(e)
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
 		});
-		
 		//loading
 		$('#table2 tbody tr').first().click();
 	});
