@@ -638,3 +638,37 @@ function nvl(obj,strNull)
 	else
 		return strNull;
 }
+
+function onGetRailwayHistory(from_date,to_date)
+{
+	var csrftoken = $.cookie('csrftoken');
+	
+	var posting = $.post("/ajax-device-history", {
+		'csrfmiddlewaretoken' : csrftoken,
+		'device_id' : device_id,
+		'from_date' : from_date,
+		'to_date' : to_date,
+	});
+	posting.done(function(data) 
+	{
+		var tbody = $('#table7 tbody');
+		tbody.empty();
+		//
+		var histories = data.histories;
+		for(var i=0;i<histories.length;i++)
+		{
+			var history = histories[i];
+			
+			var row = $('<tr></tr>');
+			//STT
+			row.append($('<td>' + history.start_date + '</td>'));
+			//value
+			row.append($('<td>' + history.end_date + '</td>'));
+			row.append($('<td>' + history.time + '</td>'));
+			//value
+			row.append($('<td>' + history.description + '</td>'));
+			//append to body
+			tbody.append(row);
+		}
+	});
+}

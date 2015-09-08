@@ -3,6 +3,7 @@ Created on Apr 3, 2014
 
 @author: TuanNA
 '''
+from datetime import datetime
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -12,9 +13,9 @@ from django.views.decorators.http import require_http_methods
 
 from myapp.models.Device import Device
 from myapp.models.DeviceInfor import DeviceInfor
+from myapp.models.DeviceTransaction import DeviceTransaction
 from myapp.models.RailwaySession import RailwaySession
 from myapp.models.RailwaySessionDetail import RailwaySessionDetail
-
 from myapp.util import DateEncoder
 
 
@@ -75,5 +76,27 @@ def getRaiwayDetailHistory(request):
 			railway_detail_sessions.append({'detail':model_to_dict(detail), 'property':model_to_dict(detail.infor.device_pro)})
 # 			railway_detail_sessions.append({'infor':detail.infor,'value':detail.value,'status':detail.status,'start_date':detail.start_date})			
 		return HttpResponse(json.dumps({'railway_detail_sessions':railway_detail_sessions}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+	except Exception as ex:
+		return HttpResponse(json.dumps({"error": str(ex)}), content_type="application/json")
+@login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def getDeviceHistory(request):
+	try:
+		device_id = request.POST['device_id']
+		p_from_date = request.POST['from_date']
+		p_to_date = request.POST['to_date']
+		from_date = datetime.strptime(p_from_date, '%d/%m/%Y')
+		to_date = datetime.strptime(p_to_date, '%d/%m/%Y')
+		device = Device.objects.get(id=device_id)
+		rows = DeviceTransaction.objects.filter(device=device,device_status='2',start_date__gte = from_date,end_date__lte = to_date).order_by('-start_date')
+		histories = []
+		for row in rows:
+			temp = model_to_dict(row)
+			if row.end_date is not None and row.start_date is not None:
+				temp.update({'time':(row.end_date-row.start_date).seconds})
+			else:
+				temp.update({'time':'--'})
+			histories.append(temp)
+		return HttpResponse(json.dumps({'histories':histories}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
 	except Exception as ex:
 		return HttpResponse(json.dumps({"error": str(ex)}), content_type="application/json")

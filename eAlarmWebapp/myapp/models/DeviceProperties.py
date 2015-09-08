@@ -4,7 +4,6 @@ Created on Aug 15, 2014
 @author: TuanNA
 '''
 from django.db import models
-from myapp.models.ApParam import ApParam
 # Create your models here.
 class DeviceProperties(models.Model):
     code = models.CharField(max_length=20)

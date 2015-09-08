@@ -10,3 +10,4 @@ from myapp.models.RailwaySession import RailwaySession
 from myapp.models.RailwaySessionDetail import RailwaySessionDetail
 from myapp.models.Cmd import Cmd
 from myapp.models.CmdParam import CmdParam
+from myapp.models.DeviceTransaction import DeviceTransaction

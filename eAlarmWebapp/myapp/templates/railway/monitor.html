@@ -331,7 +331,7 @@
 						<div class="row"> 
 							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
 								<div class="input-group">
-									<input type="text" id="dtFromDate" class="form-control"
+									<input type="text" id="dtHistoryFromDate" class="form-control"
 										name="dtFromDate" data-provide="datepicker"
 										data-date-format="dd/mm/yy" placeholder="Từ ngày(mm/dd/yyyy)">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -339,14 +339,14 @@
 							</div>
 							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
 								<div class="input-group">
-									<input type="text" id="dtToDate" class="form-control"
-										name="dtToDate" data-provide="datepicker"
+									<input type="text" id="dtHistoryToDate" class="form-control"
+										name="dtHistoryToDate" data-provide="datepicker"
 										data-date-format="dd/mm/yy" placeholder="Đến ngày (mm/dd/yyyy)">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								</div>
 							</div>
 							<div class="col-sm-2" >
-								<button class="btn btn-primary" style="padding: 3px;width: 100%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
+								<button id="btnHistorySearch" class="btn btn-primary" style="padding: 3px;width: 100%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
 							</div>
 						</div>
 						<div class="row"> 
@@ -658,18 +658,19 @@
 		$("#txt007").keyup(function () { 
 			this.value = this.value.replace(/[^0-9\.]/g,'');
 		});
-		$('#dtFromDate').datepicker({
+		$('#dtHistoryFromDate').datepicker({
 			dateFormat : 'dd/mm/yy',
 		});
 		
-		$('#dtToDate').datepicker({
+		$('#dtHistoryToDate').datepicker({
 			dateFormat : 'dd/mm/yy',
 		});
 		// Input Masks
-		$('#dtFromDate').mask("99/99/9999");
+		$('#dtHistoryFromDate').mask("99/99/9999");
 		// Input Masks
-		$('#dtToDate').mask("99/99/9999");
-		
+		$('#dtHistoryToDate').mask("99/99/9999");
+		$("#dtHistoryFromDate").datepicker( "setDate", new Date());
+		$("#dtHistoryToDate").datepicker( "setDate", new Date());
 		var tid1;
 		var temp = true;
 		function mycode() 
@@ -814,8 +815,15 @@
 		{
 			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"control_relay","body":{"RELAY":0}}}');
 		});
+		
+		$('#btnHistorySearch').click(function(e)
+		{
+			onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+		});
+		
 		//loading
 		$('#table2 tbody tr').first().click();
+		onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
 	});
 </script>
 {% endblock scripts%}

@@ -83,6 +83,7 @@ urlpatterns = patterns('',
     # Ajax
     url(r'^ajax-railway-history$', DeviceInfor.getRaiwayHistory,name='ajax-railway-history'),
     url(r'^ajax-railway-detail-history$', DeviceInfor.getRaiwayDetailHistory,name='ajax-railway-detail-history'),
+    url(r'^ajax-device-history$', DeviceInfor.getDeviceHistory,name='ajax-device-history'),
     url(r'^language/(?P<language_code>\w+)/$', Language.switch_language, name='switch-language'),
     # System
     url(regex=r'^report/(?P<path>.*)$', view='django.views.static.serve', kwargs={'document_root': settings.REPORT_ROOT, 'show_indexes' : True, }),
