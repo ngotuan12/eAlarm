@@ -115,7 +115,7 @@
 								<td>{{ device.route.name }}</td>
 								<td>{{ device.name }}</td>
 								<td class="center">
-									<p id ="railway-{{ device.id }}" class="railway-action" style="position: absolute;margin-left: 30px">
+									<p id ="railway-{{ device.id }}" class="railway-action" action_status="{{ device.action_status }}"style="position: absolute;margin-left: 30px">
 										{% if  device.status != '0' %}
 											{% if  device.action_status == '1' %}
 												>>>>>
@@ -603,6 +603,7 @@
 						railway_action.html("");
 						clearRailwayInfor();
 					}
+					railway_action.attr("action_status",action_status);
 					break;
 				default:
 					if (data.type === "response")
@@ -673,6 +674,9 @@
 		$("#dtHistoryToDate").datepicker( "setDate", new Date());
 		var tid1;
 		var temp = true;
+		var on_railway = false;
+		var audio = new Audio('/sound/alarm.mp3');
+		audio.loop = true;
 		function mycode() 
 		{
 			$('.railway-action').each(function(index, element)
@@ -685,10 +689,31 @@
 				{
 					$(element).css('display','');
 				}
+				
 			});
 			
 			tid1 = setTimeout(mycode, 500); // repeat myself
 			temp = !temp;
+			
+			var isRailway = false;
+			
+			$('.railway-action').each(function(index, element)
+			{
+				alert($(element).attr("action_status"));
+				if($(element).attr("action_status")!= "0" && $(element).attr("action_status")!= "")
+				{
+					isRailway = true;
+				}
+			});
+			
+			if(on_railway != isRailway)
+			{
+				if(isRailway)
+					audio.play();
+				else 
+					audio.stop();
+				on_railway = isRailway;
+			}
 		};
 		
 		tid1 = setTimeout(mycode, 500);
