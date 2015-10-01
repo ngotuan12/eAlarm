@@ -655,6 +655,8 @@
 	{
 		websocket.send(message);
 	}
+	var on_railway = false;
+	var audio = new Audio('/sound/alarm.mp3');
 	jQuery(document).ready(function() {
 		$("#txt007").keyup(function () { 
 			this.value = this.value.replace(/[^0-9\.]/g,'');
@@ -674,8 +676,6 @@
 		$("#dtHistoryToDate").datepicker( "setDate", new Date());
 		var tid1;
 		var temp = true;
-		var on_railway = false;
-		var audio = new Audio('/sound/alarm.mp3');
 		audio.loop = true;
 		function mycode() 
 		{
