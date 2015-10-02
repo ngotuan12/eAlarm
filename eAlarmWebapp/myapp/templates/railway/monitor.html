@@ -711,7 +711,10 @@
 				if(isRailway)
 					audio.play();
 				else 
-					audio.stop();
+				{
+					audio.pause();
+					audio.currentTime = 0;
+				}
 				on_railway = isRailway;
 			}
 		};
