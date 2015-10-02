@@ -709,11 +709,13 @@
 			if(on_railway != isRailway)
 			{
 				if(isRailway)
+				{
+					audio.loop = true;
 					audio.play();
+				}
 				else 
 				{
-					audio.pause();
-					audio.currentTime = 0;
+					audio.loop = false;
 				}
 				on_railway = isRailway;
 			}
