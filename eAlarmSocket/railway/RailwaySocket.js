@@ -961,25 +961,30 @@ wss.on('connection', function(conn)
 		var isSend = false;
 		if(typeof gateways[device_id.toString()] !== 'undefined' )
 		{
+			// check action status
+			var strSQL = "SELECT action_status FROM device WHERE id = ? ";
 			log("gateway_id: " + gateways[device_id].gatewayinfo.id);
-			sendGatewayCommand(body, gateways[device_id]);
-			isSend = true;
+			//
+			connDB.query(strSQL, [], function(err,rows)
+			{
+				if (err)
+				{
+					log(err);
+					return;
+				}
+				var action_status = rows[0].action_status;
+				if(action_status!=="0"&& action_status!=="")
+				{
+					conn.send('{"handle":"on_error","msg":"Không thể thực hiện thao tác. Hãy thử lại sau!"}');
+					return;
+				}
+				//send cmd
+				sendGatewayCommand(body, gateways[device_id]);
+				isSend = true;
+			});
 		}
-		
-//		for (var i = 0; i < gateways.length; i++)
-//		{
-//			var gateway = gateways[i];
-//			log("gateway_id: " + gateway.gatewayinfo.id);
-//			if (gateway.gatewayinfo.id === device_id)
-//			{
-//				sendGatewayCommand(body, gateway);
-//				isSend = true;
-//				break;
-//			}
-//		}
-		if(!isSend)
+		else
 		{
-			
 			conn.send('Device is not connect! ');
 		}
 	}

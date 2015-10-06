@@ -38,3 +38,14 @@ def maps(request):
         print(ex)
     finally:
         return render_to_response("railway-map.html", context,RequestContext(request))
+def vinh(request):
+    try:
+        context = {}
+        devices = Device.objects.filter(type='4')
+        context.update({'devices':devices})
+        return render_to_response("railway/vinh.html", context, RequestContext(request))
+    except Exception as ex:
+        print(ex)
+        devices = Device.objects.all()
+        context = {'devices':devices}
+        return render_to_response("railway/vinh.html", context, RequestContext(request))

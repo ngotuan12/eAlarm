@@ -11,6 +11,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^home$', Home.home),
+    #Vinh
+    
     #railway
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
     url(r'^railway/maps/$', Railway.maps,name='railway-maps'),

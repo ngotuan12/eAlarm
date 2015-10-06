@@ -605,6 +605,9 @@
 					}
 					railway_action.attr("action_status",action_status);
 					break;
+				case "on_error":
+					$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+					break;
 				default:
 					if (data.type === "response")
 					{
