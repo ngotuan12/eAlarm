@@ -115,19 +115,19 @@
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="panel panel-default" id="pnl2">
+			<div class="panel panel-default" id="pnl2" style="min-height: 350px">
 				<div class="panel-body">
 				
 					<div class="row">
 						<label class="col-sm-3 control-label" style="font-family: '';padding-top: 5px;width: 90px">Đường ngang</label>
-						<div class="col-sm-8">
+						<div class="col-sm-7">
 							<select name='slRailway' id="slRailway" class="form-control chosen-select" required style="padding: 8px;">
 								{% for device in devices %}
 									<option value="{{ device.id }}" >{{ device.route.name }} - {{ device.name }}</option>
 								{% endfor %}
 							</select>
 						</div>
-						<div style="width: 95px;float: left;">
+						<div style="width: 95px;float: left;" class="col-sm-3">
 							<button id="btnAssignDevice" class="btn btn-primary" style="padding: 5px;width: 100%"><i class="fa fa-plus"></i> Thếm </button>
 						</div>
 					</div>

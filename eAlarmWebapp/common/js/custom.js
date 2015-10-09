@@ -32,30 +32,30 @@ jQuery(document).ready(
 			}
 
 			// Dropdown works only when leftpanel is not collapsed
-			var body = jQuery('body');
-			var bodypos = body.css('position');
-
-			if (bodypos != 'relative')
-			{
-
-				if (!body.hasClass('leftpanel-collapsed'))
-				{
-					body.addClass('leftpanel-collapsed');
-					jQuery('.nav-bracket ul').attr('style', '');
-
-					jQuery(this).addClass('menu-collapsed');
-
-				} else
-				{
-					body.removeClass('leftpanel-collapsed chat-view');
-					jQuery('.nav-bracket li.active ul').css({
-						display : 'block'
-					});
-
-					jQuery(this).removeClass('menu-collapsed');
-
-				}
-			}
+//			var body = jQuery('body');
+//			var bodypos = body.css('position');
+//
+//			if (bodypos != 'relative')
+//			{
+//
+//				if (!body.hasClass('leftpanel-collapsed'))
+//				{
+//					body.addClass('leftpanel-collapsed');
+//					jQuery('.nav-bracket ul').attr('style', '');
+//
+//					jQuery(this).addClass('menu-collapsed');
+//
+//				} else
+//				{
+//					body.removeClass('leftpanel-collapsed chat-view');
+//					jQuery('.nav-bracket li.active ul').css({
+//						display : 'block'
+//					});
+//
+//					jQuery(this).removeClass('menu-collapsed');
+//
+//				}
+//			}
 
 			// Toggle Left Menu
 			jQuery('.nav-parent > a').click(function()
