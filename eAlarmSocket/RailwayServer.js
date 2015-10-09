@@ -4,6 +4,6 @@
  * @copyright: Ngo Anh Tuan <ngo.tuan12@gmail.com>
  * @company: LienViet co.,ltd
  */
-var server = require("./railway/RailwaySocket.js");
+var server = require("./railway/RailwaySocketV1.js");
 
 server.start();
