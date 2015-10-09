@@ -4,7 +4,7 @@ from django.contrib import admin
 from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
-    RailwayList, RailwayProperty, Log, Route, RailwayAssign, Language
+    RailwayList, RailwayProperty, Log, Route, RailwayAssign, Language, Manage
 
 
 admin.autodiscover()
@@ -12,7 +12,11 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^home$', Home.home),
     #Vinh
-    
+    #manage
+    url(r'^manage/assign-railway/$', Manage.assign_railway,name='assign-railway'),
+    url(r'^ajax-get-user-device$', Manage.getAssignDeviceByUser,name='ajax-get-user-device'),
+    url(r'^ajax-assign-device-to-user$', Manage.assignDeviceToUser,name='ajax-assign-device-to-user'),
+    url(r'^ajax-unsign-device-from-user$', Manage.unsignDeviceFromUser,name='ajax-unsign-device-from-user'),
     #railway
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
     url(r'^railway/maps/$', Railway.maps,name='railway-maps'),

@@ -294,6 +294,7 @@
 				btnOK.on('click', function () 
 				{
 					$('#message-box').trigger("message.confirm");
+					$('#message-box').alert('close');
 				});
 			}
 			if(typeof btnCancel !=='undefined')
@@ -302,7 +303,7 @@
 				//
 				btnCancel.on('click', function () 
 				{
-					$('#message-box').alert('close')
+					$('#message-box').alert('close');
 				});
 			}
 			if(typeof control !=='undefined')

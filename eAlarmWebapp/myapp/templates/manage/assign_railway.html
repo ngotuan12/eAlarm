@@ -1,0 +1,312 @@
+{% extends "base.html" %} 
+{% block styles %}
+	<link href="/css/chart.css" rel="stylesheet">
+	<style>
+		th{
+			font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
+			font-weight: bold !important;
+		}
+		.tab-pane{
+			min-height: 450px;
+		}
+		.profile-header{
+			margin-bottom: 10px;
+		}
+		#railway-infor .row{
+			margin-bottom: 15px;
+		}
+		#device-infor-1 .row{
+			margin-top: 15px;
+		}
+		#device-infor-2 .row{
+			margin-top: 15px;
+		}
+		#device-infor-3 .row{
+			margin-top: 15px;
+		}
+		
+		.dataTables_filter{
+			float: left;
+		}
+		.dataTables_filter input {
+			padding: 7px;
+		}
+		.dataTables_length{
+		float: right;
+		}
+		.col-sm{
+			padding-left: 10px;
+		}
+		h3,h5{
+			font-family: tahoma;
+		}
+		#railway-infor .col-sm-2, .col-sm-3 {
+			display: inline-block; 
+			white-space: nowrap;
+		}
+		.col-sm-6 p 
+		{ 
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		#device-issue{
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		.col-sm-3 p{
+			margin: 0;
+		}
+		.form-horizontal .control-label
+		{
+			text-align: left;
+			padding-left: 20px;
+		}
+		.form-bordered .form-group
+		{
+			padding: 0px;
+			border: none;
+		}
+		.form-control
+		{
+			padding: 5px;
+		}
+		.input-group-btn button 
+		{
+			margin-left: 0;
+			padding: 3px 10px;
+		}
+	</style>
+{% endblock %}
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Giao đường ngang cho nhân viên <span> </span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div id="loading"></div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="panel panel-default" id="pnl1">
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table" id="table1">
+							<thead>
+								<tr>
+									<th>Tài khoản</th>
+									<th>Họ tên</th>
+									<th>Phòng ban</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in users %}
+									<tr class="odd gradeX" id="{{ user.id }}">
+										<td>{{ user.username }}</td>
+										<td>{{ user.first_name }} {{ user.last_name }}</td>
+										<td class="center"></td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="panel panel-default" id="pnl2">
+				<div class="panel-body">
+				
+					<div class="row">
+						<label class="col-sm-3 control-label" style="font-family: '';padding-top: 5px;width: 90px">Đường ngang</label>
+						<div class="col-sm-8">
+							<select name='slRailway' id="slRailway" class="form-control chosen-select" required style="padding: 8px;">
+								{% for device in devices %}
+									<option value="{{ device.id }}" >{{ device.route.name }} - {{ device.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div style="width: 95px;float: left;">
+							<button id="btnAssignDevice" class="btn btn-primary" style="padding: 5px;width: 100%"><i class="fa fa-plus"></i> Thếm </button>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table" id="table2">
+								<thead>
+									<tr>
+										<th>Mã đường ngáng</th>
+										<th>Tuyến</th>
+										<th>Lý trình</th>
+										<th style="text-align: center;">Sửa/Xoá</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery.numeric.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+<script src="/js/jquery.confirm.js"></script>
+
+<script src="/js/message.js"></script>
+<script src="/js/loading.js"></script>
+
+<script>
+	var user_id;
+	jQuery(document).ready(function() {
+		// Chosen Select
+		//jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
+		
+		//jQuery('#table2').dataTable({
+			//"sPaginationType" : "full_numbers"
+		//});
+		var table = $('#table1').dataTable(
+		{
+			//"bLengthChange": false,
+			//"bFilter" : false,
+			"bInfo":false,
+			"sPaginationType" : "full_numbers",
+			"iDisplayLength":10,
+			//aoColumnDefs: [{bSortable: false,aTargets: [-1,-2]}],
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
+		});
+		$('#table1 tbody').on( 'click', 'tr', function () {
+			user_id = $(this).attr('id');
+			$("#table1 tbody tr[id][id='"+ user_id +"']").css('background-color','#8EE2BC');
+			$("#table1 tbody tr[id][id!='"+ user_id +"']").css('background-color','#fff');
+			onGetAssignDevice(user_id);
+		});
+		// Chosen Select
+		$("#pnl1 select").chosen({
+			'min-width' : '150px',
+			'white-space' : 'nowrap',
+			disable_search_threshold : 10
+		});
+		
+		$('#table1 tbody tr').first().click();
+		$('#btnAssignDevice').on('click',function(){
+			assignDeviceToUser(user_id,$('#slRailway').val());
+		});
+	});
+	function onGetAssignDevice(user_id)
+	{
+		//$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-get-user-device", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'user_id' : user_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				var tbody = $("#table2 tbody");
+				tbody.empty();
+				var devices = data.devices;
+				for(var i=0;i<devices.length;i++)
+				{
+					var device = devices[i];
+					var row = $('<tr></tr>');
+					row.append($('<td>'+device.code+'</td>'));
+					row.append($('<td>'+device.route.name+'</td>'));
+					row.append($('<td>'+device.name+'</td>'));
+					var action = $('<td  class="table-action" device_name="'+device.name+'" id="'+device.id+'"><a href="#"><i class="fa fa-trash-o"></i></a></td>');
+					action.on('click',function(){
+						var device_id = $(this).attr("id");
+						var message = $.message. confirm ("Bạn muốn loại bỏ " + $(this).attr("device_name") +" ra khỏi danh sách");
+						message.on('message.confirm',function(){
+							//message.destroy();
+							unsignDeviceFromUser(user_id,device_id)
+						});
+					});
+					row.append(action);
+					tbody.append(row);
+				}
+			}
+			//$.fn.loading.hide();
+		});
+	}
+	function assignDeviceToUser(user_id,device_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-assign-device-to-user", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'user_id' : user_id,
+			'device_id' : device_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				$.message.notification('Giao đường ngang thành công',"center");
+			}
+			$.fn.loading.hide();
+			onGetAssignDevice(user_id);
+		});
+	}
+	function unsignDeviceFromUser(user_id,device_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-unsign-device-from-user", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'user_id' : user_id,
+			'device_id' : device_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				$.message.notification('Ngừng giao thành công',"center");
+			}
+			$.fn.loading.hide();
+			onGetAssignDevice(user_id);
+		});
+	}
+</script>
+{% endblock scripts%}

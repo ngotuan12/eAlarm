@@ -965,7 +965,7 @@ wss.on('connection', function(conn)
 			var strSQL = "SELECT action_status FROM device WHERE id = ? ";
 			log("gateway_id: " + gateways[device_id].gatewayinfo.id);
 			//
-			connDB.query(strSQL, [], function(err,rows)
+			connDB.query(strSQL, [gateways[device_id].gatewayinfo.id], function(err,rows)
 			{
 				if (err)
 				{
@@ -973,7 +973,7 @@ wss.on('connection', function(conn)
 					return;
 				}
 				var action_status = rows[0].action_status;
-				if(action_status!=="0"&& action_status!=="")
+				if(action_status==="1" || action_status==="2")
 				{
 					conn.send('{"handle":"on_error","msg":"Không thể thực hiện thao tác. Hãy thử lại sau!"}');
 					return;
