@@ -17,6 +17,7 @@ from django.views.decorators.http import require_http_methods
 from myapp.models.Device import Device
 from myapp.models.UserDevice import UserDevice
 from myapp.util import DateEncoder
+from myapp.models.Route import Route
 
 
 @login_required(login_url='/login')
@@ -38,11 +39,25 @@ def assign_railway(request):
 @login_required(login_url='/login')
 def railway_order(request):
     context = {}
-    return render_to_response("manage/assign_railway.html", context, RequestContext(request))
+    routes = Route.objects.all().order_by('order')
+    context.update({"routes":routes})
+    return render_to_response("manage/railway_order.html", context, RequestContext(request))
 @login_required(login_url='/login')
 def railway_statistics(request):
     context = {}
-    return render_to_response("manage/assign_railway.html", context, RequestContext(request))
+    return render_to_response("manage/railway_statistics.html", context, RequestContext(request))
+@login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def getDeviceByRoute(request):
+    try:
+        route_id = request.POST['route_id']
+        all_device = Device.objects.filter(route_id=route_id)
+        devices = []
+        for device in all_device:
+            devices.append(model_to_dict(device))
+        return HttpResponse(json.dumps({'handle':'success','devices':devices}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
 @login_required(login_url='/login')
 @require_http_methods(["POST", ])
 def getAssignDeviceByUser(request):

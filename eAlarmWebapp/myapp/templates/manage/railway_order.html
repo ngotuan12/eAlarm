@@ -1,2 +1,128 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="glyphicon glyphicon-list-alt"></i> Điều hành <span> Xắp xếp đường ngang theo tuyến </span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="col-sm-6 col-md-6">
+		<div class="panel panel-default panel-alt widget-messaging" id = "pnlRoute">
+			<div class="panel-heading">
+				<div class="panel-btns">
+					<a href="#" class="panel-edit" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
+					<a href="#" class="panel-edit" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
+				</div>
+				<!-- panel-btns -->
+				<h3 class="panel-title">Danh sách tuyến</h3>
+			</div>
+			<div class="panel-body" style="min-height: 550px">
+				<ul>
+					{% for route in routes %}
+						<li id= "{{ route.id }}">
+							<small class="pull-right">{{ route.create_date|date:"d/m/y H:i:s" }}</small>
+							<h4 class="sender">{{ route.name }}</h4> 
+							<small>{{ route.code }} - {{ route.name }}</small>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<!-- panel-body -->
+		</div>
+		<!-- panel -->
+	</div>
+	<div class="col-sm-6 col-md-6">
+		<div class="panel panel-default panel-alt widget-messaging" id = "pnlRailway">
+			<div class="panel-heading">
+				<div class="panel-btns">
+					<a href="#" class="panel-edit" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
+					<a href="#" class="panel-edit" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
+				</div>
+				<!-- panel-btns -->
+				<h3 class="panel-title">Danh sách đường ngang</h3>
+			</div>
+			<div class="panel-body" style="min-height: 550px">
+				<ul>
+					
+				</ul>
+			</div>
+			<!-- panel-body -->
+		</div>
+		<!-- panel -->
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
 
+<script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery.numeric.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+<script src="/js/jquery.confirm.js"></script>
+
+<script src="/js/message.js"></script>
+<script src="/js/loading.js"></script>
+
+<script>
+	jQuery(document).ready(function() {
+		var route_id;
+		$('#pnlRoute ul').on( 'click', 'li', function () {
+			route_id = $(this).attr('id');
+			$("#pnlRoute ul li[id][id='"+ route_id +"']").css('background-color','#8EE2BC');
+			$("#pnlRoute ul li[id][id!='"+ route_id +"']").css('background-color','#fff');
+			getDeviceByRoute(route_id);
+		});
+		$('#pnlRoute ul li').first().click();
+		
+		var railway_id;
+		$('#pnlRailway ul').on( 'click', 'li', function () {
+			railway_id = $(this).attr('id');
+			$("#pnlRailway ul li[id][id='"+ railway_id +"']").css('background-color','#8EE2BC');
+			$("#pnlRailway ul li[id][id!='"+ railway_id +"']").css('background-color','#fff');
+		});
+	});
+	function getDeviceByRoute(route_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-get-device-by_route", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'route_id' : route_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				var list = $("#pnlRailway ul");
+				list.empty();
+				var devices = data.devices;
+				for(var i=0;i<devices.length;i++)
+				{
+					var device = devices[i];
+					var row = $('<li id="'+device.id+'"></li>');
+					row.append($('<small class="pull-right">'+device.create_date+'</small>'));
+					row.append($('<h4 class="sender" >'+device.name+'</h4>'));
+					row.append($('<small>'+ device.code +" - "+ device.name +'</small>'));
+					
+					list.append(row);
+				}
+				$('#pnlRailway ul li').first().click();
+			}
+			$.fn.loading.hide();
+		});
+	}
+</script>
+{% endblock %}

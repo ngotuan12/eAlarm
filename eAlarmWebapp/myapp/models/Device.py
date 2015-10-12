@@ -3,10 +3,14 @@ Created on Aug 15, 2014
 
 @author: TuanNA
 '''
+import datetime
+
+from django.contrib.auth.models import  Group, User
+from django.db import models
+
 from myapp.models.Area import Area
 from myapp.models.Route import Route
-from django.contrib.auth.models import  Group,User
-from django.db import models
+
 
 # Create your models here.
 class Device(models.Model):
@@ -29,6 +33,8 @@ class Device(models.Model):
     owner_phone=models.CharField(max_length=25)
     route = models.ForeignKey(Route,db_column='route_id',null=True)
     action_status = models.CharField(db_column='action_status',max_length=25)
+    order = models.IntegerField(max_length=11)
+    create_date = models.DateTimeField(default=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),db_column="create_date")
     class Meta:
         db_table = 'device'
         app_label = 'myapp'

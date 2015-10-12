@@ -14,6 +14,9 @@ urlpatterns = patterns('',
     #Vinh
     #manage
     url(r'^manage/assign-railway/$', Manage.assign_railway,name='assign-railway'),
+    url(r'^manage/railway/order/$', Manage.railway_order,name='manage-railway-order'),
+    url(r'^manage/railway/statistics/$', Manage.railway_statistics,name='manage-railway-statistics'),
+    url(r'^ajax-get-device-by_route$', Manage.getDeviceByRoute,name='ajax-get-device-by_route'),
     url(r'^ajax-get-user-device$', Manage.getAssignDeviceByUser,name='ajax-get-user-device'),
     url(r'^ajax-assign-device-to-user$', Manage.assignDeviceToUser,name='ajax-assign-device-to-user'),
     url(r'^ajax-unsign-device-from-user$', Manage.unsignDeviceFromUser,name='ajax-unsign-device-from-user'),
