@@ -36,6 +36,14 @@ def assign_railway(request):
         context = {'devices':devices}
         return render_to_response("manage/assign_railway.html", context, RequestContext(request))
 @login_required(login_url='/login')
+def railway_order(request):
+    context = {}
+    return render_to_response("manage/assign_railway.html", context, RequestContext(request))
+@login_required(login_url='/login')
+def railway_statistics(request):
+    context = {}
+    return render_to_response("manage/assign_railway.html", context, RequestContext(request))
+@login_required(login_url='/login')
 @require_http_methods(["POST", ])
 def getAssignDeviceByUser(request):
     try:
