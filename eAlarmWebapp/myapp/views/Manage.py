@@ -51,7 +51,7 @@ def railway_statistics(request):
 def getDeviceByRoute(request):
     try:
         route_id = request.POST['route_id']
-        all_device = Device.objects.filter(route_id=route_id)
+        all_device = Device.objects.filter(route_id=route_id).order_by('order')
         devices = []
         for device in all_device:
             devices.append(model_to_dict(device))
