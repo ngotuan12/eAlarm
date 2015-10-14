@@ -33,7 +33,7 @@ class Device(models.Model):
     owner_phone=models.CharField(max_length=25)
     route = models.ForeignKey(Route,db_column='route_id',null=True)
     action_status = models.CharField(db_column='action_status',max_length=25)
-    order = models.IntegerField(max_length=11)
+    order = models.IntegerField(max_length=11,default=0)
     create_date = models.DateTimeField(default=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),db_column="create_date")
     class Meta:
         db_table = 'device'

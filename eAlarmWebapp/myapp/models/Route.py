@@ -12,7 +12,7 @@ from django.db import models
 class Route(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
-    order = models.IntegerField(max_length=11)
+    order = models.IntegerField(max_length=11,default=0)
     create_date = models.DateTimeField(default=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),db_column="create_date")
     class Meta:
         db_table = 'route'

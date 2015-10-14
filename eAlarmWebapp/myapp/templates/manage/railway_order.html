@@ -12,8 +12,8 @@
 		<div class="panel panel-default panel-alt widget-messaging" id = "pnlRoute">
 			<div class="panel-heading">
 				<div class="panel-btns">
-					<a href="#" class="panel-edit" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
-					<a href="#" class="panel-edit" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
+					<a href="#" class="panel-edit" id="btnUpRoute" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
+					<a href="#" class="panel-edit" id="btnDownRoute" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
 				</div>
 				<!-- panel-btns -->
 				<h3 class="panel-title">Danh sách tuyến</h3>
@@ -37,8 +37,8 @@
 		<div class="panel panel-default panel-alt widget-messaging" id = "pnlRailway">
 			<div class="panel-heading">
 				<div class="panel-btns">
-					<a href="#" class="panel-edit" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
-					<a href="#" class="panel-edit" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
+					<a href="#" id="btnUpRailway" class="panel-edit" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
+					<a href="#" id="btnDownRailway" class="panel-edit" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
 				</div>
 				<!-- panel-btns -->
 				<h3 class="panel-title">Danh sách đường ngang</h3>
@@ -84,7 +84,50 @@
 			getDeviceByRoute(route_id);
 		});
 		$('#pnlRoute ul li').first().click();
-		
+		$('#btnDownRoute').click(function (){
+			if(route_id==null||route_id=='')
+				return;
+			var $curr = $('#pnlRoute ul #'+route_id);
+			//alert($curr.attr('id'));
+			if( $curr.next().is('li'))
+			{
+				downOrderRoute(route_id);
+			};
+		});
+		$('#btnUpRoute').on( 'click',function (){
+			if(route_id==null||route_id=='')
+				return;
+			var $curr = $('#pnlRoute ul #'+route_id);
+			//alert($curr.attr('id'));
+			if( $curr.prev().is('li'))
+			{
+				upOrderRoute(route_id);
+			};
+		});
+		$('#btnDownRailway').click(function (){
+			if(route_id==null||route_id=='')
+				return;
+			if(railway_id==null||railway_id=='')
+				return;
+			var $curr = $('#pnlRailway ul #'+railway_id);
+			//alert($curr.attr('id'));
+			if( $curr.next().is('li'))
+			{
+				downOrderDevice(route_id,railway_id);
+			};
+		});
+		$('#btnUpRailway').on( 'click',function (){
+			if(route_id==null||route_id=='')
+				return;
+			if(railway_id==null||railway_id=='')
+				return;
+			var $curr = $('#pnlRailway ul #'+railway_id);
+			//alert($curr.attr('id'));
+			if( $curr.prev().is('li'))
+			{
+				upOrderDevice(route_id,railway_id);
+			};
+		});
 		var railway_id;
 		$('#pnlRailway ul').on( 'click', 'li', function () {
 			railway_id = $(this).attr('id');
@@ -92,11 +135,109 @@
 			$("#pnlRailway ul li[id][id!='"+ railway_id +"']").css('background-color','#fff');
 		});
 	});
+	function upOrderRoute(route_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-up-order-route", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'route_id' : route_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				//$.message.notification('success',"center",{"class_name":"alert alert-success"});
+				var $curr = $('#pnlRoute ul #'+route_id);
+				//alert($curr.attr('id'));
+				var $next = $curr.prev();
+				//alert($next.attr('id'));
+				$curr.after($next);
+			}
+			$.fn.loading.hide();
+		});
+	}
+	function downOrderRoute(route_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-down-order-route", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'route_id' : route_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				//$.message.notification('success',"center",{"class_name":"alert alert-success"});
+				var $curr = $('#pnlRoute ul #'+route_id);
+				//alert($curr.attr('id'));
+				var $next = $curr.next();
+				//alert($next.attr('id'));
+				$curr.before($next);
+			}
+			$.fn.loading.hide();
+		});
+	}
+	function upOrderDevice(route_id,railway_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-up-order-device", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'route_id' : route_id,
+			'device_id' : railway_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				//$.message.notification('success',"center",{"class_name":"alert alert-success"});
+				var $curr = $('#pnlRailway ul #'+railway_id);
+				//alert($curr.attr('id'));
+				var $next = $curr.prev();
+				//alert($next.attr('id'));
+				$curr.after($next);
+			}
+			$.fn.loading.hide();
+		});
+	}
+	function downOrderDevice(route_id,railway_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-down-order-device", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'route_id' : route_id,
+			'device_id' : railway_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				//$.message.notification('success',"center",{"class_name":"alert alert-success"});
+				var $curr = $('#pnlRailway ul #'+railway_id);
+				//alert($curr.attr('id'));
+				var $next = $curr.next();
+				//alert($next.attr('id'));
+				$curr.before($next);
+			}
+			$.fn.loading.hide();
+		});
+	}
 	function getDeviceByRoute(route_id)
 	{
 		$.fn.loading.show();
 		var csrftoken = $.cookie('csrftoken');
-		var posting = $.post("/ajax-get-device-by_route", {
+		var posting = $.post("/ajax-get-device-by-route", {
 			'csrfmiddlewaretoken' : csrftoken,
 			'route_id' : route_id,
 		});

@@ -43,6 +43,106 @@ def railway_order(request):
     context.update({"routes":routes})
     return render_to_response("manage/railway_order.html", context, RequestContext(request))
 @login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def downOrderRoute(request):
+    try:
+        route_id = request.POST['route_id']
+        routes = Route.objects.all().order_by('order')
+        i = 0
+        cur_route = None;
+        next_route = None;
+        for  i in range(len(routes)):
+            routes[i].order = i
+            if(str(routes[i].id) == route_id):
+                cur_route = routes[i]
+                next_route = routes[i+1]
+            else:
+                routes[i].save()
+        if next_route is not None:
+            temp = cur_route.order;
+            cur_route.order = next_route.order
+            next_route.order = temp
+            cur_route.save()
+            next_route.save()
+        return HttpResponse(json.dumps({'handle':'success'}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
+@login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def upOrderRoute(request):
+    try:
+        route_id = request.POST['route_id']
+        routes = Route.objects.all().order_by('order')
+        i = 0
+        cur_route = None;
+        prev_route = None;
+        for  i in range(len(routes)):
+            routes[i].order = i
+            if(str(routes[i].id) == route_id):
+                cur_route = routes[i]
+                prev_route = routes[i-1]
+            else:
+                routes[i].save()
+        if prev_route is not None:
+            temp = cur_route.order;
+            cur_route.order = prev_route.order
+            prev_route.order = temp
+            cur_route.save()
+            prev_route.save()
+        return HttpResponse(json.dumps({'handle':'success'}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
+@login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def downOrderDevice(request):
+    try:
+        route_id = request.POST['route_id']
+        device_id = request.POST['device_id']
+        devices = Device.objects.filter(route_id = route_id).order_by('order')
+        cur_device = None;
+        next_device = None;
+        for i in range(len(devices)):
+            devices[i].order = i
+            if(str(devices[i].id) == device_id):
+                cur_device = devices[i]
+                next_device = devices[i+1]
+            else:
+                devices[i].save()
+        if next_device is not None:
+            temp = cur_device.order;
+            cur_device.order = next_device.order
+            next_device.order = temp
+            cur_device.save()
+            next_device.save()
+        return HttpResponse(json.dumps({'handle':'success'}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
+@login_required(login_url='/login')
+@require_http_methods(["POST", ])
+def upOrderDevice(request):
+    try:
+        route_id = request.POST['route_id']
+        device_id = request.POST['device_id']
+        devices = Device.objects.filter(route_id = route_id).order_by('order')
+        cur_device = None;
+        prev_device = None;
+        for i in range(len(devices)):
+            devices[i].order = i
+            if(str(devices[i].id) == device_id):
+                cur_device = devices[i]
+                prev_device = devices[i-1]
+            else:
+                devices[i].save()
+        if prev_device is not None:
+            temp = cur_device.order;
+            cur_device.order = prev_device.order
+            prev_device.order = temp
+            cur_device.save()
+            prev_device.save()
+        return HttpResponse(json.dumps({'handle':'success'}, cls=DateEncoder.DateTimeEncoder) , content_type="application/json")
+    except Exception as ex:
+        return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
+@login_required(login_url='/login')
 def railway_statistics(request):
     context = {}
     return render_to_response("manage/railway_statistics.html", context, RequestContext(request))
