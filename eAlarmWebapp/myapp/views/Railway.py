@@ -10,6 +10,7 @@ from django.template.context import RequestContext
 
 from myapp.models.Area import Area
 from myapp.models.Device import Device
+from myapp.models.UserDevice import UserDevice
 
 
 @login_required(login_url='/login')
@@ -17,8 +18,14 @@ def monitor(request):
     context = {}
     #devices = Device.objects.filter(type='4')
     #context.update({'devices':devices})
-    try: 
-        devices = Device.objects.filter(type='4').order_by('route__order','order')
+    try:
+        devices = []
+        if request.user.is_superuser:
+            devices = Device.objects.filter(type='4').order_by('route__order','order')
+        else:
+            #test_ids = list(TestSubjectSet.objects.all().values_list('test_id', flat=True))
+            user_device = list(UserDevice.objects.filter(user=request.user).values_list('device_id', flat=True))
+            devices = Device.objects.filter(id__in=user_device).order_by('route__order','order')
         context.update({'devices':devices})
         return render_to_response("railway/monitor.html", context, RequestContext(request))
     except Exception as ex:
