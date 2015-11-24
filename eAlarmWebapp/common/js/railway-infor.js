@@ -63,11 +63,11 @@ function showRailwayHistory()
 			//STT
 			row.append($('<td>'+ (i+1).toString() +'</td>'));
 			//Phien 
-			if(railway_session.status==='1')
+			if(railway_session.status==='2')
 			{
 				row.append($('<td> Chẵn</td>'));
 			}	
-			else if(railway_session.status==='2')
+			else if(railway_session.status==='1')
 			{
 				row.append($('<td> Lẻ</td>'));
 			}
