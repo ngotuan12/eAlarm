@@ -163,11 +163,15 @@
 			<div id="railway-detail" >
 				<ul class="nav nav-tabs" >
 					<li id="tab-railway-status" ><a href="#railway-status"   data-toggle="tab">Trạng thái</a></li>
-					<li id="tab-railway-history"><a href="#railway-history"   data-toggle="tab">Phiên tàu</a></li>
+					{% if perms.myapp.view_railway_session %}
+						<li id="tab-railway-history"><a href="#railway-history"   data-toggle="tab">Phiên tàu</a></li>
+					{% endif %}
 					{% if perms.myapp.control_railway %}
 						<li id="tab-device-control"><a href="#device-control"   data-toggle="tab">Điều khiển</a></li>
 					{% endif %}
-					<li id="tab-device-history"><a href="#device-history"   data-toggle="tab">Lịch sử</a></li>
+					{% if perms.myapp.view_device_session %}
+						<li id="tab-device-history"><a href="#device-history"   data-toggle="tab">Lịch sử</a></li>
+					{% endif %}
 				</ul>
 				<!-- tab-content -->
 				<div class="tab-content" style="padding: 10px">
