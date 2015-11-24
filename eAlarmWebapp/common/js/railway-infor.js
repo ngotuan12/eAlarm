@@ -11,6 +11,7 @@ var tid;
 var table3;
 var codes = ["X1","X2","X3","X4","X5","X6","I1","I2","I3","I4","I5","I6","I7","I8"];
 function onGetDeviceInfor(device_id) {
+	clearRailwayInfor();
 	currentDeviceID = device_id;
 	var csrftoken = $.cookie('csrftoken');
 	var posting = $.post("/device-infor", {
