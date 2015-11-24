@@ -18,7 +18,7 @@ def monitor(request):
     #devices = Device.objects.filter(type='4')
     #context.update({'devices':devices})
     try: 
-        devices = Device.objects.filter(type='4')
+        devices = Device.objects.filter(type='4').order_by('route__order','order')
         context.update({'devices':devices})
         return render_to_response("railway/monitor.html", context, RequestContext(request))
     except Exception as ex:

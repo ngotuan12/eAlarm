@@ -41,3 +41,4 @@ class Device(models.Model):
         permissions = (
             ("view_device", "Can see list device"),
         )
+        ordering = ('route__order', 'order')
