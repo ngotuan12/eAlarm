@@ -1,0 +1,566 @@
+{% extends "base.html" %} 
+{% block styles %}
+	<link href="/css/chart.css" rel="stylesheet">
+	<style>
+		th{
+			font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
+			font-weight: bold !important;
+		}
+		.tab-pane{
+			min-height: 450px;
+		}
+		.profile-header{
+			margin-bottom: 10px;
+		}
+		#railway-infor .row{
+			margin-bottom: 15px;
+		}
+		#device-infor-1 .row{
+			margin-top: 15px;
+		}
+		#device-infor-2 .row{
+			margin-top: 15px;
+		}
+		#device-infor-3 .row{
+			margin-top: 15px;
+		}
+		
+		.dataTables_filter{
+			float: left;
+		}
+		.dataTables_filter input {
+			padding: 7px;
+		}
+		.dataTables_length{
+		float: right;
+		}
+		.col-sm{
+			padding-left: 10px;
+		}
+		h3,h5{
+			font-family: tahoma;
+		}
+		#railway-infor .col-sm-2, .col-sm-3 {
+			display: inline-block; 
+			white-space: nowrap;
+		}
+		.col-sm-6 p 
+		{ 
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		#device-issue{
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		.col-sm-3 p{
+			margin: 0;
+		}
+		.form-horizontal .control-label
+		{
+			text-align: left;
+			padding-left: 20px;
+		}
+		.form-bordered .form-group
+		{
+			padding: 0px;
+			border: none;
+		}
+		.form-control
+		{
+			padding: 5px;
+		}
+		.input-group-btn button 
+		{
+			margin-left: 0;
+			padding: 3px 10px;
+		}
+	</style>
+{% endblock %}
+{% block content-header %}
+<div class="pageheader" style="display: none;">
+	<h2>
+		<i class="fa fa-align-justify"></i> Giám sát đường ngang <span>Theo dõi sự cố
+			hệ thống</span>
+	</h2>
+	<div class="breadcrumb-wrapper">
+			<span class="label">Giao diện </span>
+			<ol class="breadcrumb">
+				<li><a href="#">Bản đồ</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="modal fade" id="edit-railway-history" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel" style="text-align: center;">SỬA THÔNG TIN PHIÊN TÀU</h4>
+				<h5 class="modal-title" id="lbErrorEdit" style="text-align: left;color: red;"></h5>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<input type="hidden" value="" id="hdHistoryId"/>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Từ ngày</label>
+						<div class="col-sm-5" style="padding: 0 1px 0 5px;"> 
+							<div class="input-group">
+								<input type="text" id="dtHistoryFromDate" class="form-control"
+									name="dtFromDate" data-provide="datepicker"
+									data-date-format="dd/mm/yy" placeholder="Từ ngày(mm/dd/yyyy)">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<input id="historyFromTime"/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" >Đến ngày</label>
+						<div class="col-sm-5" style="padding: 0 1px 0 5px;"> 
+							<div class="input-group">
+								<input type="text" id="dtHistoryToDate" class="form-control"
+									name="dtHistoryToDate" data-provide="datepicker"
+									data-date-format="dd/mm/yy" placeholder="Đến ngày (mm/dd/yyyy)">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<input id="historyToTime" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="btnEditHistory" type="button" class="btn btn-primary">Lưu</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>						
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="edit-railway-history-detail" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modalDetailLabel" style="text-align: center;">SỬA THÔNG TIN CẢM BIẾN</h4>
+				<h5 class="modal-title" id="lbErrorEdit" style="text-align: left;color: red;"></h5>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<input type="hidden" value="" id="hdHistoryDetailId"/>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" >Giá trị</label>
+						<div class="col-sm-10">
+							<input id="detailValue" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="btnEditHistoryDetail" type="button" class="btn btn-primary">Lưu</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>						
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="contentpanel">
+	<div id="loading"></div>
+	<div class="row" style="margin-bottom: 10px">
+		<label class="col-sm-3 control-label" style="font-family: '';padding-top: 5px;width: 90px">Đường ngang</label>
+		<div class="col-sm" style="padding-left: 100px;padding-right: 30px">
+			<select name='slRailway' id="slRailway" class="form-control chosen-select" required style="padding: 8px;">
+				{% for device in devices %}
+					<option value="{{ device.id }}" >{{ device.route.name }} - {{ device.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6  col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					`<div class="table-responsive">
+						<table class="table" id="table3">
+							<thead>
+								<tr>
+									<th>Phiên </th>
+									<th>Hướng </th>
+									<th>Băt đầu</th>
+									<th>Kết thúc</th>
+									<th>Sửa/Xóa</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6  col-md-6">
+			<div class="table-responsive">
+				<table class="table" id="table4">
+					<thead>
+						<tr>
+							<th>Cảm biến</th>
+							<th>Giá trị</th>
+							<th>Sửa/Xóa</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+
+<script src="/js/flot/jquery.flot.js"></script>
+
+<script src="/js/jquery.maskedinput.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery-ui-1.10.3.min.js"></script>
+
+<script src="/js/loading.js"></script>
+<script src="/js/message.js"></script>
+
+<script src="/js/custom.js"></script>
+<script>
+	var device_id="ALL";
+	var table3;
+	var railway_session_id;
+	jQuery(document).ready(function() {
+		// Chosen Select
+		$( "#slRailway" ).change(function() {
+			showRailwayHistory($('#slRailway').val());
+		});
+		$("select").chosen({
+			'min-width' : '150px',
+			'white-space' : 'nowrap',
+			disable_search_threshold : 10
+		});
+		showRailwayHistory($('#slRailway').val());
+		$('#dtHistoryFromDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		
+		$('#dtHistoryToDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		$('#btnEditHistory').on('click',function(){
+			var history_id = $("#hdHistoryId").val();
+			var strStartDate = $("#dtHistoryFromDate").val() + " "+ $("#historyFromTime").val();
+			var strEndDate = $("#dtHistoryToDate").val() + " "+ $("#historyToTime").val();
+			$("#edit-railway-history").modal('hide');
+			editRailwayHistory(history_id,strStartDate,strEndDate);
+		});
+		
+		$('#btnEditHistoryDetail').on('click',function(){
+			var detail_id = $("#hdHistoryDetailId").val();
+			var strValue = $("#detailValue").val();
+			$("#edit-railway-history-detail").modal('hide');
+			editRailwayHistoryDetail(detail_id,strValue);
+		});
+	});
+	
+	function showRailwayHistory(device_id) 
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-get-railway-history", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'device_id' : device_id,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				//$.message.notification("fdsfaasfs","center",{"class_name":"alert alert-success"});
+				showHistory(data.railway_histories);
+			}
+			$.fn.loading.hide();
+		});
+	}
+	
+	function showHistory(histories)
+	{
+		if(typeof table3 !== 'undefined')
+			table3.fnDestroy();
+		
+		var tbody = $('#table3 tbody');
+		tbody.empty();
+		sessions = histories;
+		//alert(JSON.stringify(data.railway_session));
+		if (sessions.length==0)
+		{
+			var tbody_table4 = $('#table4 tbody');
+			tbody_table4.empty();
+		}
+		for(var i=0;i<sessions.length;i++)
+		{
+			railway_session = sessions[i];
+			//var row = $('<tr class="odd gradeX" id="'+ railway_session.id +'"></tr>');
+			var row = $('<tr id="'+ railway_session.id + '"></tr>');
+			
+			//STT
+			row.append($('<td>'+ (i+1).toString() +'</td>'));
+			//Phien 
+			if(railway_session.status==='2')
+			{
+				row.append($('<td> Chẵn</td>'));
+			}	
+			else if(railway_session.status==='1')
+			{
+				row.append($('<td> Lẻ</td>'));
+			}
+			else
+				row.append($('<td> Unknown</td>'));
+			//row.append($('<td>' + railway_session.id + '</td>'));
+			//start date
+			row.append($('<td>' + railway_session.start_date + '</td>'));
+			//start date
+			row.append($('<td>' + railway_session.end_date + '</td>'));
+			//table action
+			var row_action = $('<td class="table-action"></td>');
+			var row_edit = $('<a href="#" start-date="'+ railway_session.start_date +'" end-date="'+ railway_session.end_date +'" history-id="'+ railway_session.id +'"><i class="fa fa-pencil"></i></a>');
+			var row_delete = $('<a href="#" start-date="'+ railway_session.start_date +'" end-date="'+ railway_session.end_date +'" history-id="'+ railway_session.id +'"><i class="fa fa-trash-o"></i></a>');
+			row_edit.on('click',function()
+			{
+				var history_id = $(this).attr('history-id');
+				$("#hdHistoryId").val(history_id);
+				var date_time = $(this).attr('start-date').split(' ');
+				var strDate = date_time[0];
+				var parsedDate = $.datepicker.parseDate('dd/mm/yy', strDate);
+				var strTime = date_time[1];
+				$("#dtHistoryFromDate").datepicker( "setDate", parsedDate);
+				$("#historyFromTime").val(strTime);
+				//to date
+				date_time = $(this).attr('end-date').split(' ');
+				strDate = date_time[0];
+				parsedDate = $.datepicker.parseDate('dd/mm/yy', strDate);
+				strTime = date_time[1];
+				$("#dtHistoryToDate").datepicker( "setDate", parsedDate);
+				$("#historyToTime").val(strTime);
+				//modal
+				$("#edit-railway-history").modal();
+			});
+			row_delete.on('click',function()
+			{
+				var history_id = $(this).attr('history-id');
+				var confirm = $.message.confirm('Bạn muốn phiên tàu '+ $(this).attr('start-date')+ " đến "+ $(this).attr('end-date') +' ? ');
+				confirm.on('message.confirm',function(){
+					deleteRailwayHistory(history_id);
+					$.message.destroy();
+				});
+			});
+			row_action.append(row_edit);
+			row_action.append(row_delete);
+			row.append(row_action);
+			//append to body
+			tbody.append(row);
+		}
+		var bFirst = true;
+		$('#table3 tbody tr').click(function(e)
+		{
+			if(typeof railway_session_id != 'undefined' && railway_session_id == $(this).attr('id'))
+				return;
+			railway_session_id = $(this).attr('id');
+			$("#table3 tbody tr[id][id='"+ railway_session_id +"']").css('background-color','#8EE2BC');
+			$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
+			if(!bFirst)
+				showRailwayDetailHistory(railway_session_id,true);
+			else
+			{
+				showRailwayDetailHistory(railway_session_id,false);
+				bFirst = false;
+			}
+		});
+		$('#table3 tbody tr').first().click();
+		table3 = $('#table3').dataTable(
+		{
+			"bLengthChange": false,
+			//"bFilter" : false,
+			"bRetrieve": true,
+			"bInfo":false,
+			"bFilter":false,
+			"sPaginationType" : "full_numbers",
+			"iDisplayLength":10,
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
+		});
+	}
+	function showRailwayDetailHistory(railway_session_id,bShowLoading)
+	{
+		//if (bShowLoading)
+			//$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-railway-detail-history", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'railway_session_id' : railway_session_id,
+		});
+		
+		posting.done(function(data) 
+		{
+			var tbody = $('#table4 tbody');
+			tbody.empty();
+			railway_detail_sessions = data.railway_detail_sessions;
+			//alert(JSON.stringify(data.railway_session));
+			for(var i=0;i<railway_detail_sessions.length;i++)
+			{
+				railway_detail_session = railway_detail_sessions[i];
+				var row = $('<tr></tr>');
+				//STT
+				//row.append($('<td>'+ (i+1).toString() +'</td>'));
+				//infor_device 
+				row.append($('<td>' + railway_detail_session.property.name + '</td>'));
+				//value
+				row.append($('<td>' + railway_detail_session.detail.value + " ("+railway_detail_session.property.symbol + ')</td>'));
+				//action
+				var row_action = $('<td class="table-action"></td>');
+				var row_edit = $('<a href="#" detail-name="'+ railway_detail_session.property.name +'" detail-value="'+ railway_detail_session.detail.value +'" detail-symbol="'+ railway_detail_session.property.symbol +'" detail-id="'+ railway_detail_session.detail.id +'"><i class="fa fa-pencil"></i></a>');
+				//
+				row_edit.on('click',function()
+				{
+					var detail_id = $(this).attr('detail-id');
+					$("#hdHistoryDetailId").val(detail_id);
+					$("#modalDetailLabel").html("SỬA THÔNG TIN " + $(this).attr('detail-name'));
+					$("#detailValue").val($(this).attr('detail-value'));
+					
+					//modal
+					$("#edit-railway-history-detail").modal();
+					
+				});
+				row_action.append(row_edit);
+				row.append(row_action);
+				//start date
+				//row.append($('<td>' + railway_detail_session.detail.start_date + '</td>'));
+				//end date
+				//row.append($('<td>' + railway_detail_session.end_date + '</td>'));
+				//status
+				//row.append($('<td>' + railway_detail_session.detail.status + '</td>'));	
+				if( railway_detail_session.detail.value > railway_detail_session.property.max_alarm || 
+						railway_detail_session.detail.value < railway_detail_session.property.min_alarm)
+				{
+					//alert(railway_detail_session.property.max_alarm);
+					row.css("color","red");
+				}
+				//append to body
+				tbody.append(row);
+			}
+			//if (bShowLoading)
+				//$.fn.loading.hide();
+		});
+		//hide loading
+		//$.fn.loading.hide();
+	}
+	function deleteRailwayHistory(history_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-delete-railway-history", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'history_id' : history_id,
+		});
+		
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				$.message.notification('Xóa bản ghi thành công',"top");
+			}
+			$.fn.loading.hide();
+			//refresh
+			showRailwayHistory($('#slRailway').val());
+		});
+	}
+	
+	function editRailwayHistory(history_id,start_date,end_date)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-edit-railway-history", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'history_id' : history_id,
+			'start_date' : start_date,
+			'end_date' : end_date,
+		});
+		
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				$.message.notification('Sửa thông tin thành công',"top");
+			}
+			$.fn.loading.hide();
+			//refresh
+			showRailwayHistory($('#slRailway').val());
+		});
+	}
+	
+	function editRailwayHistoryDetail(detail_id,detail_value)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/ajax-edit-railway-history-detail", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'detail_id' : detail_id,
+			'detail_value' : detail_value,
+		});
+		
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			else if(data.handle=='success')
+			{
+				$.message.notification('Sửa thông tin thành công',"top");
+			}
+			$.fn.loading.hide();
+			//refresh
+			showRailwayDetailHistory(railway_session_id,false);
+		});
+	}
+</script>
+{% endblock scripts%}

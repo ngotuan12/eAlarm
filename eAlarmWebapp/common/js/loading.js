@@ -24,6 +24,8 @@
 				jQuery('body #status').remove();
 				jQuery('#background-mask').remove();
 			});
+			jQuery('body #status').remove();
+			jQuery('#background-mask').remove();
 		},
 	};
 	var mask, size, loading;
