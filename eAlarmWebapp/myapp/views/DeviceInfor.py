@@ -25,7 +25,7 @@ def index(request):
 	try:
 		device_id = request.POST['device_id']
 		device = Device.objects.get(id=device_id)
-		device_infor = DeviceInfor.objects.filter(device_id=device, status='1').order_by('device_pro__id')
+		device_infor = DeviceInfor.objects.filter(device_id=device, status='1').order_by('device_pro__name')
 # 		print(device_infor.query)
 		infors = []
 		last_railway = {}
