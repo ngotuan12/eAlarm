@@ -43,9 +43,9 @@ def add_property(request):
                 _symbol = request.POST['txtSymbol']
             else:
                 _min = float('0')
-                _max = float('0')
+                _max = float('2')
                 _minAlarm = float('0')
-                _maxAlarm = float('0')
+                _maxAlarm = float('2')
                 _symbol = ''
             _parent_id = None
             _mtypeid = request.POST['slMType']
@@ -108,9 +108,9 @@ def edit_property(request,property_id):
                 _symbol = request.POST['txtSymbolEdit']
             else:
                 _min = float('0')
-                _max = float('0')
+                _max = float('2')
                 _minAlarm = float('0')
-                _maxAlarm = float('0')
+                _maxAlarm = float('2')
                 _symbol = ''
             _parent_id = None
             _mtypeid = request.POST['slMTypeEdit']
