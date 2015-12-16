@@ -34,6 +34,7 @@
 					class="fa fa-laptop"></i> <span>Giám sát phòng máy</span></a></li>
 			<li><a href="/railway/monitor/"><i
 					class="fa fa-align-justify"></i> <span>Giám sát đường ngang</span></a></li>
+			{% if user.is_superuser %}
 			<li class="nav-parent"><a href="#"><i class="glyphicon glyphicon-book"></i>
 					<span>Điều hành</span></a>
 				<ul class="children">
@@ -44,6 +45,8 @@
 						<li><a href="/manage/railway/statistics/"><i class="fa fa-caret-right"></i>
 							Thống kê sự kiện đường ngang</a></li>
 				</ul></li>
+			{% endif %}
+			{% if user.is_superuser %}
 			<li class="nav-parent"><a href="#"><i class="fa fa-laptop"></i>
 					<span>Phòng máy</span></a>
 				<ul class="children">
@@ -60,6 +63,8 @@
 								Danh sách cảm biến</a></li>
 						{% endif %}
 				</ul></li>
+			{% endif %}
+			{% if user.is_superuser %}
 			<li class="nav-parent"><a href="#"><i class="fa fa-align-justify"></i>
 					<span>Đường ngang </span></a>
 				<ul class="children">
@@ -74,6 +79,7 @@
 						
 						
 				</ul></li>
+			{% endif %}
 			<!-- <li class="nav-parent"><a href="#"><i class="fa fa-suitcase"></i>
 					<span>Tiện ích</span></a>
 				<ul class="children">
