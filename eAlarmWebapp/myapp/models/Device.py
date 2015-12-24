@@ -10,6 +10,7 @@ from django.db import models
 
 from myapp.models.Area import Area
 from myapp.models.Route import Route
+from myapp.models.DeviceProperties import DeviceProperties
 
 
 # Create your models here.
@@ -35,6 +36,10 @@ class Device(models.Model):
     action_status = models.CharField(db_column='action_status',max_length=25)
     order = models.IntegerField(max_length=11,default=0)
     create_date = models.DateTimeField(default=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),db_column="create_date")
+    railway_type = models.CharField(db_column='railway_type',max_length=10)
+    sensor_direction = models.ForeignKey(DeviceProperties,db_column='sensor_direction_id')
+    railway_direction = models.CharField(db_column='railway_direction',max_length=10)
+    sensor_direction_code = models.CharField(db_column='sensor_direction_code',max_length=20)
     class Meta:
         db_table = 'device'
         app_label = 'myapp'

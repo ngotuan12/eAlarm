@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.contrib.auth.models import  Group,User
 from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Route
+from myapp.models.ApParam import ApParam
 
 
 @login_required(login_url='/login')
@@ -24,10 +25,17 @@ def add_railway(request):
         lsArea = Area.objects.filter(level = '2')
         
         lsProperty = DeviceProperties.objects.filter(p_type='2')
+        lsSensorDirection = DeviceProperties.objects.filter(p_type='2',m_type='3')
+        lsRailwayType = ApParam.objects.filter(type='RAILWAY_TYPE')
+        lsRailwayDirection = ApParam.objects.filter(type='RAILWAY_DIRECTION')
         departments =Group.objects.all()
         routes =Route.objects.all()
         users =User.objects.all().order_by("username")
-        context={'lsArea':lsArea,'lsProperty':lsProperty,'departments':departments,'users':users,'routes':routes}
+        context={
+                 'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,'lsProperty':lsProperty,
+                 'lsRailwayType':lsRailwayType,'lsRailwayDirection':lsRailwayDirection,
+                 'departments':departments,'users':users,'routes':routes
+                 }
         context.update(csrf(request))
     elif request.method == 'POST':
         try:
@@ -46,6 +54,7 @@ def add_railway(request):
             _fullName = request.POST['txtFullName'].strip()
             _lat = request.POST['txtLat'].strip()
             _lng = request.POST['txtLng'].strip()
+            _railwayType = request.POST['slRailwayType'].strip()
             area = Area.objects.get(id = _area_id)
             group =Group.objects.get(id=_ManagementUnit)
             user =User.objects.get(id=_UserUnit)
@@ -67,8 +76,15 @@ def add_railway(request):
             device.user=user
             device.route =route
             device.type ='4'
+            device.railway_type = _railwayType
+            if _railwayType == '3':
+                _railwayDirection = request.POST['slRailwayDirection'].strip()
+                _sensorDirection = request.POST['slSensorDirection'].strip()
+                sensorDirection = DeviceProperties.objects.get(id = _sensorDirection)
+                device.railway_direction = _railwayDirection
+                device.sensor_direction = sensorDirection
+                device.sensor_direction_code = sensorDirection.code
             device.save()
- 
  
             lsDeviceProperties = DeviceProperties.objects.filter(p_type='2')
             for deviceProperties in lsDeviceProperties:
@@ -96,8 +112,15 @@ def edit_railway(request,railway_id):
     departments =Group.objects.all()
     routes =Route.objects.all()
     users =User.objects.all().order_by("username")
+    lsSensorDirection = DeviceProperties.objects.filter(p_type='2',m_type='3')
+    lsRailwayType = ApParam.objects.filter(type='RAILWAY_TYPE')
+    lsRailwayDirection = ApParam.objects.filter(type='RAILWAY_DIRECTION')
     device = Device.objects.get(id=railway_id)
-    context={'lsArea':lsArea,'lsInfor':lsInfor,'device':device,'departments':departments,'users':users,'routes':routes}
+    context={
+             'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,'lsInfor':lsInfor,
+             'lsRailwayType':lsRailwayType,'lsRailwayDirection':lsRailwayDirection,
+             'device':device,'departments':departments,'users':users,'routes':routes
+             }
     if request.method == 'POST':
         try:
             _code = request.POST['txtCode'].strip()
@@ -115,6 +138,8 @@ def edit_railway(request,railway_id):
             _fullName = request.POST['txtFullName'].strip()
             _lat = request.POST['txtLat'].strip()
             _lng = request.POST['txtLng'].strip()
+            _railwayType = request.POST['slRailwayType'].strip()
+            
             area = Area.objects.get(id = _area_id)
             group =Group.objects.get(id=_ManagementUnit)
             user =User.objects.get(id=_UserUnit)
@@ -135,6 +160,14 @@ def edit_railway(request,railway_id):
             device.user=user
             device.route=route
             device.type ='4'
+            device.railway_type = _railwayType
+            if _railwayType == '3':
+                _railwayDirection = request.POST['slRailwayDirection'].strip()
+                _sensorDirection = request.POST['slSensorDirection'].strip()
+                sensorDirection = DeviceProperties.objects.get(id = _sensorDirection)
+                device.railway_direction = _railwayDirection
+                device.sensor_direction = sensorDirection
+                device.sensor_direction_code = sensorDirection.code
             device.save()
             
             for deviceInfor in lsInfor:

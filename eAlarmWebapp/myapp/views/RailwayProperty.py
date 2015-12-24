@@ -20,7 +20,13 @@ from myapp.models.ApParam import ApParam
 @login_required(login_url='/login')
 def index(request):
     #devices = DeviceProperties.objects.filter(p_type='2')
-    devices =  DeviceProperties.objects.raw("SELECT `id`, `code`, `name`, `description`, `type`, `min`, `max`, `min_alarm`, `max_alarm`, `symbol`, `require`, `parent_id`, `p_type`, `on_railway`, `m_type` m_type_id,(select `par_name` from `ap_param` where `par_type`='M_TYPE' and `par_value`=d.`m_type`) m_type_name FROM `device_properties` d WHERE `p_type`='2' ")
+    devices =  DeviceProperties.objects.raw("""
+                    SELECT `id`, `code`, `name`, `description`, 
+                    `type`, `min`, `max`, `min_alarm`, `max_alarm`, 
+                    `symbol`, `require`, `parent_id`, `p_type`, `on_railway`, 
+                    `m_type` m_type_id,(select `par_name` from `ap_param` where `par_type`='M_TYPE' and `par_value`=d.`m_type`) m_type_name 
+                    FROM `device_properties` d WHERE `p_type`='2' 
+                    """)
     mtypes = ApParam.objects.filter(type='M_TYPE')
     
     context={'devices':devices,'mtypes':mtypes}
