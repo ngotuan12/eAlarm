@@ -186,7 +186,7 @@
 				$("#table1 tbody tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
 				$("#table1 tbody tr[id][id!='"+ device_id +"']").css('background-color','#fff');
 			});
-			
+			$('#table1 tbody tr').first().click();
 			$('#btnHistorySearch').click(function(e)
 			{
 				//onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
