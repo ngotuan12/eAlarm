@@ -1,2 +1,229 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% load i18n %}
+{% block styles %}
+<style>
+.mainpanel {
+	margin-left: 0px !important;
+}
+</style>
+{% endblock %}
+{% block left-panel %}
+{% endblock %}
+{% block tool-bar-left %}
+<div class="header-left" style="margin-bottom: -10px">
+	<div id="navbar" class="navbar-collapse collapse">
+		<ul class="nav navbar-nav">
+			<li class="dropdown"><a href="#" class="dropdown-toggle"
+				data-toggle="dropdown" role="button" aria-haspopup="true"
+				aria-expanded="false">Quản lý hệ thống <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Quản lý người dùng</a></li>
+					<li><a href="#">Quản lý đường ngang</a></li>
+					<li><a href="#">Cài đặt hệ thống</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Thoát</a></li>
+				</ul></li>
+		</ul>
+		<ul class="nav navbar-nav">
+			<li class="dropdown"><a>Báo cáo</a>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav">
+			<li class="dropdown"><a>Trợ giúp</a>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right headermenu">
+			<li class="active"><button class="btn btn-default tp-icon"
+					data-toggle="dropdown">
+					<img alt="" src="/images/language/{{ LANGUAGE_CODE }}.png"
+						width="25px">
+				</button>
+				<ul class="dropdown-menu">
+					{% for language in LANGUAGES %}
+						{% ifnotequal language.0 LANGUAGE_CODE %}
+							<li style="padding: 0"><a href="{% url 'switch-language' language_code=language.0 %}?next={{ request.get_full_path }}"> <img alt="" src="/images/language/{{ language.0 }}.png" width="25px">  {{language.1}}</a></li>
+						{% endifnotequal %}
+					{% endfor%}
+				</ul>
+			</li>
+			<li>
+
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle"
+						data-toggle="dropdown">
+						<i class="glyphicon glyphicon-cog"></i> {{ user.username }}<span
+							class="caret"></span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+						<li><a href="/password/change/"><i
+								class="glyphicon glyphicon-cog"></i> {% trans 'Đổi mật khẩu'%}</a></li>
+						<li><a href="#"><i
+								class="glyphicon glyphicon-question-sign"></i> {% trans 'Trợ giúp'%}</a></li>
+						<li><a href="/logout/"><i
+								class="glyphicon glyphicon-log-out"></i> {% trans 'Thoát'%}</a></li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+{% endblock %}
+{% block tool-bar-right %}
+{% endblock %}
+{% block content-header %}
+	<div class="contentpanel">
+		<div class="row" style="padding-bottom: 5px">
+			<div class="col-md-2">
+				<img alt="" src="/images/Banner.gif" style="width: 100%">
+			</div>
+			<div class="col-md-4">
+				<div class="input-group" style="padding-bottom: 5px">
+					<input type="text" id="dtHistoryFromDate" class="form-control"
+						name="dtFromDate" data-provide="datepicker"
+						data-date-format="dd/mm/yy" placeholder="Từ ngày(mm/dd/yyyy)">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+				<div class="input-group" style="padding-bottom: 5px">
+					<input type="text" id="dtHistoryToDate" class="form-control"
+						name="dtHistoryToDate" data-provide="datepicker"
+						data-date-format="dd/mm/yy" placeholder="Đến ngày (mm/dd/yyyy)">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+				
+				<button id="btnHistorySearch" class="btn btn-primary" style="padding: 3px;width: 50%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
+			</div>
+			<div class="col-md-6">
+				<div class="profile-header">
+				<h4 class="profile-name" id="device-name" style="text-align: center;"><a href="#">HỆ THỐNG GIÁM SÁT VÀ CẢNH BÁO TỰ ĐỘNG ĐƯỜNG NGANG</a></h4>
+				<h4 class="profile-name" id="device-name" style="text-align: center;"><a href="#">GPRS VERSION 1.0</a></h4>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="panel panel-default" style="min-height: 500px">
+					<table class="table mb30" id="table1">
+						<thead>
+							<tr>
+								<th class="center">Tuyến</th>
+								<th class="center">Lý trình</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for device in devices %}
+								<tr id="{{ device.id }}">
+									<td>{{ device.route.name }}</td>
+									<td>{{ device.name }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="panel panel-default" style="min-height: 500px">
+					<table class="table mb30" id="table2">
+						<thead>
+							<tr>
+								<th>Bắt đầu</th>
+								<th>Kết thúc</th>
+								<th>Thời gian</th>
+								<th>Nội dung</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block scripts %}
+	<script src="/js/jquery-1.10.2.min.js"></script>
+	<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/modernizr.min.js"></script>
+	<script src="/js/jquery.sparkline.min.js"></script>
+	<script src="/js/toggles.min.js"></script>
+	<script src="/js/retina.min.js"></script>
+	<script src="/js/jquery.cookies.js"></script>
+	
+	<script src="/js/jquery.datatables.min.js"></script>
+	<script src="/js/chosen.jquery.min.js"></script>
+	
+	<script src="/js/flot/jquery.flot.js"></script>
+	
+	<script src="/js/jquery.maskedinput.min.js"></script>
+	<script src="/js/chosen.jquery.min.js"></script>
+	<script src="/js/jquery-ui-1.10.3.min.js"></script>
+	
+	<script src="/js/loading.js"></script>
+	<script src="/js/message.js"></script>
+	
+	<script src="/js/custom1.js"></script>
+	<script>
+		var device_id="ALL";
+		jQuery(document).ready(function() {
+			$('#dtHistoryFromDate').datepicker({
+				dateFormat : 'dd/mm/yy',
+			});
+			
+			$('#dtHistoryToDate').datepicker({
+				dateFormat : 'dd/mm/yy',
+			});
+			// Input Masks
+			$('#dtHistoryFromDate').mask("99/99/9999");
+			// Input Masks
+			$('#dtHistoryToDate').mask("99/99/9999");
+			$("#dtHistoryFromDate").datepicker( "setDate", new Date());
+			$("#dtHistoryToDate").datepicker( "setDate", new Date());
+			$('#table1 tbody').on( 'click', 'tr', function () {
+				device_id = $(this).attr('id');
+				$("#table1 tbody tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
+				$("#table1 tbody tr[id][id!='"+ device_id +"']").css('background-color','#fff');
+			});
+			
+			$('#btnHistorySearch').click(function(e)
+			{
+				onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+			});
+		});
+		function onGetRailwayHistory(from_date,to_date)
+		{
+			var csrftoken = $.cookie('csrftoken');
+			
+			var posting = $.post("/ajax-device-history", {
+				'csrfmiddlewaretoken' : csrftoken,
+				'device_id' : device_id,
+				'from_date' : from_date,
+				'to_date' : to_date,
+			});
+			posting.done(function(data) 
+			{
+				var tbody = $('#table2 tbody');
+				tbody.empty();
+				//
+				var histories = data.histories;
+				for(var i=0;i<histories.length;i++)
+				{
+					var history = histories[i];
+					
+					var row = $('<tr></tr>');
+					//STT
+					row.append($('<td>' + history.start_date + '</td>'));
+					//value
+					row.append($('<td>' + history.end_date + '</td>'));
+					row.append($('<td>' + history.time + '</td>'));
+					//value
+					row.append($('<td>' + history.description + '</td>'));
+					//append to body
+					tbody.append(row);
+				}
+			});
+		}
+	</script>
+{% endblock %}
 

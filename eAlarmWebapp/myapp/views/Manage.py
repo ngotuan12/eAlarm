@@ -145,6 +145,14 @@ def upOrderDevice(request):
 @login_required(login_url='/login')
 def railway_statistics(request):
     context = {}
+    devices = []
+    if request.user.is_superuser:
+        devices = Device.objects.filter(type='4').order_by('route__order','order')
+    else:
+        #test_ids = list(TestSubjectSet.objects.all().values_list('test_id', flat=True))
+        user_device = list(UserDevice.objects.filter(user=request.user).values_list('device_id', flat=True))
+        devices = Device.objects.filter(id__in=user_device).order_by('route__order','order')
+    context.update({'devices':devices})
     return render_to_response("manage/railway_statistics.html", context, RequestContext(request))
 @login_required(login_url='/login')
 @require_http_methods(["POST", ])
