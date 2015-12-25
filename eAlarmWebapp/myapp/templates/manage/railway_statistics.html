@@ -77,6 +77,7 @@
 				<img alt="" src="/images/Banner.gif" style="width: 100%">
 			</div>
 			<div class="col-md-4">
+				
 				<div class="input-group" style="padding-bottom: 5px">
 					<input type="text" id="dtHistoryFromDate" class="form-control"
 						name="dtFromDate" data-provide="datepicker"
@@ -90,7 +91,7 @@
 					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				</div>
 				
-				<button id="btnHistorySearch" class="btn btn-primary" style="padding: 3px;width: 50%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
+				<button id="btnHistorySearch" class="btn btn-primary" style="padding: 3px;width: 50%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm phiên tàu</button>
 			</div>
 			<div class="col-md-6">
 				<div class="profile-header">
@@ -122,13 +123,13 @@
 			</div>
 			<div class="col-md-9">
 				<div class="panel panel-default" style="min-height: 500px">
-					<table class="table mb30" id="table2">
+					<table class="table mb30" id="table3">
 						<thead>
 							<tr>
+								<th>STT</th>
+								<th>Hướng</th>
 								<th>Bắt đầu</th>
 								<th>Kết thúc</th>
-								<th>Thời gian</th>
-								<th>Nội dung</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -188,7 +189,8 @@
 			
 			$('#btnHistorySearch').click(function(e)
 			{
-				onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+				//onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+				showRailwayHistory();
 			});
 		});
 		function onGetRailwayHistory(from_date,to_date)
@@ -222,6 +224,85 @@
 					//append to body
 					tbody.append(row);
 				}
+			});
+		}
+		var table3;
+		
+		function showRailwayHistory()
+		{
+			
+			var csrftoken = $.cookie('csrftoken');
+			var posting = $.post("/ajax-railway-history", {
+				'csrfmiddlewaretoken' : csrftoken,
+				'device_id' : device_id,
+			});
+			
+			posting.done(function(data) 
+			{
+				if(typeof table3 !== 'undefined')
+					table3.fnDestroy();
+				
+				var tbody = $('#table3 tbody');
+				tbody.empty();
+				sessions = data.railway_sessions;
+				//alert(JSON.stringify(data.railway_session));
+				for(var i=0;i<sessions.length;i++)
+				{
+					railway_session = sessions[i];
+					//var row = $('<tr class="odd gradeX" id="'+ railway_session.id +'"></tr>');
+					var row = $('<tr id="'+ railway_session.id + '"></tr>');
+					
+					//STT
+					row.append($('<td>'+ (i+1).toString() +'</td>'));
+					//Phien 
+					if(railway_session.status==='2')
+					{
+						row.append($('<td> Chẵn</td>'));
+					}	
+					else if(railway_session.status==='1')
+					{
+						row.append($('<td> Lẻ</td>'));
+					}
+					else
+						row.append($('<td> Unknown</td>'));
+					//row.append($('<td>' + railway_session.id + '</td>'));
+					//start date
+					row.append($('<td>' + railway_session.start_date + '</td>'));
+					//start date
+					row.append($('<td>' + railway_session.end_date + '</td>'));
+					//append to body
+					tbody.append(row);
+				}
+				$('#table3 tbody tr').click(function(e)
+				{
+					railway_session_id = $(this).attr('id');
+					$("#table3 tbody tr[id][id='"+ railway_session_id +"']").css('background-color','#8EE2BC');
+					$("#table3 tbody tr[id][id!='"+ railway_session_id +"']").css('background-color','#fff');
+				});
+				$('#table3 tbody tr').first().click();
+				table3 = $('#table3').dataTable(
+				{
+					"bLengthChange": false,
+					//"bFilter" : false,
+					"bRetrieve": true,
+					"bInfo":false,
+					"bFilter":false,
+					"sPaginationType" : "full_numbers",
+					"iDisplayLength":10,
+					"oLanguage":
+					{
+						"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+						"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+						"oPaginate": 
+						{
+							"sFirst":      "<<",
+							"sLast":       ">>",
+							"sNext":       ">",
+							"sPrevious":   "<"
+						},
+						"sSearch":"",
+					}
+				});
 			});
 		}
 	</script>
