@@ -227,7 +227,7 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Địa chỉ:</label>
 												<div class="col-sm-12">
-													<input disabled type="text" id="txtAddress" name="txtAddress" value="{{ device.short_address }}" class="form-control"
+													<input readonly type="text" id="txtAddress" name="txtAddress" value="{{ device.short_address }}" class="form-control"
 														style="padding: 8px;" 
 														placeholder="<Địa chỉ>" maxlength="50" required onchange="getLatLong();">
 												</div>
@@ -239,7 +239,7 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Kinh độ: </label>
 												<div class="col-sm-12">
-													<input disabled type="text" id="txtLat" name="txtLat" value="{{ device.lat }}" class="form-control numberic"
+													<input readonly type="text" id="txtLat" name="txtLat" value="{{ device.lat }}" class="form-control numberic"
 													style="padding: 8px;" placeholder="<Kinh độ>">
 												</div>
 											</div>
@@ -248,7 +248,7 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Vĩ độ: </label>
 												<div class="col-sm-12">
-													<input disabled type="text" id="txtLng" name="txtLng" value="{{ device.lng }}" class="form-control numberic"
+													<input readonly type="text" id="txtLng" name="txtLng" value="{{ device.lng }}" class="form-control numberic"
 													style="padding: 8px;" placeholder="<Vĩ độ>">
 												</div>
 											</div>
@@ -492,15 +492,15 @@
 			typeLocation = $(this).val();
 			if(typeLocation=='1')
 			{
-				$("#txtAddress").prop('disabled', false);
-				$("#txtLat").prop('disabled', true);
-				$("#txtLng").prop('disabled', true);
+				$("#txtAddress").prop('readonly', false);
+				$("#txtLat").prop('readonly', true);
+				$("#txtLng").prop('readonly', true);
 			}
 			else if(typeLocation=='2')
 			{
-				$("#txtAddress").prop('disabled', true);
-				$("#txtLat").prop('disabled', false);
-				$("#txtLng").prop('disabled', false);
+				$("#txtAddress").prop('readonly', true);
+				$("#txtLat").prop('readonly', false);
+				$("#txtLng").prop('readonly', false);
 			}
 		});
 		$("#txtLat").change(function(){
