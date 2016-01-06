@@ -178,13 +178,53 @@
 										</div>
 									</div>
 									<div class="row">
+										<label class="col-sm-12 control-label">Địa điểm</label>
+										<div class="col-sm-12" id="typeLocation">
+											<div class="col-sm-5">
+												<div class="rdio rdio-primary">
+													<input type="radio" id="rdoAddress" value="1" name="gender"
+														required=""> <label for="rdoAddress">Theo địa chỉ</label>
+												</div>
+												<!-- rdio -->
+												
+											</div>
+											<div class="col-sm-5">
+												<div class="rdio rdio-primary">
+													<input type="radio" value="2" id="rdoCoordinates" name="gender">
+													<label for="rdoCoordinates">Theo tọa độ</label>
+												</div>
+												<!-- rdio -->
+											</div>
+										</div>
+									</div>
+									<div class="row">
 										<div class="col-sm-12" style="padding-left: 0px;">
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Địa chỉ:</label>
 												<div class="col-sm-12">
-													<input type="text" id="txtAddress" name="txtAddress" value="" class="form-control"
+													<input disabled type="text" id="txtAddress" name="txtAddress" value="" class="form-control"
 														style="padding: 8px;" 
 														placeholder="<Địa chỉ>" maxlength="50" required onchange="getLatLong();">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6" style="padding-left: 0px;">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Kinh độ: </label>
+												<div class="col-sm-12">
+													<input disabled type="text" id="txtLat" name="txtLat" value="{{ device.lat }}" class="form-control numberic"
+													style="padding: 8px;" placeholder="<Kinh độ>">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6" style="padding-left: 0px;">
+											<div class="form-group">
+												<label class="col-sm-12 control-label">Vĩ độ: </label>
+												<div class="col-sm-12">
+													<input disabled type="text" id="txtLng" name="txtLng" value="{{ device.lng }}" class="form-control numberic"
+													style="padding: 8px;" placeholder="<Vĩ độ>">
 												</div>
 											</div>
 										</div>
@@ -214,8 +254,6 @@
 							</div>
 						</div>
 						<input type="hidden" name="type" value="addDevice">
-						<input type="hidden" id="txtLat" name="txtLat" value="{% if lat %} {{ lat }} {% endif %}">
-						<input type="hidden" id="txtLng" name="txtLng" value="{% if lng %} {{ lng }} {% endif %}">
 						<input type="hidden" id="txtFullName" name="txtFullName" value="">
 					</div>
 					<div class="panel-body" style="padding-top: 0px;">
@@ -381,7 +419,7 @@
 				]
 			}
 		];
-	
+	var typeLocation = "";
 	jQuery(document).ready(function() {
 		// Chosen Select
 		jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap',disable_search_threshold : 20});
@@ -407,6 +445,28 @@
 		});
 		//validate
 		$.validator.setDefaults({ ignore: ":hidden:not(select)" })
+		$('#typeLocation :input').change(function(){
+			//alert($(this).val());
+			typeLocation = $(this).val();
+			if(typeLocation=='1')
+			{
+				$("#txtAddress").prop('disabled', false);
+				$("#txtLat").prop('disabled', true);
+				$("#txtLng").prop('disabled', true);
+			}
+			else if(typeLocation=='2')
+			{
+				$("#txtAddress").prop('disabled', true);
+				$("#txtLat").prop('disabled', false);
+				$("#txtLng").prop('disabled', false);
+			}
+		});
+		$("#txtLat").change(function(){
+			showAddressByCoordinate();
+		});
+		$("#txtLng").change(function(){
+			showAddressByCoordinate();
+		});
 	});
 	function showAddress(lat,lng,address)
 	{
@@ -423,28 +483,53 @@
 		});
 		google.maps.event.addDomListener(window, 'load', initialize);
 	}
-	function getLatLong(){
-		
-		if ( !$('#txtAddress').val() ) {
-		}
-		else
+	function showAddressByCoordinate()
+	{
+		var lat = $("#txtLat").val();
+		var lng = $("#txtLng").val();
+		var address = $("#txtAddress").val();
+		if(lat == '')
 		{
-			var province = $("#slArea").find('option:selected').attr('area_name');
-			var address = $('#txtAddress').val();
-			$("#fulladdress").html(address+","+province+ ",VIỆT NAM")
-			var geo = new google.maps.Geocoder;
-			
-			geo.geocode({'address':$("#fulladdress").html()},function(results, status){
-				if (status == google.maps.GeocoderStatus.OK) {
-					$("#txtLat").val(results[0].geometry.location.lat());
-					$("#txtLng").val(results[0].geometry.location.lng());
-					$("#txtFullName").val(address+","+province+ ",Việt Nam")
-					showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
-				} else {
-					alert("Geocode was not successful for the following reason: " + status);
-				}
-			
-			});
+			$("#txtLat").focus();
+			return;
+		}
+		if(lng == '')
+		{
+			$("#txtLng").focus();
+			return;
+		}
+		var latlng = lat+","+lng;
+		var url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng + "&sensor=false";
+		$.getJSON(url, function (data) {
+			var address = data.results[0].formatted_address;
+			$("#txtAddress").val(address);
+		 	showAddress(lat,lng,address);
+		});
+	}
+	function getLatLong(){
+		if(typeLocation=='1')
+		{
+			if ( !$('#txtAddress').val() ) {
+			}
+			else
+			{
+				var province = $("#slArea").find('option:selected').attr('area_name');
+				var address = $('#txtAddress').val();
+				$("#fulladdress").html(address+","+province+ ",VIỆT NAM")
+				var geo = new google.maps.Geocoder;
+				
+				geo.geocode({'address':$("#fulladdress").html()},function(results, status){
+					if (status == google.maps.GeocoderStatus.OK) {
+						$("#txtLat").val(results[0].geometry.location.lat());
+						$("#txtLng").val(results[0].geometry.location.lng());
+						$("#txtFullName").val(address+","+province+ ",Việt Nam")
+						showAddress(results[0].geometry.location.lat(),results[0].geometry.location.lng(),address);
+					} else {
+						alert("Geocode was not successful for the following reason: " + status);
+					}
+				
+				});
+			}
 		}
 	}
 	function onAddDeviceFromSubmit()
