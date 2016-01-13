@@ -106,6 +106,7 @@
 							<tr>
 								<th>Tuyến</th>
 								<th>Lý Trình</th>
+								<th>Loại đường ngang </th>
 								<th>Trạng thái</th>
 							</tr>
 						</thead>
@@ -114,6 +115,7 @@
 							<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}" device_status = "{{ device.status }}">
 								<td>{{ device.route.name }}</td>
 								<td>{{ device.name }}</td>
+								<td>{{ device.device_type.name }}</td>
 								<td class="center">
 									<p id ="railway-{{ device.id }}" class="railway-action" action_status="{{ device.action_status }}"style="position: absolute;margin-left: 30px">
 										{% if  device.status != '0' %}
