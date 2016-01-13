@@ -94,9 +94,9 @@
 											<div class="form-group">
 												<label class="col-sm-12 control-label">Kiểu đường ngang:</label>
 												<div class="col-sm-12">
-													<select name='slRailwayType' id="slRailwayType" class="form-control chosen-select" required style="padding: 8px;">
-														{% for railwayType in lsRailwayType %}
-															<option value="{{ railwayType.value }}" ">{{ railwayType.name }}</option>
+													<select name='slDeviceType' id="slDeviceType" class="form-control chosen-select" required style="padding: 8px;">
+														{% for deviceType in lsDeviceType %}
+															<option value="{{ deviceType.id }}" ">{{ deviceType.name }}</option>
 														{% endfor %}
 													</select>
 												</div>
@@ -383,8 +383,8 @@
 			});
 		}
 	});
-	$("#slRailwayType").change(function(){
-		if($("#slRailwayType").val()=='3')
+	$("#slDeviceType").change(function(){
+		if($("#slDeviceType").val()=='3')
 		{
 			$("#slSensorDirection").prop("disabled", false).trigger("liszt:updated");
 			$("#slSensorDirection").prop("disabled", false).trigger("chosen:updated");
