@@ -1,0 +1,247 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Đường ngang <span>Danh sách loại đường ngang</span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<a class="btn btn-danger" style="min-width: 100px;margin-right: 5px;float: right;" href="#" onclick="removeDevice();">Xóa</a>
+				<a id="btnEdit" class="btn btn-warning" style="min-width: 100px;margin-right: 5px;float: right;" data-toggle="modal" data-target="#edit-device-type">Sửa</a>
+				<a class="btn btn-success" style="min-width: 100px;margin-right: 5px;float: right;" data-toggle="modal" data-target="#add-device-type">Thêm</a>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-hover" id="table2">
+					<thead>
+						<tr>
+							<th>Mã loại đường ngang</th>
+							<th>Tên loại đường ngang</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for type in types %}
+							<tr class="odd gradeX" id="{{ type.id }}" code="{{ type.code }}" name="{{ type.name }}">
+								<td>{{ type.code }}</td>
+								<td>{{ type.name }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- table-responsive -->
+		</div>
+		<!-- panel-body -->
+	</div>
+	<!-- panel -->
+</div>
+<!-- Modal add -->
+<div class="modal fade" id="add-device-type" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Thêm loại đường ngang</h4>
+			</div>
+			<div class="panel panel-default">
+				<form id="addDeviceType">
+					<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
+						<div class="form-group">
+							<label class="col-sm-12 control-label">Mã loại đường ngang:</label>
+							<div class="col-sm-12">
+								<input type="text" id="txtAddCode" name="txtAddCode" class="form-control"
+									placeholder="<Mã>" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label">Tên loại đường ngang:</label>
+							<div class="col-sm-12">
+								<input type="text" id="txtAddName" name="txtAddName" class="form-control"
+									placeholder="<Tên>" required>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button style="min-width: 100px;margin-right: 5px;float: right;" 
+					type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+				<button style="min-width: 100px;margin-right: 5px;float: right;"
+					type="button" class="btn btn-primary" id="btnAddDeviceType">Lưu</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End modal add -->
+<!-- Modal edit -->
+<div class="modal fade" id="edit-device-type" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Sửa loại đường ngang</h4>
+			</div>
+			<div class="panel panel-default">
+				<form id="editDeviceType">
+					<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
+						<div class="form-group">
+							<label class="col-sm-12 control-label">Mã loại đường ngang:</label>
+							<div class="col-sm-12">
+								<input type="text" id="txtEditCode" name="txtEditCode" class="form-control"
+									placeholder="<Mã>" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label">Tên loại đường ngang:</label>
+							<div class="col-sm-12">
+								<input type="text" id="txtEditName" name="txtEditName" class="form-control"
+									placeholder="<Tên>" required>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button style="min-width: 100px;margin-right: 5px;float: right;" 
+					type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+				<button style="min-width: 100px;margin-right: 5px;float: right;"
+					type="button" class="btn btn-primary" id="btnEditDeviceType">Lưu</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End modal edit -->
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.validate.min.js"></script>
+
+<script src="/js/custom.js"></script>
+
+<script src="/js/message.js"></script>
+<script src="/js/loading.js"></script>
+
+<script>
+	var type_id;
+	jQuery(document).ready(function() {
+		$('#table2 tbody tr').click(function()
+		{
+			type_id = $(this).attr('id');
+			$("#table2 tbody tr[id][id='"+ type_id +"']").css('background-color','#8EE2BC');
+			$("#table2 tbody tr[id][id!='"+ type_id +"']").css('background-color','#fff');
+		});
+		$('#table2 tbody tr').first().click();
+		$('#btnAddDeviceType').click(function(){
+			var $valid = $('#addDeviceType').valid();
+			if(!$valid) 
+			{
+				$validator.focusInvalid();
+				return;
+			}
+			var code = $('#txtAddCode').val();
+			var name = $('#txtAddName').val();
+			addDeviceType(code,name);
+		});
+		$('#btnEdit').click(function(){
+			var code = $("#table2 tbody tr[id][id='"+ type_id +"']").attr('code');
+			var name = $("#table2 tbody tr[id][id='"+ type_id +"']").attr('name');
+			$('#txtEditCode').val(code);
+			$('#txtEditName').val(name);
+		});
+		$('#btnEditDeviceType').click(function(){
+			if(type_id==''|| typeof type_id =='undefined')
+				return;
+			var $valid = $('#editDeviceType').valid();
+			if(!$valid) 
+			{
+				$validator.focusInvalid();
+				return;
+			}
+			var code = $('#txtEditCode').val();
+			var name = $('#txtEditName').val();
+			editDeviceType(type_id,code,name);
+		});
+	});
+	
+	function addDeviceType(code,name)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/device/type/add/", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'code' : code,
+			'name' : name,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+			{
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			}
+			else if(data.handle=='success')
+			{
+				$.message.notification('Thêm loại đường ngang thành công',"center");
+				$('#add-device-type').modal('hide');
+				var row = $('<tr id="'+ data.id +'" code="'+ code +'" name="'+ name +'"></tr>');
+				row.append($('<td>'+ code +'</td>'));
+				row.append($('<td>'+ name +'</td>'));
+				$("#table2 tbody").append(row);
+				
+				row.click(function()
+				{
+					type_id = $(this).attr('id');
+					$("#table2 tbody tr[id][id='"+ type_id +"']").css('background-color','#8EE2BC');
+					$("#table2 tbody tr[id][id!='"+ type_id +"']").css('background-color','#fff');
+				});
+			}
+			$.fn.loading.hide();
+		});
+	}
+	
+	function editDeviceType(id,code,name)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/device/type/edit/", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'id' : id,
+			'code' : code,
+			'name' : name,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+			{
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			}
+			else if(data.handle=='success')
+			{
+				$.message.notification('Sửa loại đường ngang thành công',"center");
+				$('#edit-device-type').modal('hide');
+				$("#table2 tbody tr[id][id='"+ type_id +"']").attr('code',code);
+				$("#table2 tbody tr[id][id='"+ type_id +"']").attr('name',name);
+				$("#table2 tbody tr[id][id='"+ type_id +"']").children().eq(0).html(code);
+				$("#table2 tbody tr[id][id='"+ type_id +"']").children().eq(1).html(name);
+			}
+			$.fn.loading.hide();
+		});
+	}
+</script>
+{% endblock scripts%}

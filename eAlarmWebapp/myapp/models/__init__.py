@@ -12,3 +12,4 @@ from myapp.models.Cmd import Cmd
 from myapp.models.CmdParam import CmdParam
 from myapp.models.DeviceTransaction import DeviceTransaction
 from myapp.models.UserDevice import UserDevice
+from myapp.models.DeviceType import DeviceType

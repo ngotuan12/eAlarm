@@ -4,12 +4,14 @@ Created on Dec 3, 2014
 @author: TuanNA
 '''
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import  Group, User
 from django.core.context_processors import csrf
+from django.db.models.aggregates import Max
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from django.contrib.auth.models import  Group,User
-from myapp.models import Device, Area, DeviceProperties, DeviceInfor,Route
+
+from myapp.models import Device, Area, DeviceProperties, DeviceInfor, Route
 from myapp.models.ApParam import ApParam
 
 
@@ -76,6 +78,8 @@ def add_railway(request):
             device.user=user
             device.route =route
             device.type ='4'
+            _order = Device.objects.filter(route=route).aggregate(Max('order'))['order__max']
+            device.order = _order + 1
             device.railway_type = _railwayType
             if _railwayType == '3':
                 _railwayDirection = request.POST['slRailwayDirection'].strip()
