@@ -1,0 +1,162 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Đường ngang <span>Danh sách đầu đo - loại đường ngang</span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="col-sm-6 col-md-6">
+		<div class="panel panel-default panel-alt widget-messaging" id = "pnlType">\
+			<div class="panel-heading">
+				<div class="panel-btns">
+					<a href="#" class="panel-edit" id="btnUpRoute" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
+					<a href="#" class="panel-edit" id="btnDownRoute" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
+				</div>
+				<!-- panel-btns -->
+				<h3 class="panel-title">Danh sách loại đường ngang</h3>
+			</div>
+			<div class="panel-body" style="min-height: 550px">
+				<ul>
+					{% for type in types %}
+						<li id= "{{ type.id }}">
+							<small class="pull-right">{{ route.create_date|date:"d/m/y H:i:s" }}</small>
+							<h4 class="sender">{{ type.name }}</h4> 
+							<small>{{ type.code }} - {{ type.name }}</small>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 col-md-6">
+		<div class="col-lg-12" style="margin-bottom: 10px">
+			<a id="btnClear" class="btn btn-danger" style="min-width: 100px;margin-right: 5px;float: right;" href="#" onclick="removeDevice();">Làm mới</a>
+			<a id="btnSave" class="btn btn-warning" style="min-width: 100px;margin-right: 5px;float: right;" data-toggle="modal" data-target="#edit-device-type">Lưu</a>
+		</div>
+		<div class="table-responsive">
+			<table class="table" id="tblProperty">
+				<thead>
+					<tr>
+						<th>Tên đầu đo</th>
+						<th>Mã đầu đo</th>
+						<th>Ký hiệu</th>
+						<th style="text-align: center;"></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.validate.min.js"></script>
+
+<script src="/js/custom.js"></script>
+
+<script src="/js/message.js"></script>
+<script src="/js/loading.js"></script>
+
+<script>
+	var type_id;
+	jQuery(document).ready(function() {
+		var type_id;
+		$('#pnlType ul').on( 'click', 'li', function () {
+			type_id = $(this).attr('id');
+			$("#pnlType ul li[id][id='"+ type_id +"']").css('background-color','#8EE2BC');
+			$("#pnlType ul li[id][id!='"+ type_id +"']").css('background-color','#fff');
+			getDeviceTypeProperties(type_id);
+		});
+		$('#pnlType ul li').first().click();
+		$('#btnSave').click(function(){
+			save(type_id);
+		});
+		$('#btnClear').click(function(){
+			getDeviceTypeProperties(type_id);
+		});
+	});
+	function getDeviceTypeProperties(type_id)
+	{
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/device/type/properties/list/", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'device_type_id' : type_id,
+		});
+		
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+			{
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			}
+			else if(data.handle=='success')
+			{
+				var tbody = $("#tblProperty tbody");
+				tbody.empty();
+				var properties = data.properties
+				for(var i=0;i<properties.length;i++)
+				{
+					var property = properties[i];
+					var row = $('<tr></tr>');
+					row.append($('<td>'+property.code+'</td>'));
+					row.append($('<td>'+property.name+'</td>'));
+					row.append($('<td>'+property.symbol+'</td>'));
+					if (property.device_type_property_id == '0')
+					{
+						row.append($('<td> <input type="checkbox" value="'+ property.id +'" name="properties[]"> </td>'));
+					}
+					else
+					{
+						row.append($('<td> <input type="checkbox" value="'+ property.id +'" name="properties[]" checked=""> </td>'));
+					}
+					tbody.append(row);
+				}
+			}
+			$.fn.loading.hide();
+		});
+	}
+	
+	function save(type_id)
+	{
+		var properties = []
+		$("input:checked").each(function() {
+			properties.push($(this).val());
+		});
+		$.fn.loading.show();
+		var csrftoken = $.cookie('csrftoken');
+		var posting = $.post("/device/type/properties/save/", {
+			'csrfmiddlewaretoken' : csrftoken,
+			'device_type_id' : type_id,
+			'properties':properties,
+		});
+		posting.done(function(data) 
+		{
+			if(data.handle=='error')
+			{
+				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+			}
+			else if(data.handle=='success')
+			{
+				$.message.notification('Success',"center");
+			}
+			$.fn.loading.hide();
+			getDeviceTypeProperties(type_id);
+		});
+	}
+</script>
+{% endblock scripts%}

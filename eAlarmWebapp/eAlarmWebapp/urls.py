@@ -40,6 +40,9 @@ urlpatterns = patterns('',
     url(r'^device/type/$', DeviceType.index,name='device-type'),
     url(r'^device/type/add/$', DeviceType.add_device_type,name='add-device-type'),
     url(r'^device/type/edit/$', DeviceType.edit_device_type,name='edit-device-type'),
+    url(r'^device/type/properties/$', DeviceType.device_type_properties,name='device-type'),
+    url(r'^device/type/properties/list/$', DeviceType.get_device_type_properties,name='device-type'),
+    url(r'^device/type/properties/save/$', DeviceType.save_device_type_properties,name='device-type'),
     #assign railway
     url(r'^railway/assign/$', RailwayAssign.index,name='railway-assign'),
     #add,edit,delete railway
