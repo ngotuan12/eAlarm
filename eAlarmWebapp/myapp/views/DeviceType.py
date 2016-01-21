@@ -24,15 +24,7 @@ def index(request):
 @login_required(login_url='/login')
 def device_type_properties(request):
     types = DeviceType.objects.all()
-    properties = DeviceProperties.objects.raw("""
-    select a.id,a.name, a.code , 
-        (case when b.id is null then '0' else b.id end) device_type_property_id   
-    from device_properties a
-    left outer join device_type_property b on a.id = b.device_property_id
-    and b.device_type_id = '1'
-    where a.p_type = '2'
-    """)
-    context={'types':types,'properties':properties}
+    context={'types':types}
     return render_to_response("device/device-type-properties.html", context, RequestContext(request))
 @login_required(login_url='/login')
 @require_http_methods(["POST", ])
