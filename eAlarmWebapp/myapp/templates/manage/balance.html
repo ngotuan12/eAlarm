@@ -1,0 +1,74 @@
+{% extends "base.html" %} 
+{% block content-header %}
+<div class="pageheader">
+	<h2>
+		<i class="fa fa-home"></i> Đường ngang <span>Danh sách đầu đo - loại đường ngang</span>
+	</h2>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div class="col-sm-6 col-md-6">
+		<div class="table-responsive">
+			<table class="table" id="tblDevice">
+				<thead>
+					<tr>
+						<th>Tuyến</th>
+						<th>Lý Trình</th>
+						<th>Loại</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for device in devices %}
+						<tr id="{{ device.id }}" >
+							<td>{{ device.route.name }}</td>
+							<td>{{ device.name }}</td>
+							<td>{{ device.device_type.code }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-sm-6 col-md-6">
+		<div class="panel panel-default">
+		</div>
+	</div>
+</div>
+
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.validate.min.js"></script>
+
+<script src="/js/custom.js"></script>
+
+<script src="/js/message.js"></script>
+<script src="/js/loading.js"></script>
+
+<script>
+	var device_id;
+	jQuery(document).ready(function() {
+		$('#tblDevice tbody').on( 'click', 'tr', function () {
+			device_id = $(this).attr('id');
+			$("#tblDevice tbody tr[id][id='"+ device_id +"']").css('background-color','#8EE2BC');
+			$("#tblDevice tbody tr[id][id!='"+ device_id +"']").css('background-color','#fff');
+			onGetBalance(device_id);
+		});
+		$('#tblDevice tbody tr').first().click();
+	});
+	
+	function onGetBalance(device_id)
+	{
+		
+	}
+</script>
+{% endblock scripts%}

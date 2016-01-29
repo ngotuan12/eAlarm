@@ -206,3 +206,8 @@ def unsignDeviceFromUser(request):
         return HttpResponse(json.dumps({'handle':'success'}), content_type="application/json")
     except Exception as ex:
         return HttpResponse(json.dumps({'handle':'error',"msg": str(ex)}), content_type="application/json")
+def balance(request):
+    context = {}
+    devices = Device.objects.filter(type='4').order_by('route__order','order')
+    context.update({'devices':devices})
+    return render_to_response("manage/balance.html", context, RequestContext(request))

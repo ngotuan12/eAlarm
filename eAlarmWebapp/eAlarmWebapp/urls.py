@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^home$', Home.home),
     #Vinh
     #manage
+    url(r'^manage/railway/balance/$', Manage.balance,name='assign-railway'),
     url(r'^manage/assign-railway/$', Manage.assign_railway,name='assign-railway'),
     url(r'^manage/railway/order/$', Manage.railway_order,name='manage-railway-order'),
     url(r'^manage/railway/statistics/$', Manage.railway_statistics,name='manage-railway-statistics'),

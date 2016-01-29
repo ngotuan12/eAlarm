@@ -38,12 +38,14 @@
 			<li class="nav-parent"><a href="#"><i class="glyphicon glyphicon-book"></i>
 					<span>Điều hành</span></a>
 				<ul class="children">
-						<li><a href="/manage/assign-railway/"><i class="fa fa-caret-right"></i>
-							Giao đường ngang cho nhân viên</a></li>
-						<li><a href="/manage/railway/order/"><i class="fa fa-caret-right"></i>
-							Sắp xếp tuyến đường ngang</a></li>
-						<li><a href="/manage/railway/statistics/"><i class="fa fa-caret-right"></i>
-							Thống kê sự kiện đường ngang</a></li>
+					<li><a href="/manage/railway/balance/"><i class="fa fa-caret-right"></i>
+						Kiểm tra tài khoản đường ngang</a></li>
+					<li><a href="/manage/assign-railway/"><i class="fa fa-caret-right"></i>
+						Giao đường ngang cho nhân viên</a></li>
+					<li><a href="/manage/railway/order/"><i class="fa fa-caret-right"></i>
+						Sắp xếp tuyến đường ngang</a></li>
+					<li><a href="/manage/railway/statistics/"><i class="fa fa-caret-right"></i>
+						Thống kê sự kiện đường ngang</a></li>
 				</ul></li>
 			{% endif %}
 			{% if user.is_superuser %}
@@ -80,6 +82,8 @@
 								Danh sách đầu đo theo loại đường ngang</a></li>
 						<li><a href="/railway/route/"><i class="fa fa-caret-right"></i>
 								Giá trị đường ngang theo đường ngang</a></li>
+						<li><a href="/railway/route/"><i class="fa fa-caret-right"></i>
+								</a></li>
 						<!-- <li><a href="/log/view/"><i class="fa fa-caret-right"></i>
 								Kiểm tra tập lệnh</a></li> -->
 						
