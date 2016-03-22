@@ -256,7 +256,26 @@
 						<input type="hidden" name="type" value="addDevice">
 						<input type="hidden" id="txtFullName" name="txtFullName" value="">
 					</div>
-					
+					<div class="panel-body" style="padding-top: 0px;">
+						<div class="row">
+							<div class="col-md-12" style="padding-left: 0px;">
+								<div class="panel-body" style="padding: 0px;">
+								
+									<div class="form-group">
+										<label class="col-sm-12 control-label" style="line-height: 20px;">Cảm biến:</label>
+										{% for property in lsProperty%}
+											<div class="col-sm-6">
+												<div class="ckbox ckbox-primary" style="height: 28px;">
+													<input type="checkbox" id="lb{{ property.id }}" name="{{ property.code }}" style="margin-top: 0px !important;">
+													<label for="lb{{property.id}}"> {{ property.name }}</label>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='/railway/list/'">Thoát</button>
 						<button type="button" class="btn btn-primary" onclick="return onAddDeviceFromSubmit();">Lưu</button>
