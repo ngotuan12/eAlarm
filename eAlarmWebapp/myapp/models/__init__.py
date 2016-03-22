@@ -14,3 +14,4 @@ from myapp.models.DeviceTransaction import DeviceTransaction
 from myapp.models.UserDevice import UserDevice
 from myapp.models.DeviceType import DeviceType
 from myapp.models.DeviceTypeProperty import DeviceTypeProperty
+from myapp.models.UploadFile import UploadFile

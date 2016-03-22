@@ -26,8 +26,6 @@ def add_railway(request):
     context={}
     if request.method == 'GET':
         lsArea = Area.objects.filter(level = '2')
-        
-        lsProperty = DeviceProperties.objects.filter(p_type='2')
         lsSensorDirection = DeviceProperties.objects.filter(p_type='2',m_type='3')
         lsDeviceType = DeviceType.objects.all()
         lsRailwayDirection = ApParam.objects.filter(type='RAILWAY_DIRECTION')
@@ -35,7 +33,7 @@ def add_railway(request):
         routes =Route.objects.all()
         users =User.objects.all().order_by("username")
         context={
-                 'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,'lsProperty':lsProperty,
+                 'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,
                  'lsRailwayDirection':lsRailwayDirection,
                  'lsDeviceType':lsDeviceType,
                  'departments':departments,'users':users,'routes':routes
@@ -92,21 +90,15 @@ def add_railway(request):
                 device.sensor_direction = sensorDirection
                 device.sensor_direction_code = sensorDirection.code
             device.save()
- 
-            lsDeviceProperties = DeviceProperties.objects.filter(p_type='2')
-            for deviceProperties in lsDeviceProperties:
-                temp = deviceProperties
-                deviceInfor = DeviceInfor()
-                deviceInfor.device = device
-                deviceInfor.value = float('0')
-                if request.POST.get(str(temp.code)):
-                    deviceInfor.status = '1'
-                else :
-                    deviceInfor.status = '0'
-                      
-                deviceInfor.device_pro = temp
-                deviceInfor.save()
-                 
+            #add device infor by device type
+            properties = DeviceProperties.objects.filter(device_type = device_type)
+            for device_property in properties:
+                infor = DeviceInfor()
+                infor.device = device
+                infor.device_pro = device_property
+                infor.value = 0
+                infor.status = '1'
+                infor.save()
             return HttpResponseRedirect('/railway/list/')
         except Exception as ex:
             print(ex)
@@ -115,7 +107,6 @@ def add_railway(request):
 @login_required(login_url='/login')
 def edit_railway(request,railway_id):
     lsArea = Area.objects.filter(level = '2')
-    lsInfor = DeviceInfor.objects.filter(device = railway_id)
     departments =Group.objects.all()
     routes =Route.objects.all()
     users =User.objects.all().order_by("username")
@@ -123,8 +114,9 @@ def edit_railway(request,railway_id):
     lsDeviceType = DeviceType.objects.all()
     lsRailwayDirection = ApParam.objects.filter(type='RAILWAY_DIRECTION')
     device = Device.objects.get(id=railway_id)
+    current_device_type_id = device.device_type.id
     context={
-             'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,'lsInfor':lsInfor,
+             'lsSensorDirection':lsSensorDirection,'lsArea':lsArea,
              'lsDeviceType':lsDeviceType,'lsRailwayDirection':lsRailwayDirection,
              'device':device,'departments':departments,'users':users,'routes':routes
              }
@@ -147,6 +139,7 @@ def edit_railway(request,railway_id):
             _lng = request.POST['txtLng'].strip()
             _deviceType = request.POST['slDeviceType'].strip()
             device_type = DeviceType.objects.get(id = _deviceType)
+            new_device_type_id = device_type.id
             area = Area.objects.get(id = _area_id)
             group =Group.objects.get(id=_ManagementUnit)
             user =User.objects.get(id=_UserUnit)
@@ -176,17 +169,19 @@ def edit_railway(request,railway_id):
                 device.sensor_direction = sensorDirection
                 device.sensor_direction_code = sensorDirection.code
             device.save()
-            
-            for deviceInfor in lsInfor:
-                temp = deviceInfor
-                deviceProperty = DeviceProperties.objects.get(id = temp.device_pro_id)
-                if request.POST.get(str(deviceProperty.code)):
-                    temp.status = '1'
-                else :
-                    temp.status = '0'
-                temp.save()
+            if current_device_type_id != new_device_type_id:
+                #delete old device infor
+                DeviceInfor.objects.filter(device=device).delete()
+                #add device infor by device type
+                properties = DeviceProperties.objects.filter(device_type = device_type)
+                for device_property in properties:
+                    infor = DeviceInfor()
+                    infor.device = device
+                    infor.device_pro = device_property
+                    infor.value = 0
+                    infor.status = '1'
+                    infor.save()
             return HttpResponseRedirect('/railway/list/')
-        
         except Exception as ex:
             print(ex)
             context.update({'has_error':str(ex)})

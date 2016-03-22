@@ -5,7 +5,7 @@ from eAlarmWebapp import settings
 from myapp.views import Home, DeviceProperties, AddDeviceProperties, EditDeviceProperties, Area, AddArea, DeviceInfor, EditArea\
 , Device, User, Error, Group, ListDevice, AddDevice, EditDevice, Report, Railway, \
     RailwayList, RailwayProperty, Log, Route, RailwayAssign, Language, Manage, \
-    DeviceType
+    DeviceType, DeviceTypeProperties
 
 
 admin.autodiscover()
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^ajax-unsign-device-from-user$', Manage.unsignDeviceFromUser,name='ajax-unsign-device-from-user'),
     #railway
     url(r'^railway/monitor/$', Railway.monitor,name='railway-monitor'),
+    url(r'^railway/monitor/V2/$', Railway.monitorV2,name='railway-monitor'),
     url(r'^railway/manager/$', Railway.railway_manager,name='railway-manager'),
     url(r'^ajax-get-railway-history$', Railway.getRailwayHistory,name='ajax-get-railway-history'),
     url(r'^ajax-delete-railway-history$', Railway.deleteRailwayHistory,name='ajax-delete-railway-history'),
@@ -41,9 +42,11 @@ urlpatterns = patterns('',
     url(r'^device/type/$', DeviceType.index,name='device-type'),
     url(r'^device/type/add/$', DeviceType.add_device_type,name='add-device-type'),
     url(r'^device/type/edit/$', DeviceType.edit_device_type,name='edit-device-type'),
-    url(r'^device/type/properties/$', DeviceType.device_type_properties,name='device-type'),
-    url(r'^device/type/properties/list/$', DeviceType.get_device_type_properties,name='device-type'),
-    url(r'^device/type/properties/save/$', DeviceType.save_device_type_properties,name='device-type'),
+    url(r'^device/type/properties/$', DeviceTypeProperties.index,name='device-type-properties'),
+    url(r'^device/type/properties/list/$', DeviceTypeProperties.property_list,name='device-type-properties-list'),
+    url(r'^device/type/properties/add/$', DeviceTypeProperties.add,name='device-type-properties-add'),
+    url(r'^device/type/properties/edit/$', DeviceTypeProperties.edit,name='device-type-properties-edit'),
+    url(r'^device/type/properties/delete/$', DeviceTypeProperties.delete,name='device-type-properties-delete'),
     #assign railway
     url(r'^railway/assign/$', RailwayAssign.index,name='railway-assign'),
     #add,edit,delete railway

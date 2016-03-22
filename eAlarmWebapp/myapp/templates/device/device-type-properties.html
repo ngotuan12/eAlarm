@@ -7,48 +7,181 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="contentpanel">
-	<div class="col-sm-6 col-md-6">
-		<div class="panel panel-default panel-alt widget-messaging" id = "pnlType">\
-			<div class="panel-heading">
-				<div class="panel-btns">
-					<a href="#" class="panel-edit" id="btnUpRoute" style="padding-left: 10px"><i class="glyphicon glyphicon-arrow-up"></i></a>
-					<a href="#" class="panel-edit" id="btnDownRoute" style="padding-right: 0"><i class="glyphicon glyphicon-arrow-down"></i></a>
-				</div>
-				<!-- panel-btns -->
-				<h3 class="panel-title">Danh sách loại đường ngang</h3>
+<div class="modal fade" id="modalFade" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Thêm loại đường ngang</h4>
 			</div>
-			<div class="panel-body" style="min-height: 550px">
-				<ul>
-					{% for type in types %}
-						<li id= "{{ type.id }}">
-							<small class="pull-right">{{ route.create_date|date:"d/m/y H:i:s" }}</small>
-							<h4 class="sender">{{ type.name }}</h4> 
-							<small>{{ type.code }} - {{ type.name }}</small>
-						</li>
-					{% endfor %}
-				</ul>
+			<div class="panel panel-default">
+				<form id="addDeviceType">
+					<div class="panel-body" style="padding-top: 0px;padding-bottom: 0px;">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Đường ngang:</label>
+									<div class="col-sm-12">
+										<input type="text" readonly id="txtDeviceType" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Loại đầu đo:</label>
+									<div class="col-sm-12">
+										<select name='slMType' id="slMType" class="form-control chosen-select" >
+											<option value="1" >Môi trường</option>
+											<option value="2" >Chuông đèn</option>
+											<option value="3" >Đầu vào</option>
+											<option value="4" >Đầu ra</option>
+											<option value="5" >Xung nhịp</option>
+											<option value="6" >Test</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Mã đầu đo:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtCode" name="txtCode" class="form-control"
+											placeholder="<Mã>" required>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Tên đầu đo:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtName" name="txtName" class="form-control"
+											placeholder="<Tên>" required>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Min:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtMin" name="txtMin" class="form-control numberic"
+											placeholder="<Min>" required>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Max:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtMax" name="txtMax" class="form-control numberic"
+											placeholder="<Max>" required>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Ngưỡng dưới:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtMinAlarm" name="txtMinAlarm" class="form-control numberic"
+											placeholder="<Ngưỡng dưới>" required>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Ngưỡng trên:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtMaxAlarm" name="txtMaxAlarm" class="form-control numberic"
+											placeholder="<Ngưỡng trên>" required>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Kiểu:</label>
+									<div class="col-sm-12">
+										<select name='slType' id="slType" class="form-control chosen-select" >
+											<option value="1" >ON/OFF</option>
+											<option value="3" >OFF/ON</option>
+											<option value="4" >ON/OFF no alarm</option>
+											<option value="2" >Cảm biến</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="col-sm-12 control-label">Ký hiệu:</label>
+									<div class="col-sm-12">
+										<input type="text" id="txtSymbol" name="txtSymbol" class="form-control"
+											placeholder="<Ký hiệu>" required>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button style="min-width: 100px;margin-right: 5px;float: right;" 
+					type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+				<button style="min-width: 100px;margin-right: 5px;float: right;"
+					type="button" class="btn btn-primary" id="btnSave">Lưu</button>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6 col-md-6">
+</div>
+
+<div class="contentpanel">
+	<div class="row">
 		<div class="col-lg-12" style="margin-bottom: 10px">
-			<a id="btnClear" class="btn btn-danger" style="min-width: 100px;margin-right: 5px;float: right;" href="#" onclick="removeDevice();">Làm mới</a>
-			<a id="btnSave" class="btn btn-warning" style="min-width: 100px;margin-right: 5px;float: right;" data-toggle="modal" data-target="#edit-device-type">Lưu</a>
+			<div class="col-sm-6">
+				<select name='slDeviceType' id="slDeviceType" class="form-control chosen-select" >
+					{% for type in types %}
+						<option value="{{ type.id }}" >{{ type.code }} - {{ type.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="col-sm-6">
+				<a id="btnAdd" class="btn btn-success" style="min-width: 100px;margin: 5px;float: left;">Thêm</a>
+				<a id="btnEdit" class="btn btn-warning" style="min-width: 100px;margin: 5px;float: left;">Sửa</a>
+				<a id="btnDelete" class="btn btn-danger" style="min-width: 100px;margin: 5px;float: left;" data-toggle="modal" data-target="#delete-properties">Xóa</a>
+			</div>
+			
 		</div>
-		<div class="table-responsive">
-			<table class="table" id="tblProperty">
-				<thead>
-					<tr>
-						<th>Tên đầu đo</th>
-						<th>Mã đầu đo</th>
-						<th>Ký hiệu</th>
-						<th style="text-align: center;"></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+		<div class="col-lg-12">
+			<div class="table-responsive">
+				<table class="table" id="tblProperty">
+					<thead>
+						<tr>
+							<th>Loại đầu đo</th>
+							<th>Mã đầu đo</th>
+							<th>Tên đầu đo</th>
+							<th>Kiểu</th>
+							<th>Min</th>
+							<th>Max</th>
+							<th>Ngưỡng trên</th>
+							<th>Ngưỡng dưới</th>
+							<th>Ký hiệu</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
@@ -64,99 +197,317 @@
 <script src="/js/retina.min.js"></script>
 <script src="/js/jquery.cookies.js"></script>
 
+<script src="/js/jquery.datatables.min.js"></script>
+
+<script src="/js/chosen.jquery.min.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 
 <script src="/js/custom.js"></script>
 
+<script src="/js/jquery.numeric.js"></script>
+
 <script src="/js/message.js"></script>
 <script src="/js/loading.js"></script>
 
+
+
 <script>
-	var type_id;
 	jQuery(document).ready(function() {
-		var type_id;
-		$('#pnlType ul').on( 'click', 'li', function () {
-			type_id = $(this).attr('id');
-			$("#pnlType ul li[id][id='"+ type_id +"']").css('background-color','#8EE2BC');
-			$("#pnlType ul li[id][id!='"+ type_id +"']").css('background-color','#fff');
-			getDeviceTypeProperties(type_id);
-		});
-		$('#pnlType ul li').first().click();
-		$('#btnSave').click(function(){
-			save(type_id);
-		});
-		$('#btnClear').click(function(){
-			getDeviceTypeProperties(type_id);
-		});
-	});
-	function getDeviceTypeProperties(type_id)
-	{
-		$.fn.loading.show();
-		var csrftoken = $.cookie('csrftoken');
-		var posting = $.post("/device/type/properties/list/", {
-			'csrfmiddlewaretoken' : csrftoken,
-			'device_type_id' : type_id,
+		$(".numberic").numeric({ negative : false });
+		var tblProperty = $('#tblProperty').dataTable({
+			"bInfo":false,
+			"bRetrieve": true,
+			"bFilter":false,
+			"bLengthChange": false,
+			"sPaginationType" : "full_numbers",
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
 		});
 		
-		posting.done(function(data) 
+		var property_id;
+		var device_type_id;
+		var action;
+		$(".table-responsive select").chosen({
+			'min-width' : '150px',
+			'white-space' : 'nowrap',
+			'disable_search_threshold' : 10
+		});
+		$('#slDeviceType').on('change',function(){
+			var device_type_id = $(this).val();
+			showPropertiesList(device_type_id);
+		});
+		
+		showPropertiesList($('#slDeviceType').val());
+		
+		$('#btnAdd').on('click',function(){
+			showModal('ADD');
+		});
+		
+		$('#btnEdit').on('click',function(){
+			if(typeof property_id == 'undefined')
+				return;
+			showModal('EDIT');
+		});
+		
+		function showModal(action)
 		{
-			if(data.handle=='error')
+			action = action;
+			if(action == 'ADD')
 			{
-				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+				$("#modalFade .modal-title").html('Thêm đầu đo');
+				//clear value
+				$("#txtDeviceType").val($("#slDeviceType option:selected").text());
+				$("#slMType").val("");
+				$("#txtCode").val("");
+				$("#txtName").val("");
+				$("#txtMin").val("");
+				$("#txtMax").val("");
+				$("#txtMinAlarm").val("");
+				$("#txtMaxAlarm").val("");
+				$("#slType").val("2");
+				$("#txtSymbol").val("");
+			}	
+				
+			else if(action == 'EDIT')
+			{
+				var selectedRow = $("#tblProperty tbody tr[id][id='"+ property_id +"']");
+				//
+				$("#modalFade .modal-title").html('Sửa đầu đo');
+				//load value
+				$("#txtDeviceType").val($("#slDeviceType option:selected").text());
+				$("#slMType").val(selectedRow.children().eq(0).attr('value'));
+				$("#txtCode").val(selectedRow.children().eq(1).html());
+				$("#txtName").val(selectedRow.children().eq(2).html());
+				$("#txtMin").val(selectedRow.children().eq(4).html());
+				$("#txtMax").val(selectedRow.children().eq(5).html());
+				$("#txtMinAlarm").val(selectedRow.children().eq(6).html());
+				$("#txtMaxAlarm").val(selectedRow.children().eq(7).html());
+				$("#slType").val(selectedRow.children().eq(3).attr('value'));
+				$("#txtSymbol").val(selectedRow.children().eq(8).html());
 			}
-			else if(data.handle=='success')
+			updateOnchange();	
+			$("#modalFade").modal();
+		}
+		$("#btnSave").on('click',function(){
+			$.fn.loading.show();
+			var csrftoken = $.cookie('csrftoken');
+			var url = "";
+			if(action == "ADD")
+				url = "/device/type/properties/add/";
+			else (action == "EDIT")
+				url = "/device/type/properties/edit/";
+			var posting = $.post(url, {
+				'csrfmiddlewaretoken' : csrftoken,
+				'device_type_id' : device_type_id,
+				'property_id' : property_id,
+				'code' : $("#txtCode").val(),
+				'name' : $("#txtName").val(),
+				'min' : $("#txtMin").val(),
+				'max' : $("#txtMax").val(),
+				'min_alarm' : $("#txtMinAlarm").val(),
+				'max_alarm' : $("#txtMaxAlarm").val(),
+				'symbol' : $("#txtSymbol").val(),
+				'type' : $("#slType option:selected").val(),
+				'm_type' : $("#slMType option:selected").val(),
+			});
+			posting.done(function(data) 
 			{
-				var tbody = $("#tblProperty tbody");
-				tbody.empty();
-				var properties = data.properties
-				for(var i=0;i<properties.length;i++)
+				if(data.handle=='error')
 				{
-					var property = properties[i];
-					var row = $('<tr></tr>');
-					row.append($('<td>'+property.code+'</td>'));
-					row.append($('<td>'+property.name+'</td>'));
-					row.append($('<td>'+property.symbol+'</td>'));
-					if (property.device_type_property_id == '0')
-					{
-						row.append($('<td> <input type="checkbox" value="'+ property.id +'" name="properties[]"> </td>'));
-					}
-					else
-					{
-						row.append($('<td> <input type="checkbox" value="'+ property.id +'" name="properties[]" checked=""> </td>'));
-					}
-					tbody.append(row);
+					$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
 				}
-			}
-			$.fn.loading.hide();
+				else if(data.handle=='success')
+				{
+					$.message.notification("Cập nhật thành công","center");
+					$('#modalFade').modal('hide');
+					showPropertiesList($('#slDeviceType').val());
+				}
+				
+			});
 		});
-	}
-	
-	function save(type_id)
-	{
-		var properties = []
-		$("input:checked").each(function() {
-			properties.push($(this).val());
+		$("#btnDelete").on('click',function(){
+			message = $.message. confirm ("Ban muon xoa di dau do!");
+			message.on('message.confirm',function(){
+				$.fn.loading.show();
+				var csrftoken = $.cookie('csrftoken');
+				var url = "/device/type/properties/delete/";
+				var posting = $.post(url, {
+					'csrfmiddlewaretoken' : csrftoken,
+					'device_type_id' : device_type_id,
+					'property_id' : property_id,
+				});
+				posting.done(function(data) 
+				{
+					if(data.handle=='error')
+					{
+						$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+					}
+					else if(data.handle=='success')
+					{
+						$.message.notification("Cập nhật thành công","center");
+						showPropertiesList($('#slDeviceType').val());
+					}
+				});
+			});
+		})
+		$("#slType").on('change',function(){
+			updateOnchange();
 		});
-		$.fn.loading.show();
-		var csrftoken = $.cookie('csrftoken');
-		var posting = $.post("/device/type/properties/save/", {
-			'csrfmiddlewaretoken' : csrftoken,
-			'device_type_id' : type_id,
-			'properties':properties,
-		});
-		posting.done(function(data) 
+		function updateOnchange()
 		{
-			if(data.handle=='error')
+			var type = $("#slType option:selected").val();
+			if(type == '2')
 			{
-				$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+				$("#txtMin").prop("readonly",false);
+				$("#txtMax").prop("readonly",false);
+				$("#txtMinAlarm").prop("readonly",false);
+				$("#txtMaxAlarm").prop("readonly",false);
+				$("#txtSymbol").prop("readonly",false);
 			}
-			else if(data.handle=='success')
+			else
 			{
-				$.message.notification('Success',"center");
+				$("#txtMin").prop("readonly",true);
+				$("#txtMax").prop("readonly",true);
+				$("#txtMinAlarm").prop("readonly",true);
+				$("#txtMaxAlarm").prop("readonly",true);
+				$("#txtSymbol").prop("readonly",true);
 			}
-			$.fn.loading.hide();
-			getDeviceTypeProperties(type_id);
-		});
-	}
+			if(type == '1')
+			{
+				$("#txtMin").val("0");
+				$("#txtMax").val("2");
+				$("#txtMinAlarm").val("0");
+				$("#txtMaxAlarm").val("2");
+				$("#txtSymbol").val("");
+			}
+			else if(type == '3')
+			{
+				$("#txtMin").val("0");
+				$("#txtMax").val("0");
+				$("#txtMinAlarm").val("-1");
+				$("#txtMaxAlarm").val("1");
+				$("#txtSymbol").val("");
+			}
+			else if(type == '4')
+			{
+				$("#txtMin").val("0");
+				$("#txtMax").val("0");
+				$("#txtMinAlarm").val("-999");
+				$("#txtMaxAlarm").val("999");
+				$("#txtSymbol").val("");
+			}
+		}
+		function showPropertiesList(device_type_id)
+		{
+			device_type_id = device_type_id;
+			$.fn.loading.show();
+			var csrftoken = $.cookie('csrftoken');
+			var posting = $.post("/device/type/properties/list/", {
+				'csrfmiddlewaretoken' : csrftoken,
+				'device_type_id' : device_type_id
+			});
+			posting.done(function(data) 
+			{
+				if(data.handle=='error')
+				{
+					$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+				}
+				else if(data.handle=='success')
+				{
+					if(typeof tblProperty !== 'undefined')
+						tblProperty.fnDestroy();
+					var tbody = $('#tblProperty tbody');
+					tbody.empty();
+					//properties
+					properties = data.properties;
+					//add row
+					for(var i=0;i<properties.length;i++)
+					{
+						var property = properties[i];
+						var td = $('<td />');
+						var row = $('<tr'+ ' id="'+ property.id +'"'+'></tr>');
+						if(property.m_type == '1')
+							td.html('Môi trường');
+						else if(property.m_type == '2')
+							td.html('Chuông đèn');
+						else if(property.m_type == '3')
+							td.html('Đầu vào');
+						else if(property.m_type == '4')
+							td.html('Đầu ra');
+						else if(property.m_type == '5')
+							td.html('Xung nhịp');
+						else if(property.m_type == '6')
+							td.html('Test');
+						else
+							td.html('');
+						td.attr('value',property.m_type);
+						row.append(td);
+						row.append($('<td>'+ property.code +'</td>'));
+						row.append($('<td>'+ property.name +'</td>'));
+						td = $('<td />');
+						if(property.type == '1')
+							td.html('ON/OFF');
+						else if(property.type == '2')
+							td.html('Cảm biến');
+						else if(property.type == '3')
+							td.html('OFF/ON');
+						else if(property.type == '4')
+							td.html('ON/OFF no alarm');
+						else
+							td.html('');
+						td.attr('value',property.type);
+						row.append(td);
+						row.append($('<td>'+ property.min +'</td>'));
+						row.append($('<td>'+ property.max +'</td>'));
+						row.append($('<td>'+ property.min_alarm +'</td>'));
+						row.append($('<td>'+ property.max_alarm +'</td>'));
+						row.append($('<td>'+ property.symbol +'</td>'));
+						tbody.append(row);
+					}
+					$('#tblProperty tbody tr').on('click',function()
+					{
+						property_id = $(this).attr('id');
+						$("#tblProperty tbody tr[id][id='"+ property_id +"']").css('background-color','#8EE2BC');
+						$("#tblProperty tbody tr[id][id!='"+ property_id +"']").css('background-color','#fff');
+					});
+					//init
+					tblProperty = $('#tblProperty').dataTable({
+						"bInfo":false,
+						"bFilter":false,
+						"bRetrieve": true,
+						"bLengthChange": false,
+						"sPaginationType" : "full_numbers",
+						"oLanguage":
+						{
+							"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+							"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+							"oPaginate": 
+							{
+								"sFirst":      "<<",
+								"sLast":       ">>",
+								"sNext":       ">",
+								"sPrevious":   "<"
+							},
+							"sSearch":"",
+						}
+					});
+					
+					$('#tblProperty tbody tr').first().click();
+				}
+				$.fn.loading.hide();
+			});
+		};
+	});
 </script>
 {% endblock scripts%}

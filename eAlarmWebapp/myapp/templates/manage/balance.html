@@ -32,6 +32,13 @@
 	</div>
 	<div class="col-sm-6 col-md-6">
 		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="profile-header">
+					<h4 class="profile-name" id="device-name">Thông tin tài khoản </h4>
+					<div class="profile-position" > <p id="pBalance">Trạng thái: </p> <img alt="refresh" width="15px" height="15px"
+											src="/images/ic_blue.png" alt="" /></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -55,7 +62,10 @@
 <script src="/js/loading.js"></script>
 
 <script>
-	var device_id;
+	var device_id ="ALL";
+	var websocket;
+	var wsUri = "ws://113.160.52.194:9889";
+	initWebsocket();
 	jQuery(document).ready(function() {
 		$('#tblDevice tbody').on( 'click', 'tr', function () {
 			device_id = $(this).attr('id');
@@ -64,11 +74,81 @@
 			onGetBalance(device_id);
 		});
 		$('#tblDevice tbody tr').first().click();
+		
+		
 	});
+	function initWebsocket()
+	{
+		try
+		{
+			websocket = new WebSocket(wsUri);
+		}
+		catch(e)
+		{
+			setTimeout(initWebsocket,5000);
+		}
+		websocket.onopen = function(evt)
+		{
+			onOpen(evt)
+		};
+		websocket.onclose = function(evt)
+		{
+			onClose(evt)
+		}; 
+		websocket.onmessage = function(evt)
+		{
+			onMessage(evt)
+		};
+		websocket.onerror = function(evt)
+		{
+			onError(evt)
+		};
+	}
+	function onOpen(evt)
+	{
+		doSend('{"handle":"announce"}');
+		doSend('{"handle":"monitor"}');
+	}
+	function onClose(evt)
+	{
+		setTimeout(initWebsocket,5000);
+	}
+	function onMessage(evt)
+	{
+		try
+		{
+			console.log(evt.data.toString());
+			var data = $.parseJSON(evt.data.toString());
+			if (data.type === "response")
+			{
+				switch (data.cmd)
+				{
+					case "look_money":
+						alert(JSON.stringify(data.body));
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		catch(e)
+		{
+			
+		}
+	}
+	function onError(evt)
+	{
+		websocket.close();
+	}
+	function doSend(message)
+	{
+		websocket.send(message);
+	}
 	
 	function onGetBalance(device_id)
 	{
-		
+		console.log('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
+		doSend('{"handle":"send_cmd","device_id":'+ parseInt(device_id.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
 	}
 </script>
 {% endblock scripts%}

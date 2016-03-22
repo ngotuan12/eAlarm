@@ -1,0 +1,872 @@
+{% extends "base.html" %} 
+{% block styles %}
+	<link href="/css/chart.css" rel="stylesheet">
+	<style>
+		th{
+			font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
+			font-weight: bold !important;
+		}
+		.tab-pane{
+			min-height: 450px;
+		}
+		.profile-header{
+			margin-bottom: 10px;
+		}
+		#railway-infor .row{
+			margin-bottom: 15px;
+		}
+		#device-infor-1 .row{
+			margin-top: 15px;
+		}
+		#device-infor-2 .row{
+			margin-top: 15px;
+		}
+		#device-infor-3 .row{
+			margin-top: 15px;
+		}
+		
+		.dataTables_filter{
+			float: left;
+		}
+		.dataTables_filter input {
+			padding: 7px;
+		}
+		.dataTables_length{
+		float: right;
+		}
+		.col-sm{
+			padding-left: 10px;
+		}
+		h3,h5{
+			font-family: tahoma;
+		}
+		#railway-infor .col-sm-2, .col-sm-3 {
+			display: inline-block; 
+			white-space: nowrap;
+		}
+		.col-sm-6 p 
+		{ 
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		#device-issue{
+			word-break: break-word;
+			white-space: pre-line;
+		}
+		.col-sm-3 p{
+			margin: 0;
+		}
+		.form-horizontal .control-label
+		{
+			text-align: left;
+			padding-left: 20px;
+		}
+		.form-bordered .form-group
+		{
+			padding: 0px;
+			border: none;
+		}
+		.form-control
+		{
+			padding: 5px;
+		}
+		.input-group-btn button 
+		{
+			margin-left: 0;
+			padding: 3px 10px;
+		}
+	</style>
+{% endblock %}
+{% block content-header %}
+<div class="pageheader" style="display: none;">
+	<h2>
+		<i class="fa fa-align-justify"></i> Giám sát đường ngang <span>Theo dõi sự cố
+			hệ thống</span>
+	</h2>
+	<div class="breadcrumb-wrapper">
+			<span class="label">Giao diện </span>
+			<ol class="breadcrumb">
+				<li><a href="#">Bản đồ</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="contentpanel">
+	<div id="loading"></div>
+	<div class="row">
+		{% if devices %}
+		<div class="col-sm-5">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table" id="table2">
+						<thead>
+							<tr>
+								<th>Tuyến</th>
+								<th>Lý Trình</th>
+								<th>Loại</th>
+								<th>Trạng thái</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for device in devices %}
+							<tr class="odd gradeX" id="{{ device.id }}" device_id ="{{ device.id }}" device_status = "{{ device.status }}">
+								<td>{{ device.route.name }}</td>
+								<td>{{ device.name }}</td>
+								<td>{{ device.device_type.code }}</td>
+								<td class="center">
+									<p id ="railway-{{ device.id }}" class="railway-action" action_status="{{ device.action_status }}"style="position: absolute;margin-left: 30px">
+										{% if  device.status != '0' %}
+											{% if  device.action_status == '1' %}
+												>>>>>
+											{% elif device.action_status == '2' %}
+												<<<<<
+											{% elif device.action_status == '3' %}
+												Nhân công
+											{% elif device.action_status == '4' %}
+												Duy tu
+											{% endif %}
+										{% endif %}
+									</p>
+									{% if  device.status == '0' %}
+										<p style="display: None">Mất kết nối</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_blue.png" alt="" />
+									{% elif device.status == '1' %}
+										<p style="display: None">Tốt</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_green.png" alt="" />
+									{% elif device.status == '2' %}
+										<p style="display: None">Hỏng</p><img id="device-status-{{device.id}}" width="15px" height="15px" src="/images/ic_red.png" alt="" />
+									{% endif %}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- table-responsive -->
+	
+			</div>
+			<!-- panel-body -->
+		</div>
+		<!-- panel -->
+		</div>
+	
+		<div class="col-sm-7">
+			<ol class="breadcrumb" style="position: absolute;right: 0">
+				<li><a href="/railway/maps/">Bản đồ</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+			<div class="profile-header">
+				<h4 class="profile-name" id="device-name"></h4>
+				<div class="profile-location" id="device-address"></div>
+				<div class="profile-position" >Trạng thái: <img id="device-status" width="15px" height="15px"
+										src="/images/ic_blue.png" alt="" /></div>
+			</div>
+			<div id="railway-detail" >
+				<ul class="nav nav-tabs" >
+					<li id="tab-railway-status" ><a href="#railway-status"   data-toggle="tab">Trạng thái</a></li>
+					{% if perms.myapp.view_railway_session %}
+						<li id="tab-railway-history"><a href="#railway-history"   data-toggle="tab">Phiên tàu</a></li>
+					{% endif %}
+					{% if perms.myapp.control_railway %}
+						<li id="tab-device-control"><a href="#device-control"   data-toggle="tab">Điều khiển</a></li>
+					{% endif %}
+					{% if perms.myapp.view_device_session %}
+						<li id="tab-device-history"><a href="#device-history"   data-toggle="tab">Lịch sử</a></li>
+					{% endif %}
+				</ul>
+				<!-- tab-content -->
+				<div class="tab-content" style="padding: 10px">
+				
+					<!-- Device control -->
+					{% if perms.myapp.control_railway %}
+					<div class="tab-pane" id="device-control">
+						<p style="font-style: italic;font-weight: bold;">Điều khiển đường ngang</p>
+						<div class="profile-header" style="margin-left: auto;margin-right: auto;width: 60%;">
+							<button id="btnNhanCong" class="btn btn-danger" style="width: 100px;margin-right: 5px;"> Nhân công</button> 
+							<button id="btnDuyTu" class="btn btn-warning" style="width: 100px;margin-right: 5px;"> Duy tu</button> 
+							<button id="btnPhucHoi" class="btn btn-success" style="width: 100px;margin-right: 5px;"> Phục hồi </button>
+							<!-- <button id="btnCuongBuc" class="btn btn-warning" style="width: 100px"> Cưỡng bức </button> -->
+						</div>
+						<p style="font-style: italic;font-weight: bold;">Điều khiển đường ngang</p>
+						<div class="row">
+							<form action="" class = "form-horizontal form-bordered">
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Hỏi thông tin phần cứng</label>
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt001" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn001" type="button" class="btn btn-success mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Thông tin trạng thái hiện thời</label>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt002" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn002" type="button" class="btn btn-success  mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Kiểm tra trạng thái tài khoản</label>
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt003" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn003" type="button" class="btn btn-success mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Nạp tiền tài khoản</label>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt004" type="text" class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn004" type="button" class="btn btn-success  mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Đo kiểm tức thời</label>
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt005" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn005" type="button" class="btn btn-success mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Danh sách server</label>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt006" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn006" type="button" class="btn btn-success  mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Lập thời gian truyền tin</label>
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt007" type="text"  class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn007" type="button" class="btn btn-success mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Trạng thái relay PLC</label>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt008" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn008" type="button" class="btn btn-success  mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Chuyển PLC M-S</label>
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt009" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn009" type="button" class="btn btn-success mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group has-success">
+									<label class="col-sm-5 control-label">Chuyển PLC S-M</label>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input id="txt010" type="text" disabled class="form-control"> <span
+												class="input-group-btn" style="margin-left: 0">
+												<button id="btn010" type="button" class="btn btn-success  mr5">
+													<i class="glyphicon glyphicon-check"></i> Thực hiện
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					{% endif %}
+					<!-- Device control -->
+					
+					
+					<div class="tab-pane" id="device-history">
+						<div class="row"> 
+							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
+								<div class="input-group">
+									<input type="text" id="dtHistoryFromDate" class="form-control"
+										name="dtFromDate" data-provide="datepicker"
+										data-date-format="dd/mm/yy" placeholder="Từ ngày(mm/dd/yyyy)">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div class="col-sm-5" style="padding: 0 1px 0 5px;s"> 
+								<div class="input-group">
+									<input type="text" id="dtHistoryToDate" class="form-control"
+										name="dtHistoryToDate" data-provide="datepicker"
+										data-date-format="dd/mm/yy" placeholder="Đến ngày (mm/dd/yyyy)">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div class="col-sm-2" >
+								<button id="btnHistorySearch" class="btn btn-primary" style="padding: 3px;width: 100%"><i class="glyphicon glyphicon-search"></i> Tìm kiếm </button>
+							</div>
+						</div>
+						<div class="row"> 
+							<div class="col-sm"> 
+								<div class="table-responsive">
+									<table class="table" id="table7">
+										<thead>
+											<tr>
+												<th>Bắt đầu </th>
+												<th>Kết thúc </th>
+												<th>Thời gian</th>
+												<th>Chi tiết</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="tab-pane" id="railway-history">					
+						<div class="row"> 
+							<div class="col-sm-6"> 
+								<div class="table-responsive">
+									<table class="table" id="table3">
+										<thead>
+											<tr>
+												<th>Phiên </th>
+												<th>Hướng </th>
+												<th>Băt đầu</th>
+												<th>Kết thúc</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="table-responsive">
+									<table class="table" id="table4">
+										<thead>
+											<tr>
+												<th>Cảm biến</th>
+												<th>Giá trị</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div> 
+						</div>
+					</div>
+					<div class="tab-pane active" id="railway-status">
+						<div class="row"
+							style="border-bottom: 1px solid; border-color: gray;margin-top: 10px;" >
+							<div class="col-sm-6" style="display: none;">
+								<p id="device-mac" style="display: none"></p>
+								<p id="device-server" style="display: none"></p>
+								<p id="device-issue" style="display: none;"></p>
+							</div>
+							<div class="col-sm" id="railway-infor">
+								<div>
+									<div class="row">
+										<div class="col-sm-2">CB1  <p id="CB1"></p></div>
+										<div class="col-sm-2">CB2  <p id="CB2"></p></div>
+										<div class="col-sm-2">CB3  <p id="CB3"></p></div>
+										<div class="col-sm-2">CB4  <p id="CB4"></p></div>
+										<div class="col-sm-2">CB5  <p id="CB5"></p> </div>
+										<div class="col-sm-2">CB6  <p id="CB6"></p></div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3">RED1: <p id="RED1"></p></div>
+										<div class="col-sm-3">RED2: <p id="RED2"></p></div>
+										<div class="col-sm-3">RED3: <p id="RED3"></p></div>
+										<div class="col-sm-3">RED4: <p id="RED4"></p> </div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
+										<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
+										<div class="col-sm-3">RING1: <p id="RING1"></p></div>
+										<div class="col-sm-3">RING2: <p id="RING2"></p></div>
+									</div>
+								</div>
+								<!-- <div id = "device-infor-4">
+									<div class="row">
+										<div class="col-sm-3">YEL1: <p id="YEL1"></p></div>
+										<div class="col-sm-3">YEL2: <p id="YEL2"></p></div>
+										<div class="col-sm-3">RING1: <p id="RING1"></p></div>
+										<dsiv class="col-sm-3">RING2: <p id="RING2"></p></div>
+									</div>
+								</div> -->
+							</div>
+							<div style="float: right;padding-right: 5px;margin-top: 5px">Sự kiện cuối: <a href="#" id="last-raiway">--</a></div>
+						</div>
+						
+						<div class ="row" >
+							<div class="col-sm" id="device-infor-1"
+									style="border-bottom: 1px solid; border-color: gray;word-wrap: break-word;">
+							</div>
+							<div class="col-sm-6" style="display: none">
+								<p id="charTitle" style="display: none">Nhiệt độ.</p>
+								<div class="demo-container">
+									<div id="placeholder" class="demo-placeholder"></div>
+								</div>
+							</div>
+						</div>
+						<div class ="row" >
+							<div class="col-sm" id="device-infor-2"
+									style="border-bottom: 1px solid; border-color: gray;word-wrap: break-word;">
+							</div>
+						</div>
+						
+						<div class ="row" style="border-bottom: 1px solid; border-color: gray;word-wrap: break-word;">
+							<div class="col-sm" id="device-infor-3"
+									>
+							</div>
+							<div style="display:none; float: right;padding-right: 5px;margin-top: 5px">Sự kiện cuối: <a href="#" id="last-test">--</a></div>
+						</div>
+						<div style="display: none;">
+							
+						</div>
+					</div>
+				</div>	
+				<!-- tab-content -->
+			</div>
+			<!-- panel-body -->
+		</div>
+		{% endif %}
+	</div>
+</div>
+<!-- contentpanel -->
+{% endblock %} 
+{% block scripts %}
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/toggles.min.js"></script>
+<script src="/js/retina.min.js"></script>
+<script src="/js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.datatables.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+
+<script src="/js/flot/jquery.flot.js"></script>
+
+<script src="/js/jquery.maskedinput.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script src="/js/jquery-ui-1.10.3.min.js"></script>
+
+<script src="/js/loading.js"></script>
+<script src="/js/message.js"></script>
+
+<script src="/js/custom.js"></script>
+<script src="/js/railway-infor.js"></script>
+<script>
+	var wsUri = "ws://113.160.52.194:9889";
+	var websocket;
+	var mac_address="";
+	var device_id="ALL";
+	function initWebsocket()
+	{
+		try
+		{
+			websocket = new WebSocket(wsUri);
+		}
+		catch(e)
+		{
+			setTimeout(initWebsocket,5000);
+		}
+		websocket.onopen = function(evt)
+		{
+			onOpen(evt)
+		};
+		websocket.onclose = function(evt)
+		{
+			onClose(evt)
+		}; 
+		websocket.onmessage = function(evt)
+		{
+			onMessage(evt)
+		};
+		websocket.onerror = function(evt)
+		{
+			onError(evt)
+		};
+	}
+	function onOpen(evt)
+	{
+		doSend('{"handle":"announce"}');
+		doSend('{"handle":"monitor"}');
+	}
+	function onClose(evt)
+	{
+		setTimeout(initWebsocket,5000);
+	}
+	function onMessage(evt)
+	{
+		try
+		{
+			console.log(evt.data.toString());
+			var data = $.parseJSON(evt.data.toString());
+			
+			switch (data.handle)
+			{
+				case "on_status_change":
+					var device_id = data.device_id;
+					var status = data.status;
+					var img_status = $("#device-status-"+device_id);
+					if(status==="1")
+					{
+						img_status.attr("src","/images/ic_green.png");
+					}
+					else if(status==="2")
+					{
+						img_status.attr("src","/images/ic_red.png");
+					}
+					else if(status==="0")
+					{
+						img_status.attr("src","/images/ic_blue.png");
+					}
+					console.log("Status change " + "device_id: "+ device_id + "status: "+status);
+					break;
+				case "on_railway_change":
+					var device_id = data.device_id;
+					var action_status = data.action_status;
+					var railway_action = $("#railway-"+device_id);
+					console.log("#railway-"+device_id);
+					if(device.id === device_id)
+						device.action_status = action_status;
+					if(action_status==="1")
+					{
+						railway_action.html(">>>>>");
+					}
+					else if(action_status==="2")
+					{
+						railway_action.html("<<<<<");
+					}
+					else if(action_status==="3")
+					{
+						railway_action.html("Nhân công");
+					}
+					else if(action_status==="4")
+					{
+						railway_action.html("Duy tu");
+					}
+					else if(action_status==="0")
+					{
+						railway_action.html("");
+						clearRailwayInfor();
+					}
+					railway_action.attr("action_status",action_status);
+					break;
+				case "on_error":
+					$.message.notification(data.msg,"center",{"class_name":"alert alert-danger"});
+					break;
+				default:
+					if (data.type === "response")
+					{
+						switch (data.cmd)
+						{
+							case "get_gw_info":
+								$("#txt001").val(JSON.stringify(data.body));
+								break;
+							case "get_data":
+								$("#txt002").val(JSON.stringify(data.body));
+								break;
+							case "look_money":
+								$("#txt003").val(JSON.stringify(data.body));
+								break;
+							case "card number":
+								$("#txt004").val(JSON.stringify(data.body));
+								break;
+							case "get_test":
+								$("#txt005").val(JSON.stringify(data.body));
+								break;
+							case "get_connection_list":
+								$("#txt006").val(JSON.stringify(data.body));
+								break;
+							case "set_report_interval":
+								$("#txt007").val(JSON.stringify(data.body));
+								break;
+							case "status_relay":
+								$("#txt008").val(JSON.stringify(data.body));
+								break;
+							case "control_relay":
+								$("#txt009").val(JSON.stringify(data.body));
+								$("#txt010").val(JSON.stringify(data.body));
+								break;
+							default:
+								break;
+						}
+					}
+					break;
+			}
+		}
+		catch(e)
+		{
+			
+		}
+	}
+	function onError(evt)
+	{
+		websocket.close();
+	}
+	function doSend(message)
+	{
+		websocket.send(message);
+	}
+	var on_railway = false;
+	var audio = new Audio('/sound/alarm.mp3');
+	jQuery(document).ready(function() {
+		$("#txt007").keyup(function () { 
+			this.value = this.value.replace(/[^0-9\.]/g,'');
+		});
+		$('#dtHistoryFromDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		
+		$('#dtHistoryToDate').datepicker({
+			dateFormat : 'dd/mm/yy',
+		});
+		// Input Masks
+		$('#dtHistoryFromDate').mask("99/99/9999");
+		// Input Masks
+		$('#dtHistoryToDate').mask("99/99/9999");
+		$("#dtHistoryFromDate").datepicker( "setDate", new Date());
+		$("#dtHistoryToDate").datepicker( "setDate", new Date());
+		var tid1;
+		var temp = true;
+		//audio.loop = true;
+		function mycode() 
+		{
+			$('.railway-action').each(function(index, element)
+			{
+				if(temp)
+				{
+					$(element).css('display','none');
+				}
+				else 
+				{
+					$(element).css('display','');
+				}
+				
+			});
+			
+			tid1 = setTimeout(mycode, 500); // repeat myself
+			temp = !temp;
+			
+			var isRailway = false;
+			
+			$('.railway-action').each(function(index, element)
+			{
+				//alert($(element).attr("action_status"));
+				if($(element).attr("action_status")!= "0" && $(element).attr("action_status")!= "")
+				{
+					isRailway = true;
+				}
+			});
+			
+			if(on_railway != isRailway)
+			{
+				if(isRailway)
+				{
+					//audio.loop = true;
+					//audio.play();
+				}
+				else 
+				{
+					audio.loop = false;
+				}
+				on_railway = isRailway;
+			}
+		};
+		
+		tid1 = setTimeout(mycode, 500);
+		
+		initWebsocket();
+		
+		var table = $('#table2').dataTable(
+		{
+			//"bLengthChange": false,
+			//"bFilter" : false,
+			"bInfo":false,
+			"bSort" : false,
+			"sPaginationType" : "full_numbers",
+			"iDisplayLength":25,
+			aoColumnDefs: [{bSortable: false,aTargets: [-1,-2]}],
+			"oLanguage":
+			{
+				"sLengthMenu":"Hiển thị _MENU_ bản ghi",
+				"sInfo": "Hiển thị _START_ tới _END_ trong _TOTAL_ bản ghi",
+				"oPaginate": 
+				{
+					"sFirst":      "<<",
+					"sLast":       ">>",
+					"sNext":       ">",
+					"sPrevious":   "<"
+				},
+				"sSearch":"",
+			}
+		});
+		
+		// Chosen Select
+		$("select").chosen({
+				'min-width' : '150px',
+				'white-space' : 'nowrap',
+				disable_search_threshold : 10
+			});
+		$(".dataTables_filter input").attr("placeholder","Tìm kiếm");
+		
+		$('#table2 tbody').on( 'click', 'tr', function () {
+			device_id = $(this).attr('id');
+			device_status = $(this).attr('device_status');
+			//doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+mac_address.toString()+'"}');
+			$("#table2 tbody tr[device_id][device_id='"+ device_id +"']").css('background-color','#8EE2BC');
+			$("#table2 tbody tr[device_id][device_id!='"+ device_id +"']").css('background-color','#fff');
+			onGetDeviceInfor(device_id);
+			$('#railway-detail ul li').removeClass('active');
+			$('#railway-detail ul li[id][id="tab-railway-status"]').addClass('active');
+			$('#railway-detail .tab-content .tab-pane').removeClass('active');
+			$('#railway-detail .tab-content .tab-pane[id][id="railway-status"]').addClass('active');
+			doSend('{"handle":"connect_device","device_id":'+ parseInt(device_id.toString()) +',"MAC":"'+'00:00'+'"}');
+		});
+		
+		$('#tab-railway-history').click(function(e)
+		{			
+			showRailwayHistory();
+		});
+		
+		$('#btnNhanCong').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"ON","MAIN":"OFF","RESET":"OFF"}}}');
+		});
+		$('#btnDuyTu').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"ON","RESET":"OFF"}}}');
+		});
+		$('#btnPhucHoi').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_button","body":{"TEST":"OFF","MAIN":"OFF","RESET":"ON"}}}');
+		});
+		
+		$('#btn001').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_gw_info"}}');
+		});
+		$('#btn002').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_data"}}');
+		});
+		$('#btn003').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"look_money"}}');
+		});
+		$('#btn004').click(function(e)
+		{
+			if($('#txt004').val().trim() === "")
+			{
+				var message = $.message.error("Hãy điền vào mã thẻ!");
+				message.on('message.close',function(){
+					$('#txt004').focus();
+				});
+				return;
+			}
+			
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"card_number","body":{"Serial":"'+ $('#txt004').val()+'"}}}');
+		});
+		$('#btn005').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_test"}}');
+		});
+		$('#btn006').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"get_connection_list"}}');
+		});
+		$('#btn007').click(function(e)
+		{
+			if($('#txt007').val().trim() === "")
+			{
+				var message = $.message.error("Thời gian không được để trống!");
+				message.on('message.close',function(){
+					$('#txt007').focus();
+				});
+				return;
+			}
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"set_report_interval","body":{"interval":'+ $('#txt007').val()+'}}}');
+		});
+		$('#btn008').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"status_relay"}}');
+		});
+		$('#btn009').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"control_relay","body":{"RELAY":1}}}');
+		});
+		$('#btn010').click(function(e)
+		{
+			doSend('{"handle":"send_cmd","device_id":'+ parseInt(currentDeviceID.toString()) +',"body":{"type":"request","cmd":"control_relay","body":{"RELAY":0}}}');
+		});
+		
+		$('#btnHistorySearch').click(function(e)
+		{
+			onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+		});
+		
+		//loading
+		$('#table2 tbody tr').first().click();
+		onGetRailwayHistory($("#dtHistoryFromDate").val(),$("#dtHistoryToDate").val());
+	});
+</script>
+{% endblock scripts%}

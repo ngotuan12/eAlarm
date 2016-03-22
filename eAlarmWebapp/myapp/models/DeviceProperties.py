@@ -4,6 +4,10 @@ Created on Aug 15, 2014
 @author: TuanNA
 '''
 from django.db import models
+
+from myapp.models.DeviceType import DeviceType
+
+
 # Create your models here.
 class DeviceProperties(models.Model):
     code = models.CharField(max_length=20)
@@ -19,6 +23,7 @@ class DeviceProperties(models.Model):
     p_type = models.CharField(max_length=1,default ='1')
     parent = models.ForeignKey('self',db_column='parent_id',null=True)
     on_railway = models.CharField(max_length=1,default ='0')
+    device_type = models.ForeignKey(DeviceType,db_column='device_type_id')
     #m_type = models.ForeignKey(ApParam,db_column='m_type',null=True,on_delete=models.SET_NULL)
     m_type = models.CharField(max_length=10)
     class Meta:
