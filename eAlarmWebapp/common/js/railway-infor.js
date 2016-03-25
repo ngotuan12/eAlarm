@@ -1,6 +1,6 @@
 var plot;
 var data = [], totalPoints = 100;
-var updateInterval = 3000;
+var updateInterval = 9000;
 var currentDeviceID;
 var currentDeviceInforID;
 var InforIndex = 0;
